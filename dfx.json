@@ -1,0 +1,27 @@
+{
+  "canisters": {
+    "GrowTown_backend": {
+      "candid": "src/GrowTown_backend/GrowTown_backend.did",
+      "package": "GrowTown_backend",
+      "type": "rust"
+    },
+    "GrowTown_frontend": {
+      "dependencies": [
+        "GrowTown_backend"
+      ],
+      "source": [
+        "src/GrowTown_frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "GrowTown_frontend"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
