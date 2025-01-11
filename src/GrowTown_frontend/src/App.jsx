@@ -1,30 +1,48 @@
-import { useState } from 'react';
-import { GrowTown_backend } from 'declarations/GrowTown_backend';
+import React, { Suspense, lazy } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Admin from "./Admin/Admin";
+import Login from "./Admin/Login";
+import Profile from "./pages/Profile";
+import CollectionDetail from "./pages/CollectionDetail";
+import NftDetails from "./components/NftDetails";
+import Hero from "./pages/Hero";
+import BuyNft from "./pages/BuyNft";
+import PageNotFound from "./Admin/PageNotFound";
+import Activity from "./pages/Activity";
+import UnauthorizedPage from "./Admin/collection/UnauthorizedPage";
+
+// Introduce a manual delay for testing
+const simulateNetworkDelay = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
+
+// Lazy load the FullpageLoader with a simulated delay
+const FullpageLoader = lazy(() =>
+  simulateNetworkDelay(2000).then(() => import("./Loader/FullpageLoader"))
+);
 
 function App() {
-  const [greeting, setGreeting] = useState('');
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    const name = event.target.elements.name.value;
-    GrowTown_backend.greet(name).then((greeting) => {
-      setGreeting(greeting);
-    });
-    return false;
-  }
-
   return (
-    <main>
-      <img src="/logo2.svg" alt="DFINITY logo" />
-      <br />
-      <br />
-      <form action="#" onSubmit={handleSubmit}>
-        <label htmlFor="name">Enter your name: &nbsp;</label>
-        <input id="name" alt="Name" type="text" />
-        <button type="submit">Click Me!</button>
-      </form>
-      <section id="greeting">{greeting}</section>
-    </main>
+    <div>
+      <Suspense fallback={<FullpageLoader />}>
+        <Routes>
+          <Route path="/" element={<Hero />}></Route>
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/activity" element={<Activity />} />
+          <Route
+            path="/collection/:collectionName"
+            element={<CollectionDetail />}
+          />
+          <Route path="/Nft/:Nftname" element={<NftDetails />} />
+          <Route path="/Nft/:Nftname/buy" element={<BuyNft />} />
+          <Route path="/admin/login" element={<Login />} />
+          <Route path="/admin/*" element={<Admin />} />
+          <Route path="/unauth/*" element={<UnauthorizedPage />} />
+          <Route path="*" element={<PageNotFound />} />
+          <Route path="/unauth" element={<UnauthorizedPage />} />
+        </Routes>
+      </Suspense>
+    </div>
   );
 }
 

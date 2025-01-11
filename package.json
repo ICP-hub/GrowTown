@@ -14,5 +14,13 @@
   "type": "module",
   "workspaces": [
     "src/GrowTown_frontend"
-  ]
+  ],
+  "dependencies": {
+    "@dfinity/auth-client": "^2.2.0",
+    "ic-auth": "^0.9.1",
+    "react-hot-toast": "^2.5.1",
+    "react-i18next": "^15.4.0",
+    "react-time-ago": "^7.3.3",
+    "uuid": "^11.0.5"
+  }
 }
