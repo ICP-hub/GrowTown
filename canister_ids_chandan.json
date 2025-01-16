@@ -1,0 +1,14 @@
+{
+  "BeGod_assethandler": {
+    "ic": "dwx2w-fqaaa-aaaak-qttdq-cai"
+  },
+  "BeGod_backend": {
+    "ic": "atnl7-tqaaa-aaaak-qlskq-cai"
+  },
+  "BeGod_frontend": {
+    "ic": "a2oad-fyaaa-aaaak-qlsla-cai"
+  },
+  "icrc2_token_canister": {
+    "ic": "a5pgx-iaaaa-aaaak-qlslq-cai"
+  }
+}
