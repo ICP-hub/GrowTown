@@ -27,6 +27,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import toast from "react-hot-toast";
 import BackButton from "./collection/BackButton.jsx";
 import YellowButton from "../components/button/YellowButton";
+import Buttons from "../Common/Buttons.jsx";
 function Users() {
   const { backendActor } = useAuth();
 
@@ -224,7 +225,7 @@ function Users() {
           {/* Create allorder button */}
           <div className="flex space-x-4">
             <Link to="/Admin/activity/allorder">
-              <YellowButton className="font-semibold">All Orders</YellowButton>
+              <Buttons buttonName={"All Orders"} bgColor={"white"} textColor={"black"}/>
             </Link>
           </div>
         </div>
@@ -244,7 +245,7 @@ function Users() {
                 border="1px solid transparent"
                 rounded="md"
               >
-                <Thead bg="#FCD37B">
+                <Thead bg="#50B248">
                   <Tr>
                     <Th textAlign="center" color="black" p={4} fontSize="md">
                       Serial No.
@@ -431,7 +432,7 @@ function Users() {
                 </Button>
               )}
               <Button
-                bg="#FCD37B"
+                bg="#50B248"
                 color="black"
                 border="1px"
                 borderColor="black"

@@ -6,7 +6,9 @@ export default {
       fontFamily: {
         myCustomFont: ["MyCustomFont", "sans-serif"],
         caslonAntique: ["CaslonAntique", "serif"],
+        ironman: ['"Iron Man"', 'sans-serif'],
       },
+     
       screens: {
         "1.3xl": "1425px", // Custom breakpoint for 1400px
         "1.2xl": "1200px", // Custom breakpoint for 1200px

@@ -147,17 +147,17 @@ function SidebarContent({ onClose, ...rest }) {
           ))}
         </div>
         <div className="flex items-center justify-start px-8 pt-4 mb-9 text-white border-t border-gray-700 gap-x-4 2xl:mb-8">
-          <img className="w-12 h-12" src="/image/admin.png" alt="Admin" />
+          <img className="w-14 h-14 rounded-full object-contain" src="/image/Admin.svg" alt="Admin" />
           <div className="space-y-2">
             <div className="flex items-center justify-start gap-x-2">
               <p className="text-lg font-bold">
-                Welcome, <span className="text-[#FCD37B]">Admin</span>
+               <span className="text-[]">Admin</span>
               </p>
               <button
                 onClick={() => logoutHandler()}
-                className="bg-red-100 rounded-full h-7 w-7 hover:bg-red-300 "
+                className=" rounded-full h-7 w-7  "
               >
-                <Icon as={MdLogout} w={4} h={4} color={`red.700`} font="bold" />
+                <Icon as={MdLogout} w={5} h={5}  font="bold" />
               </button>
             </div>
             <div className="flex flex-col">
@@ -169,7 +169,7 @@ function SidebarContent({ onClose, ...rest }) {
                       : "No User"
                   }
                   readOnly
-                  className="text-green-400 w-[70%] bg-inherit"
+                  className=" w-[70%] bg-inherit"
                 />
                 {user && (
                   <CopyToClipboard text={user} onCopy={handleCopy}>
@@ -219,8 +219,8 @@ function NavItem({
         role="group"
         color={isActive ? "black" : "white"}
         cursor="pointer"
-        bg={isActive ? "#FCD37B" : ""}
-        _hover={{ bg: "#FCD37A30", color: "#fff" }}
+        bg={isActive ? "#50B248" : ""}
+        _hover={{  color: "#fff" }}
       >
         {icon && (
           <Icon

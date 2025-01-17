@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { RiFolder6Line, RiDeleteBinLine } from "react-icons/ri";
 import { RxCross2 } from "react-icons/rx";
 import { BeGod_assethandler } from "../../../../declarations/BeGod_assethandler";
+import { IoIosAdd } from "react-icons/io";
 
 function ImageUploader(props) {
   const [files, setFiles] = useState();
@@ -92,7 +93,8 @@ function ImageUploader(props) {
   // };
 
   return (
-    <div className="mt-1">
+    <div className="mt-2">
+        <div className="flex justify-center border-2 items-center pr-2  border-dashed border-[#424242]  h-[100px] md:h-[150px] -mt-1 m-0 rounded-md">
       {!hideUpload && (
         <input
           type={fileType}
@@ -108,8 +110,8 @@ function ImageUploader(props) {
         />
       )}
       {!hideUpload && (
-        <div className="flex justify-end items-center pr-1 bg-[#29292C] h-[38px] m-0 rounded-md">
-          <RiFolder6Line className="cursor-pointer" />
+        <div className="flex justify-center border border-[#424242] center ] items-center border-dashed rounded-full bg-transparent w-10 h-10  m-0 ">
+          <IoIosAdd className="cursor-pointer" />
         </div>
       )}
       {previews &&
@@ -118,12 +120,12 @@ function ImageUploader(props) {
           return (
             <div
               key={index}
-              className="relative w-[50px] h-[50px] md:h-[70px] m-0"
+              className="relative w-[50px] h-[50px] md:w-[70px] md:h-[70px] m-0"
             >
               <img
                 src={pic}
                 alt="Selected"
-                className="object-cover w-full h-full rounded-lg"
+                className="object-cover w-full h-full rounded-full"
               />
               <button
                 onClick={onClickDeleteImage}
@@ -134,6 +136,7 @@ function ImageUploader(props) {
             </div>
           );
         })}
+    </div>
     </div>
   );
 }

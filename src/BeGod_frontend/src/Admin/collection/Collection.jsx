@@ -10,6 +10,8 @@ import { FaTrashAlt } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { BiErrorCircle } from "react-icons/bi"; // Warning icon
 import { Principal } from "@dfinity/principal";
+import Buttons from "../../Common/Buttons";
+import { IoIosAdd } from "react-icons/io";
 
 function Collection() {
   const { backendActor } = useAuth();
@@ -96,9 +98,7 @@ function Collection() {
           {/* Create collection button */}
           <div className="flex space-x-4">
             <Link to="/Admin/collection/create">
-              <YellowButton className="font-semibold">
-                Create Collection
-              </YellowButton>
+               <Buttons buttonName="Create Collection" bgColor="white" icon={<IoIosAdd size={30}/>}/>
             </Link>
           </div>
         </div>

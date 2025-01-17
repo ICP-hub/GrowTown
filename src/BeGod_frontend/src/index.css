@@ -18,6 +18,15 @@
   font-weight: normal;
   font-style: normal;
 }
+
+@font-face {
+  font-family: "Iron Man";
+  src: url('https://fonts.cdnfonts.com/s/28969/IronMan.woff') format('woff'),
+       url('https://fonts.cdnfonts.com/s/28969/IronMan.ttf') format('truetype'); /* Add formats if available */
+  font-weight: 400; /* Specify the weight */
+  font-style: normal;
+}
+
 body {
   background-color: var(--background-color) !important;
 }
@@ -459,10 +468,10 @@ body {
 /* This apply blur effect to a image in NftCardItem Component */
 
 .add_new_nft_popup_bg_container {
-  height: 80vh;
-  width: 35vw;
-  background-color: #161618;
-  border-radius: 5px;
+  height: 90vh;
+  width: 50vw;
+  background-color: #292929;
+  border-radius: 25px;
   padding: 32px 42px 36px 42px;
   overflow-y: auto;
   scrollbar-width: none;

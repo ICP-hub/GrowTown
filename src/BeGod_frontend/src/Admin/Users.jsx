@@ -162,7 +162,7 @@ function Users() {
                 border="1px solid transparent"
                 rounded="md"
               >
-                <Thead bg="#FCD37B">
+                <Thead bg="#50B248">
                   <Tr>
                     <Th textAlign="center" color="black" p={4} fontSize="md">
                       Name
@@ -304,7 +304,7 @@ function Users() {
                 </Button>
               )}
               <Button
-                bg="#FCD37B"
+                bg="#50B248"
                 color="black"
                 border="1px"
                 borderColor="black"

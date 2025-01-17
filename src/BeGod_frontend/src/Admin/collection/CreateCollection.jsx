@@ -26,6 +26,9 @@ import toast from "react-hot-toast";
 import imageCompression from "browser-image-compression";
 import Createcollectionloader from "./Createcollectionloader.jsx";
 import { BeGod_assethandler } from "../../../../declarations/BeGod_assethandler";
+import ToggleSwitch from "./toggleSwitch";
+import { IoIosAdd } from "react-icons/io";
+import Buttons from "../../Common/Buttons";
 
 const CreateCollection = () => {
   const navigate = useNavigate();
@@ -67,13 +70,17 @@ const CreateCollection = () => {
 
   const [formData, setFormData] = useState({
     name: "",
+    maxLimit: "",
     description: "",
+    NoOfNFT: "",
     collColor: "Green",
     logo: null,
   });
   console.log(formData);
   const [name, setName] = useState(formData.name || "");
+  const [maxLimit, setMaxLimit] = useState(formData.maxLimit || "");
   const [description, setDescription] = useState(formData.description || "");
+  const [NoOfNFT, setNoOfNFT] = useState(formData.NoOfNFT || "");
   const [collColor, setCollColor] = useState(formData.collColor || "Green");
   const [Ufile, setUFile] = useState(formData.Ufile || []);
   console.log(description);
@@ -110,7 +117,7 @@ const CreateCollection = () => {
     // e.preventDefault();
 
     // Form validation checks
-    if (!name || !description || !Ufile || nftCardsList.length === 0) {
+    if (!name || !maxLimit || !description || NoOfNFT || !Ufile || nftCardsList.length === 0) {
       toast.error("Please fill in all required fields.");
       return;
     }
@@ -143,20 +150,6 @@ const CreateCollection = () => {
     const file = files[0]; // Get the first uploaded file
     if (file) {
       try {
-        // let options = {
-        //   maxSizeMB: 0.06, // 60KB
-        //   maxWidthOrHeight: 300,
-        //   useWebWorker: true,
-        // };
-
-        // let compressedFile = await imageCompression(file, options);
-        // while (compressedFile.size > 60 * 1024) {
-        //   options.maxSizeMB *= 0.9;
-        //   compressedFile = await imageCompression(file, options);
-        // }
-
-        // console.log("Compressed file size:", compressedFile.size);
-
         const reader = new FileReader();
         reader.onloadend = () => {
           setBase64String(reader.result);
@@ -168,70 +161,9 @@ const CreateCollection = () => {
       }
     }
   };
-  // const handleFiles = async (bloburl) => {
-  //   setcollectionBloburl(bloburl);
-  //   console.log(bloburl);
-  //   // const url = await UploadedNftImage(bloburl);
-  //   // console.log(url);
-  // };
-  // const UploadedNftImage = async (captureImage) => {
-  //   if (!BeGod_assethandler) {
-  //     throw new Error("BeGod_assethandler is not initialized.");
-  //   }
 
-  //   try {
-  //     if (!captureImage) {
-  //       throw new Error("captureImage is not provided or invalid.");
-  //     }
 
-  //     // Handle URL or Blob
-  //     let blob;
-  //     if (typeof captureImage === "string") {
-  //       const response = await fetch(captureImage);
-  //       blob = await response.blob();
-  //     } else if (captureImage instanceof Blob) {
-  //       blob = captureImage;
-  //     } else {
-  //       throw new Error("captureImage must be a valid URL or Blob.");
-  //     }
 
-  //     // Convert Blob to ArrayBuffer
-  //     const arrayBuffer = await blob.arrayBuffer();
-
-  //     // Upload Image
-  //     const id = Date.now().toString();
-  //     const result1 = await BeGod_assethandler.uploadImg(id, [
-  //       ...new Uint8Array(arrayBuffer),
-  //     ]);
-  //     console.log(result1);
-
-  //     // Environment Variables
-  //     const acd = process.env.DFX_NETWORK;
-  //     const canisterId = process.env.CANISTER_ID_BEGOD_ASSETHANDLER;
-
-  //     if (!acd || !canisterId) {
-  //       throw new Error(
-  //         "Environment variables are missing: DFX_NETWORK or CANISTER_ID_BEGOD_ASSETHANDLER."
-  //       );
-  //     }
-
-  //     // Generate and Return URL
-  //     let url;
-  //     if (acd === "local") {
-  //       url = `http://127.0.0.1:4943/?canisterId=${canisterId}&imgid=${id}`;
-  //     } else if (acd === "ic") {
-  //       url = `https://${canisterId}.raw.icp0.io/?imgid=${id}`;
-  //     } else {
-  //       throw new Error("Invalid DFX_NETWORK value.");
-  //     }
-
-  //     console.log("NFT URL:", url);
-  //     return url;
-  //   } catch (error) {
-  //     console.error("Error in UploadedNftImage:", error);
-  //     return null; // Return null in case of error
-  //   }
-  // };
 
   const UploadedNftImageusingBase64 = async (base64File) => {
     if (BeGod_assethandler) {
@@ -607,7 +539,7 @@ const CreateCollection = () => {
               if (!errorShown) {
                 toast.error(
                   "Error in minting NFT inside final call: " +
-                    mintResult.message
+                  mintResult.message
                 );
                 errorShown = true;
               }
@@ -714,55 +646,89 @@ const CreateCollection = () => {
           //     ))}
           // </div>
           <div className="w-full">
-            <BackButton />
+            <div className="flex items-center">
+              <BackButton />
+              <h1 className=" text-2xl lg:text-3xl ml-2 lg:ml-5 text-white ">Create Collection</h1>
+            </div>
             <div className="my-8">
-              <h1 className="text-3xl text-white ">Create Collection</h1>
+
               <div className="flex flex-col md:flex-row gap-x-8 items-center  w-full  px-1 py-2 text-[#FFFFFF] justify-start rounded-md">
                 <div className="flex flex-col w-full gap-2 mt-4 space-y-4">
                   {/* Collection Name and Max Limit */}
                   <div className="flex flex-col items-center justify-center w-full sm:flex-row sm:gap-4 md:flex-row md:gap-4">
-                    <div className="flex flex-col w-full sm:w-1/2">
-                      <label className="text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[20px] leading-[25px] mb-2">
-                        Collection Name:
-                      </label>
-                      <input
-                        value={name}
-                        onChange={(e) => {
-                          let value = e.target.value;
-                          if (/^[a-zA-Z0-9 ]*$/.test(value)) {
-                            value = value.trimStart();
-                            if (value.trim() !== "") {
-                              setName(value);
-                              setFormData((prev) => ({ ...prev, name: value }));
+
+                    <div className="flex flex-col w-full sm:w-1/2 pr-2">
+                      <div className="flex flex-col ">
+                        <label className="text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[20px] leading-[25px] mb-2">
+                          Collection Name
+                        </label>
+                        <input
+                          value={name}
+                          onChange={(e) => {
+                            let value = e.target.value;
+                            if (/^[a-zA-Z0-9 ]*$/.test(value)) {
+                              value = value.trimStart();
+                              if (value.trim() !== "") {
+                                setName(value);
+                                setFormData((prev) => ({ ...prev, name: value }));
+                              } else {
+                                setName("");
+                              }
                             } else {
-                              setName("");
+                              toast.error(
+                                "Only letters and numbers are allowed."
+                              );
                             }
-                          } else {
-                            toast.error(
-                              "Only letters and numbers are allowed."
-                            );
-                          }
-                        }}
-                        type="text"
-                        placeholder="Enter your Collection Name"
-                        className="pl-4 rounded-md bg-[#29292C] h-[30px] md:h-[45px] w-full"
-                      />
+                          }}
+                          type="text"
+                          placeholder=""
+                          className="pl-4 rounded-md bg-transparent border-2 border-[#424242] h-[30px] md:h-[45px] w-full"
+                        />
+                      </div>
+                      <div className="flex mt-[25px] flex-col w-full">
+                        <label className="text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[20px] leading-[25px] mb-2">
+                          Max Limit
+                        </label>
+                        <input
+                          value={maxLimit}
+                          onChange={(e) => {
+                            let value = e.target.value;
+                            if (/^[0-9]*$/.test(value)) {
+                              value = value.trimStart();
+                              if (value.trim() !== "") {
+                                setMaxLimit(value);
+                                setFormData((prev) => ({ ...prev, maxLimit: value }));
+                              } else {
+                                setMaxLimit("");
+                              }
+                            } else {
+                              toast.error(
+                                "Only numbers are allowed."
+                              );
+                            }
+                          }}
+                          type="text"
+                          placeholder=""
+                          className="pl-4 rounded-md bg-transparent  border-2 border-[#424242] h-[30px] md:h-[45px] w-full"
+                        />
+                      </div>
                     </div>
-                    <div className="w-full sm:w-1/2 flex flex-col mt-[20px] sm:mt-0">
+
+                    <div className="w-full sm:w-1/2 flex pl-2 flex-col sm:mt-0">
                       <label className="w-full flex flex-col mt-[20px] sm:mt-0">
                         <span className="text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[20px] leading-[25px] mb-2">
-                          Logo
+                          Collection Image
                         </span>
                         <LogoImageUploader
                           captureUploadedbloburl={handleFiles}
 
-                          // captureuploadedurl={setcollectionImageURL}
+                        // captureuploadedurl={setcollectionImageURL}
                         />
                       </label>
                     </div>
                   </div>
                   {/* Description */}
-                  <label className="mt-[20px] w-[100%] flex flex-col text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[20px] leading-[25px]">
+                  <label className="mt-[25px] w-[100%] flex flex-col text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[20px] leading-[25px]">
                     Description:
                     <textarea
                       value={description}
@@ -779,11 +745,48 @@ const CreateCollection = () => {
                           setDescription(""); // or handle as needed
                         }
                       }}
-                      className="pl-4 w-[100%] h-[100px] bg-[#29292C] rounded-md resize-none p-2"
+                      className="pl-4 w-[100%] h-[150px]  bg-transparent  border-2 border-[#424242] rounded-md resize-none p-2"
                       rows="8"
-                      placeholder="Enter description here"
+                      placeholder=""
                     />
                   </label>
+
+                  <div className="flex mt-[25px] flex-col w-full">
+                    <div className="flex justify-between">
+                      <label className="text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[20px] leading-[25px] mb-2">
+                        No. of NFT
+                      </label>
+                      <div className="flex items-center">
+                        <label className="text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[20px] leading-[25px] mb-2 mr-4">
+                          Featured
+                        </label>
+                        <ToggleSwitch />
+                      </div>
+                    </div>
+                    <input
+                      value={NoOfNFT}
+                      onChange={(e) => {
+                        let value = e.target.value;
+                        if (/^[0-9]*$/.test(value)) {
+                          value = value.trimStart();
+                          if (value.trim() !== "") {
+                            setNoOfNFT(value);
+                            setFormData((prev) => ({ ...prev, NoOfNFT: value }));
+                          } else {
+                            setNoOfNFT("");
+                          }
+                        } else {
+                          toast.error(
+                            "Only numbers are allowed."
+                          );
+                        }
+                      }}
+                      type="text"
+                      placeholder=""
+                      className="pl-4 rounded-md bg-transparent  border-2 border-[#424242] h-[30px] md:h-[45px] w-full"
+                    />
+                  </div>
+
 
                   <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] md:text-[18px] leading-[25px]">
                     Type color:
@@ -823,33 +826,31 @@ const CreateCollection = () => {
                       </option>
                     </select>
                   </label>
+
                   {/* Add new NFT Section */}
                   <div
-                    className={`${
-                      nftCardsList.length > 0 && "flex justify-end items-center"
-                    }`}
+                    className={`${nftCardsList.length > 0 && "flex justify-end items-center"
+                      }`}
                   >
-                    <label className="mt-[20px] w-[100%]  md:h-[46px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[20px] leading-[25px] mb-[0px]">
+                    <label className="mt-[25px] w-[100%]  md:h-[46px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[20px] leading-[25px] mb-[0px]">
                       NFT Cards
                     </label>
-                    <br />
-                    <div className="relative inline-block py-2 mt-2">
+
+
+                    <div className="flex justify-center  border-2 items-center pr-2 w-1/2 mt-2 border-dashed border-[#424242]  h-[30px] md:h-[150px]  m-0 rounded-md">
                       <button
                         type="button"
-                        className="add_new_button flex items-center justify-center px-6 py-2 bg-transperent text-white border border-[#d1b471] rounded-l-full rounded-r-none h-[40px] w-[180px] "
+                        className="w-10 h-10 border-2 flex justify-center border-[#424242] items-center border-dashed rounded-full "
                         onClick={() => {
                           updateType("add");
                           toggleModal();
                         }}
                       >
-                        Add New
+                        <IoIosAdd className="cursor-pointer text-[#424242] h-6 w-6" />
                       </button>
-                      <div className="absolute left-[-10px] top-1/2 transform -translate-y-1/2 bg-[#f0c96a] w-[40px] h-[40px] rounded-full flex items-center justify-center border-2 border-gray-900">
-                        <span>
-                          <BiPlus size={22} />{" "}
-                        </span>
-                      </div>
+
                     </div>
+
                   </div>
                   <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-2">
                     {nftCardsList.map((eachNftItem) => (
@@ -862,24 +863,21 @@ const CreateCollection = () => {
                     ))}
                   </div>
                   {/* Form Buttons */}
-                  <div className="flex justify-start sm:justify-end md:justify-end gap-4 w-[100%] mt-[10px] pb-8 sm:mb-0">
-                    <button
+                  <div className="flex justify-start sm:justify-end md:justify-start gap-[14%] w-[100%] mt-[10px] pb-8 sm:mb-0">
+                    <div
                       type="button"
                       onClick={() => navigate(-1)}
-                      className="w-[30%] sm:w-[25%] md:w-[15%] h-[43px] text-[#FFFFFF] rounded-md border-[#FCD37B] border font-semibold"
+                      className="w-[30%]  sm:w-[25%] md:w-[15%] h-[43px] text-[#FFFFFF] "
                     >
-                      Cancel
-                    </button>
+                      <Buttons buttonName={"Cancel"} textColor="white" bgColor="#424242" />
+                    </div>
 
-                    <button
-                      type="button"
-                      className="add_new_button flex items-center justify-center px-6 py-2 bg-transperent text-white border rounded-md border-[#d1b471]  h-[40px] w-[180px] "
-                      // onClick={finalcall}
-                      // onClick={() => setShowModal(true)}
-                      onClick={handleSubmit}
-                    >
-                      Create Collection
-                    </button>
+                    <div onClick={handleSubmit} className="">
+                      <Buttons bgColor="white" textColor="black" buttonName={"Create Collection"} />
+                    </div>
+
+
+
                   </div>
                   {showModal && (
                     <WarningModal
@@ -890,8 +888,8 @@ const CreateCollection = () => {
                   {!showModal && Success && <SuccessModal />}
 
                   {modal && (
-                    <div className="fixed top-0 bottom-0 left-0 right-0 w-screen h-screen">
-                      <div className="w-screen h-screen top-0 left-0 right-0 bottom-0 fixed bg-[rgba(49,49,49,0.8)]">
+                    <div className="fixed top-0 bottom-0 left-0 right-0 w-screen h-screen bg-black bg-opacity-50 backdrop-blur-sm">
+                      <div className="w-screen h-screen top-0 left-0 right-0 bottom-0 fixed">
                         <div className="flex items-center justify-center h-screen">
                           <Modal
                             toggleModal={toggleModal}
@@ -904,6 +902,7 @@ const CreateCollection = () => {
                       </div>
                     </div>
                   )}
+
                 </div>
               </div>
             </div>
