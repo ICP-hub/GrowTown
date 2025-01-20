@@ -12,6 +12,7 @@ import { BiErrorCircle } from "react-icons/bi"; // Warning icon
 import { Principal } from "@dfinity/principal";
 import Buttons from "../../Common/Buttons";
 import { IoIosAdd } from "react-icons/io";
+import CollectionCard from "./CollectionCard";
 
 function Collection() {
   const { backendActor } = useAuth();
@@ -28,6 +29,7 @@ function Collection() {
 
         const tempArray = [];
         if (result && Array.isArray(result)) {
+          console.log('resultCollection=>',result)
           result.forEach((item) => {
             if (item && item.length > 1) {
               item[1].forEach((value) => {
@@ -120,49 +122,12 @@ function Collection() {
               ))}
           </div>
         ) : (
-          <div className="w-full flex justify-center items-center">
+          <div className="w-full flex justify-center mt-10 items-center">
             {/* Grid of collections */}
             {coll.length > 0 ? (
               <div className="grid w-full gap-6 lg:grid-cols-3 sm:grid-cols-1 md:grid-cols-2">
                 {coll.map((collectiondata, index) => (
-                  <Link
-                    to={`/Admin/collection/collectionDetails/${collectiondata[0]}`}
-                    key={index}
-                    state={{ collectiondata }}
-                  >
-                    <div
-                      key={index}
-                      className="relative bg-[#29292C] w-full h-full px-10 py-6 text-white flex flex-col justify-center items-center gap-y-4 rounded-md border-transparent border hover:border-[#FCD37B]"
-                    >
-                      <div className="absolute top-4 right-4">
-                        <button
-                          className="text-white hover:text-red-600 transition-colors duration-300"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleDelete(collectiondata[1]);
-                          }}
-                        >
-                          <FaTrashAlt className="w-6 h-6" />
-                        </button>
-                      </div>
-
-                      {/* Updated Image Rendering */}
-                      <img
-                        className="w-28 h-28 sm:h-40 sm:w-40"
-                        src={
-                          JSON.parse(collectiondata[4]).collectionImageURL ||
-                          "default-image.jpg"
-                        }
-                        alt={`collection`}
-                      />
-                      <div className="mx-auto mt-2 text-sm text-center sm:font-bold">
-                        <p className="text-2xl font-semibold">
-                          {collectiondata[2]}
-                        </p>
-                        <p className="text-2xl font-semibold">Collection</p>
-                      </div>
-                    </div>
-                  </Link>
+                  <CollectionCard collectiondata={collectiondata} handleDelete={handleDelete} index={index} />
                 ))}
               </div>
             ) : (

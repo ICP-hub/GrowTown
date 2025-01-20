@@ -465,11 +465,51 @@ body {
   animation: smoke 4s infinite alternate;
 }
 
-/* This apply blur effect to a image in NftCardItem Component */
 
+@media screen and (max-width: 768px) {
+  .add_new_nft_popup_bg_container {
+    width: 80vw;
+    padding: 16px 22px 16px 22px;
+    height: 70vh;
+    overflow-y: auto;
+  }
+}
+
+/* styles TokenModal */
+.add_new_Token_popup_bg_container {
+  height: 90vh;
+  width: 40vw;
+  background-color: #292929;
+  border-radius: 25px;
+  padding: 32px 42px 36px 42px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+@media screen and (max-width: 1200px) {
+  .add_new_Token_popup_bg_container {
+    width: 40vw;
+    height: 50vh;
+  }
+}
+@media screen and (max-width: 950px) {
+  .add_new_Token_popup_bg_container {
+    height: 50vh;
+    overflow-y: auto;
+  }
+}
+@media screen and (max-width: 768px) {
+  .add_new_Token_popup_bg_container {
+    width: 80vw;
+    padding: 16px 22px 16px 22px;
+    height: 70vh;
+    overflow-y: auto;
+  }
+}
+
+/* styles NFTModal */
 .add_new_nft_popup_bg_container {
   height: 90vh;
-  width: 50vw;
+  width: 45vw;
   background-color: #292929;
   border-radius: 25px;
   padding: 32px 42px 36px 42px;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import SideBar from "./SideBar";
 import DashBoard from "./DashBoard";
@@ -93,6 +93,11 @@ function Admin() {
       className="flex flex-col items-start justify-center lg:flex-row md:flex-row sm:flex-col admin-control-font"
       style={{ fontFamily: "sans-serif !important" }}
     >
+      <Link to="/admin">
+      <div className=" absolute right-4 md1:left-4  p-1 z-50  top-5 ">
+         <img src="image/Grow town logo.png" className="bg-white p-1 rounded-lg"/>
+      </div>
+      </Link>
       <SideBar isOpen={isOpen} toggleSidebar={toggleSidebar} />
       <div className="flex items-center justify-center w-full">
         <Routes>

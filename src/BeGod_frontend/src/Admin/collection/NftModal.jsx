@@ -16,9 +16,7 @@ const Modal = (props) => {
     type,
     toggleModal,
   } = props;
-  // console.log(cardDetails)
-  // console.log("type",type)
-  // const [nftId, setNftId] = useState("");
+  
   const [nftName, setNftName] = useState(
     type === "edit" ? cardDetails.nftName : ""
   );
@@ -37,9 +35,7 @@ const Modal = (props) => {
   const [nftImage, setNftImage] = useState(
     type === "edit" ? cardDetails.nftImage : ""
   );
-  // const [nftImageURL, setNftImageURL] = useState(
-  //   type === "edit" ? cardDetails.nftImageURL : ""
-  // );
+
   const [nftcolor, setnftcolor] = useState(
     type === "edit" ? cardDetails.nftcolor : "Golden"
   );
@@ -185,19 +181,6 @@ const Modal = (props) => {
     const file = files[0];
     if (file) {
       try {
-        // let options = {
-        //   maxSizeMB: 0.06,
-        //   maxWidthOrHeight: 300,
-        //   useWebWorker: true,
-        // };
-        // let compressedFile = await imageCompression(file, options);
-
-        // while (compressedFile.size > 60 * 1024) {
-        //   options.maxSizeMB *= 0.9;
-        //   compressedFile = await imageCompression(file, options);
-        // }
-
-        // console.log("Compressed file size:", compressedFile.size);
 
         const reader = new FileReader();
         reader.onloadend = () => setNftImage(reader.result);
@@ -208,30 +191,12 @@ const Modal = (props) => {
     }
   };
 
-  // const captureUploadedNftImage = (pic) => {
-  //   setNftImageURL(pic);
-  //   // console.log(nftImageURL);
-  //   // console.log("img", files);
-  // };
+
 
   const captureUploadedNftFullImageHDFile = async (files) => {
     const file = files[0];
     if (file) {
       try {
-        // let options = {
-        //   maxSizeMB: 0.06,
-        //   maxWidthOrHeight: 200,
-        //   useWebWorker: true,
-        // };
-        // let compressedFile = await imageCompression(file, options);
-
-        // while (compressedFile.size > 60 * 1024) {
-        //   options.maxSizeMB *= 0.9;
-        //   compressedFile = await imageCompression(file, options);
-        // }
-
-        // console.log("Compressed file size:", compressedFile.size);
-
         const reader = new FileReader();
         reader.onloadend = () => setNftFullImage(reader.result);
         reader.readAsDataURL(file);
@@ -245,19 +210,6 @@ const Modal = (props) => {
     const file = files[0];
     if (file) {
       try {
-        // let options = {
-        //   maxSizeMB: 0.06,
-        //   maxWidthOrHeight: 300,
-        //   useWebWorker: true,
-        // };
-        // let compressedFile = await imageCompression(file, options);
-
-        // while (compressedFile.size > 60 * 1024) {
-        //   options.maxSizeMB *= 0.9;
-        //   compressedFile = await imageCompression(file, options);
-        // }
-
-        // console.log("Compressed file size:", compressedFile.size);
 
         const reader = new FileReader();
         reader.onloadend = () => setNftImageSD(reader.result);
@@ -272,19 +224,6 @@ const Modal = (props) => {
     const file = files[0];
     if (file) {
       try {
-        // let options = {
-        //   maxSizeMB: 0.06,
-        //   maxWidthOrHeight: 200,
-        //   useWebWorker: true,
-        // };
-        // let compressedFile = await imageCompression(file, options);
-
-        // while (compressedFile.size > 60 * 1024) {
-        //   options.maxSizeMB *= 0.9;
-        //   compressedFile = await imageCompression(file, options);
-        // }
-
-        // console.log("Compressed file size:", compressedFile.size);
 
         const reader = new FileReader();
         reader.onloadend = () => setNftFullImage(reader.result);
@@ -295,19 +234,10 @@ const Modal = (props) => {
     }
   };
 
-  // const captureUploadedNftFullImage = (pic) => {
-  //   setNftFullImageURL(pic);
-  //   // console.log(nftFullImageURL);
-  //   // console.log("img", files);
-  // };
-  // const value = () => {
-  //   // console.group("image 3 and 4 called");
-  // };
-  // // console.log(nftFullImage, nftFullImageURL);
 
   return (
-    <div className="add_new_nft_popup_bg_container">
-      <div className="flex items-center justify-end">
+    <div className="add_new_nft_popup_bg_container border border-[#50B248]">
+      <div className="flex   items-center justify-end">
         <button className="text-[#ffffff]" onClick={() => toggleModal()}>
           <RxCross2 size={25} />
         </button>
@@ -333,7 +263,7 @@ const Modal = (props) => {
               }}
               type="text"
               placeholder=""
-              className="mt-1 pl-4 w-[100%] h-[38px] border-2 border-[#424242] bg-transparent rounded-md text-[16px] text-[#8a8686]"
+              className="mt-1 pl-4 w-[100%] h-[38px] border  bg-transparent rounded-md text-[16px] text-[#8a8686]"
             />
           </label>
         </div>
@@ -342,7 +272,7 @@ const Modal = (props) => {
           <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] md:text-[18px] leading-[25px]">
             NFT Rarity
             <select
-              className=" h-[38px] border-2 border-[#424242] bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
+              className=" h-[38px] border  bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
               value={nftType}
               onChange={(e) => setNftType(e.target.value)}
             >
@@ -389,7 +319,7 @@ const Modal = (props) => {
               }}
               type="text"
               placeholder=""
-              className="pl-4 rounded-md h-[40px] border-2 border-[#424242] p-2 bg-transparent text-[16px] text-[#8a8686]"
+              className="pl-4 rounded-md h-[40px] border  p-2 bg-transparent text-[16px] text-[#8a8686]"
             />
           </label>
         </div>
@@ -398,7 +328,7 @@ const Modal = (props) => {
           <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] md:text-[18px] leading-[25px]">
             NFT Type
             <select
-              className=" h-[38px] border-2 border-[#424242] bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
+              className=" h-[38px] border  bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
               value={newtype}
               onChange={(e) => setnewtype(e.target.value)}
             >
@@ -435,7 +365,7 @@ const Modal = (props) => {
               min="1"
               pattern="[1-9][0-9]*"
               placeholder=""
-              className="pl-4 rounded-md h-[38px] p-2 border-2 border-[#424242] bg-transparent text-[16px] text-[#8a8686]"
+              className="pl-4 rounded-md h-[38px] p-2 border  bg-transparent text-[16px] text-[#8a8686]"
             />
           </label>
         </div>
@@ -564,7 +494,7 @@ const Modal = (props) => {
           <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] md:text-[18px] leading-[25px]">
             NFT Season:
             <select
-              className=" h-[38px] border-2 border-[#424242] bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
+              className=" h-[38px] border  bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
               value={nftSeason}
               onChange={(e) => setnftSeason(e.target.value)}
             >
@@ -589,7 +519,7 @@ const Modal = (props) => {
           <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] md:text-[18px] leading-[25px]">
             Border Color:
             <select
-              className=" h-[38px] border-2 border-[#424242] bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
+              className=" h-[38px] border  bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
               value={nftcolor}
               onChange={(e) => setnftcolor(e.target.value)}
             >
@@ -622,7 +552,7 @@ const Modal = (props) => {
               }}
               type="number"
               min="1"
-              className="pl-4 w-[100%] mt-2  h-[38px] border-2 border-[#424242] bg-transparent rounded-md text-[16px] text-[#8a8686]"
+              className="pl-4 w-[100%] mt-2  h-[38px] border  bg-transparent rounded-md text-[16px] text-[#8a8686]"
             />
           </label>
         </div>
@@ -642,19 +572,19 @@ const Modal = (props) => {
                 }
               }}
               rows={5}
-              className="pl-2 w-[100%] h-[150px] border-2 border-[#424242] bg-transparent rounded-md mt-2 text-[16px] text-[#8a8686]"
+              className="pl-2 w-[100%] h-[150px] border  bg-transparent rounded-md mt-2 text-[16px] text-[#8a8686]"
               placeholder=""
             />
           </label>
         </div>
         <div className="flex justify-center mt-2 md:mt-3">
           {type === "add" && (
-            <div className="flex  justify-center gap-[10%] md:gap-[20%] items-center">
+            <div className="flex  justify-center gap-[10%]  md:gap-[20%] items-center">
             <div onClick={() => toggleModal()}>
-              <Buttons bgColor="#333333" textColor="white" buttonName={"Cancel"} />
+              <Buttons bgColor="black" hover={{textColor:'text-red-600', scale:'scale-110'}} textColor="white" buttonName={"Cancel"} />
             </div>
             <div onClick={() => onClickAddButton()}>
-              <Buttons bgColor="white" textColor="black" buttonName={"Add"} />
+            <Buttons bgColor="white" hover={{textColor:'text-green-600', scale:'scale-110'}} textColor="black" buttonName={"Add"} />
             </div>
 
             </div>

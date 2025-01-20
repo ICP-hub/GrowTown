@@ -103,7 +103,7 @@ function LogoImageUploader({ captureUploadedbloburl }) {
 
   return (
     <div className="mt-1">
-      <div className="flex justify-center border-2 items-center pr-2  border-dashed border-[#424242]  h-[30px] md:h-[150px] -mt-1 m-0 rounded-md">
+      <div className="flex justify-center border items-center pr-2  border-dashed   h-[30px] md:h-[150px] -mt-1 m-0 rounded-md">
         {!hideUpload && (
           <input
             id={Date.now()}
@@ -118,8 +118,8 @@ function LogoImageUploader({ captureUploadedbloburl }) {
         )}
         {!hideUpload && (
 
-          <div className="w-10 h-10 border-2 flex justify-center border-[#424242] items-center border-dashed rounded-full">
-            <IoIosAdd className="cursor-pointer text-[#424242] h-6 w-6" />
+          <div className="w-10 h-10 border-2 flex justify-center items-center border-dashed rounded-full">
+            <IoIosAdd className="cursor-pointer  h-6 w-6" />
 
           </div>
         )}
