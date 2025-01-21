@@ -7,7 +7,7 @@ import { idlFactory } from "../../../../declarations/BeGod_backend/BeGod_backend
 import { canisterId } from "../../../../declarations/BeGod_backend";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { useSelector } from "react-redux";
-import Modal from "./modal.jsx";
+import Modal from "./NftModal.jsx";
 import NftCardItem from "./NftCardItem.jsx";
 import LogoImageUploader from "./LogoImageUploader.jsx";
 import { GoPlus } from "react-icons/go";
@@ -29,6 +29,7 @@ import { BeGod_assethandler } from "../../../../declarations/BeGod_assethandler"
 import ToggleSwitch from "./toggleSwitch";
 import { IoIosAdd } from "react-icons/io";
 import Buttons from "../../Common/Buttons";
+import PreviewCard from "../../Common/PreviewCard";
 
 const CreateCollection = () => {
   const navigate = useNavigate();
@@ -80,7 +81,6 @@ const CreateCollection = () => {
   const [name, setName] = useState(formData.name || "");
   const [maxLimit, setMaxLimit] = useState(formData.maxLimit || "");
   const [description, setDescription] = useState(formData.description || "");
-  const [NoOfNFT, setNoOfNFT] = useState(formData.NoOfNFT || "");
   const [collColor, setCollColor] = useState(formData.collColor || "Green");
   const [Ufile, setUFile] = useState(formData.Ufile || []);
   console.log(description);
@@ -117,7 +117,7 @@ const CreateCollection = () => {
     // e.preventDefault();
 
     // Form validation checks
-    if (!name || !maxLimit || !description || NoOfNFT || !Ufile || nftCardsList.length === 0) {
+    if (!name || !maxLimit || !description  || !Ufile ) {
       toast.error("Please fill in all required fields.");
       return;
     }
@@ -626,7 +626,7 @@ const CreateCollection = () => {
 
   return (
     <SkeletonTheme baseColor="#202020" highlightColor="#444">
-      <div className="w-[90%] overflow-y-scroll pt-10 px-10 pb-8 h-screen no-scrollbar  no-scroll 2xl:ml-[7%] md:w-full lg:w-[90%] lg:pt-20">
+      <div className="w-[90%] overflow-y-scroll pt-10 px-10 pb-8 h-screen no-scrollbar  no-scroll 2xl:ml-[4%] md:w-full  lg:pt-20">
         {/* <Createcollectionloader done={done} total={total} /> */}
         {loading ? (
           <Createcollectionloader done={done} total={totalnft} />
@@ -650,8 +650,14 @@ const CreateCollection = () => {
               <BackButton />
               <h1 className=" text-2xl lg:text-3xl ml-2 lg:ml-5 text-white ">Create Collection</h1>
             </div>
-            <div className="my-8">
 
+         
+              
+            <div className="grid grid-flow-col grid-cols-12 ">
+              <div className="hidden xl:block my-8  mr-4  rounded-xl col-span-4"> 
+                <PreviewCard colName={name} colImage={Ufile} maxLimit={maxLimit} typeColor={collColor} description={description} />
+                 </div>
+            <div className="my-8 col-span-12 border border-[#50B248] p-4 px-8 rounded-xl bg-[#29292C] xl:col-span-8 ">
               <div className="flex flex-col md:flex-row gap-x-8 items-center  w-full  px-1 py-2 text-[#FFFFFF] justify-start rounded-md">
                 <div className="flex flex-col w-full gap-2 mt-4 space-y-4">
                   {/* Collection Name and Max Limit */}
@@ -682,7 +688,7 @@ const CreateCollection = () => {
                           }}
                           type="text"
                           placeholder=""
-                          className="pl-4 rounded-md bg-transparent border-2 border-[#424242] h-[30px] md:h-[45px] w-full"
+                          className="pl-4 rounded-md bg-transparent border  h-[30px] md:h-[45px] w-full"
                         />
                       </div>
                       <div className="flex mt-[25px] flex-col w-full">
@@ -709,7 +715,7 @@ const CreateCollection = () => {
                           }}
                           type="text"
                           placeholder=""
-                          className="pl-4 rounded-md bg-transparent  border-2 border-[#424242] h-[30px] md:h-[45px] w-full"
+                          className="pl-4 rounded-md bg-transparent  border h-[30px] md:h-[45px] w-full"
                         />
                       </div>
                     </div>
@@ -728,7 +734,7 @@ const CreateCollection = () => {
                     </div>
                   </div>
                   {/* Description */}
-                  <label className="mt-[25px] w-[100%] flex flex-col text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[20px] leading-[25px]">
+                  <label className="mt-[25px] w-[100%] flex flex-col text-[#FFFFFF] gap-2 text-[14px] md:text-[20px] leading-[25px]">
                     Description:
                     <textarea
                       value={description}
@@ -745,53 +751,16 @@ const CreateCollection = () => {
                           setDescription(""); // or handle as needed
                         }
                       }}
-                      className="pl-4 w-[100%] h-[150px]  bg-transparent  border-2 border-[#424242] rounded-md resize-none p-2"
+                      className="pl-4 w-[100%] h-[150px]  bg-transparent  border rounded-md resize-none p-2"
                       rows="8"
                       placeholder=""
                     />
                   </label>
 
-                  <div className="flex mt-[25px] flex-col w-full">
-                    <div className="flex justify-between">
-                      <label className="text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[20px] leading-[25px] mb-2">
-                        No. of NFT
-                      </label>
-                      <div className="flex items-center">
-                        <label className="text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[20px] leading-[25px] mb-2 mr-4">
-                          Featured
-                        </label>
-                        <ToggleSwitch />
-                      </div>
-                    </div>
-                    <input
-                      value={NoOfNFT}
-                      onChange={(e) => {
-                        let value = e.target.value;
-                        if (/^[0-9]*$/.test(value)) {
-                          value = value.trimStart();
-                          if (value.trim() !== "") {
-                            setNoOfNFT(value);
-                            setFormData((prev) => ({ ...prev, NoOfNFT: value }));
-                          } else {
-                            setNoOfNFT("");
-                          }
-                        } else {
-                          toast.error(
-                            "Only numbers are allowed."
-                          );
-                        }
-                      }}
-                      type="text"
-                      placeholder=""
-                      className="pl-4 rounded-md bg-transparent  border-2 border-[#424242] h-[30px] md:h-[45px] w-full"
-                    />
-                  </div>
-
-
                   <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] md:text-[18px] leading-[25px]">
                     Type color:
                     <select
-                      className=" h-[38px] bg-[#29292C] text-[16px] p-2 rounded-md text-[#8a8686]"
+                      className=" h-[38px] bg-[#29292C] text-[16px] p-2 rounded-md border  "
                       // value={collColor}
                       // onChange={(e) => setCollColor(e.target.value)}
                       onChange={(e) => {
@@ -828,29 +797,13 @@ const CreateCollection = () => {
                   </label>
 
                   {/* Add new NFT Section */}
-                  <div
+                  {/* <div
                     className={`${nftCardsList.length > 0 && "flex justify-end items-center"
                       }`}
                   >
-                    <label className="mt-[25px] w-[100%]  md:h-[46px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[20px] leading-[25px] mb-[0px]">
+                    <label className="mt-[5px] w-[100%]  text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[20px] leading-[25px] mb-[0px]">
                       NFT Cards
                     </label>
-
-
-                    <div className="flex justify-center  border-2 items-center pr-2 w-1/2 mt-2 border-dashed border-[#424242]  h-[30px] md:h-[150px]  m-0 rounded-md">
-                      <button
-                        type="button"
-                        className="w-10 h-10 border-2 flex justify-center border-[#424242] items-center border-dashed rounded-full "
-                        onClick={() => {
-                          updateType("add");
-                          toggleModal();
-                        }}
-                      >
-                        <IoIosAdd className="cursor-pointer text-[#424242] h-6 w-6" />
-                      </button>
-
-                    </div>
-
                   </div>
                   <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-2">
                     {nftCardsList.map((eachNftItem) => (
@@ -861,24 +814,37 @@ const CreateCollection = () => {
                         onClickEdit={onClickEdit}
                       />
                     ))}
-                  </div>
+                          <div className="flex justify-center   border-2 items-center pr-2 max-w-[28rem] mt-2 border-dashed border-[#424242]  h-[30px] md:h-[150px]  m-0 rounded-md">
+                      <button
+                        type="button"
+                        className="w-10  h-10 border-2 flex justify-center border-[#424242] items-center border-dashed rounded-full "
+                        onClick={() => {
+                          updateType("add");
+                          toggleModal();
+                        }}
+                      >
+                        <IoIosAdd className="cursor-pointer text-[#424242] h-6 w-6" />
+                      </button>
+
+                    </div>
+                  </div> */}
+
                   {/* Form Buttons */}
-                  <div className="flex justify-start sm:justify-end md:justify-start gap-[14%] w-[100%] mt-[10px] pb-8 sm:mb-0">
+                  <div className="flex   justify-start sm:justify-end md:justify-around gap-[14%] w-[100%] mt-[10px]  pb-8 sm:mb-0">
                     <div
                       type="button"
                       onClick={() => navigate(-1)}
-                      className="w-[30%]  sm:w-[25%] md:w-[15%] h-[43px] text-[#FFFFFF] "
+                      className="w-[30%] mt-10  sm:w-[25%] md:w-[15%] h-[43px] text-[#FFFFFF] "
                     >
                       <Buttons buttonName={"Cancel"} textColor="white" bgColor="#424242" />
                     </div>
 
-                    <div onClick={handleSubmit} className="">
+                    <div onClick={handleSubmit} className="mt-10">
                       <Buttons bgColor="white" textColor="black" buttonName={"Create Collection"} />
                     </div>
 
-
-
                   </div>
+
                   {showModal && (
                     <WarningModal
                       togglewarning={togglewarning}
@@ -887,7 +853,7 @@ const CreateCollection = () => {
                   )}
                   {!showModal && Success && <SuccessModal />}
 
-                  {modal && (
+                  {/* {modal && (
                     <div className="fixed top-0 bottom-0 left-0 right-0 w-screen h-screen bg-black bg-opacity-50 backdrop-blur-sm">
                       <div className="w-screen h-screen top-0 left-0 right-0 bottom-0 fixed">
                         <div className="flex items-center justify-center h-screen">
@@ -901,10 +867,11 @@ const CreateCollection = () => {
                         </div>
                       </div>
                     </div>
-                  )}
+                  )} */}
 
                 </div>
               </div>
+            </div>
             </div>
           </div>
         )}

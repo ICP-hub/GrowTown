@@ -94,7 +94,7 @@ function ImageUploader(props) {
 
   return (
     <div className="mt-2">
-        <div className="flex justify-center border-2 items-center pr-2  border-dashed border-[#424242]  h-[100px] md:h-[150px] -mt-1 m-0 rounded-md">
+        <div className="flex justify-center border items-center pr-2  border-dashed h-[100px] md:h-[150px] -mt-1 m-0 rounded-md">
       {!hideUpload && (
         <input
           type={fileType}
@@ -110,7 +110,7 @@ function ImageUploader(props) {
         />
       )}
       {!hideUpload && (
-        <div className="flex justify-center border border-[#424242] center ] items-center border-dashed rounded-full bg-transparent w-10 h-10  m-0 ">
+        <div className="flex justify-center border  center ] items-center border-dashed rounded-full bg-transparent w-10 h-10  m-0 ">
           <IoIosAdd className="cursor-pointer" />
         </div>
       )}

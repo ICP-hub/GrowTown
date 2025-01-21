@@ -5,7 +5,7 @@ import BackButton from "./BackButton";
 import NftCard from "./NftCard.jsx";
 import { Principal } from "@dfinity/principal";
 import { useAuth } from "../../utils/useAuthClient.jsx";
-import Modal from "./modal.jsx";
+import Modal from "./NftModal.jsx";
 import toast from "react-hot-toast";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -19,6 +19,7 @@ import { IoCheckmarkOutline } from "react-icons/io5";
 import { Box, Button } from "@chakra-ui/react";
 import { BeGod_assethandler } from "../../../../declarations/BeGod_assethandler";
 import { useNavigate } from "react-router-dom";
+import TokenModal from "./TokenModal";
 
 const cardTypeList = [
   {
@@ -83,6 +84,7 @@ const filterListOptions = [
 
 function CollectionDetails() {
   const [nftList, setnftList] = useState([]);
+  const [tokenModal, setTokenModal] = useState(false);
   const [modal, setModal] = useState(false);
   const [nftType, setnfttype] = useState("");
   const [nftname, setnftname] = useState("");
@@ -125,6 +127,10 @@ function CollectionDetails() {
 
   const toggleModal = () => {
     setModal(!modal);
+  };
+
+  const toggleTokenModal = () => {
+    setTokenModal(!tokenModal);
   };
   // console.log(collectiondata);
 
@@ -681,6 +687,9 @@ function CollectionDetails() {
                   <BackButton />
                 </span>
                 <div className="flex justify-end w-full ml-auto lg:-ml-12 gap-x-6 md:ml-0 sm:ml-auto">
+                <YellowButton methodName={() => toggleTokenModal()}>
+                    Add Token
+                  </YellowButton>
                   <YellowButton methodName={() => toggleModal()}>
                     Add NFT
                   </YellowButton>
@@ -997,6 +1006,19 @@ function CollectionDetails() {
                 </Box>
               </div>
 
+              {tokenModal && (
+                <div className="fixed top-0 bottom-0 left-0 right-0 w-screen h-screen">
+                  <div className="w-screen h-screen top-0 left-0 right-0 bottom-0 fixed bg-[rgba(37,37,37,0.84)]">
+                    <div className="flex items-center justify-center h-screen">
+                      <TokenModal
+                        toggleModal={setTokenModal}
+                        principalString={principalStringg}      
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+              
               {modal && (
                 <div className="fixed top-0 bottom-0 left-0 right-0 w-screen h-screen">
                   <div className="w-screen h-screen top-0 left-0 right-0 bottom-0 fixed bg-[rgba(37,37,37,0.84)]">
@@ -1010,6 +1032,7 @@ function CollectionDetails() {
                   </div>
                 </div>
               )}
+
               {isDisplayFiltersPopup && (
                 <div className="fixed top-0 bottom-0 left-0 right-0 z-20 w-screen h-screen md:hidden">
                   <div className="w-screen h-screen top-0 bottom-0 right-0 left-0 fixed bg-[rgba(49,49,49,0.8)]">
