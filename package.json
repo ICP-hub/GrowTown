@@ -3,22 +3,31 @@
     "node": ">=16.0.0",
     "npm": ">=7.0.0"
   },
-  "name": "begods",
+  "name": "Growntown",
   "scripts": {
     "build": "npm run build --workspaces --if-present",
     "prebuild": "npm run prebuild --workspaces --if-present",
     "pretest": "npm run prebuild --workspaces --if-present",
-    "start": "npm start --workspaces --if-present",
+    "start": "npm run start:frontend & npm run start:admin",
+    "start:frontend": "cd src/Growntown_Frontend && vite --port 3000",
+    "start:admin": "cd src/Growntown_AdminFrontend && vite --port 3001",
     "test": "npm test --workspaces --if-present"
   },
   "type": "module",
   "workspaces": [
-    "src/BeGod_frontend"
+    "src/Growntown_Frontend",
+    "src/Growntown_AdminFrontend"
   ],
   "dependencies": {
     "@ant-design/icons": "^5.4.0",
     "@chakra-ui/icons": "^2.1.1",
-    "@dfinity/auth-client": "^2.0.0",
+    "@chakra-ui/react": "^3.4.0",
+    "@chakra-ui/styled-system": "^2.12.1",
+    "@chakra-ui/theme": "^3.4.7",
+    "@chakra-ui/utils": "^2.2.3",
+    "@dfinity/agent": "^2.2.0",
+    "@dfinity/auth-client": "^2.2.0",
+    "@dfinity/identity": "^2.2.0",
     "@dfinity/ledger-icp": "^2.5.0",
     "@dfinity/ledger-icrc": "^2.5.0",
     "@funded-labs/plug-mobile-sdk": "^0.1.3",
@@ -51,11 +60,12 @@
     "react-spinners": "^0.14.1",
     "react-time-ago": "^7.3.3",
     "react-toastify": "^10.0.5",
-    "stream-browserify": "^3.0.0",
     "swiper": "^11.1.12",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
+    "buffer": "^6.0.3",
+    "stream-browserify": "^3.0.0",
     "vite": "^5.4.10",
     "vite-plugin-optimizer": "^1.4.3"
   }

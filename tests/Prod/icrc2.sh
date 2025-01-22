@@ -7,15 +7,15 @@ export MINTER_ACCOUNT_ID=$(dfx ledger account-id --network ic)
 echo "MINTER_ACCOUNT_ID: $MINTER_ACCOUNT_ID"
 
 # Step 3: Switch back to the default identity
-dfx identity use chandan
+dfx identity use Mohit
 export DEFAULT_ACCOUNT_ID=$(dfx ledger account-id --network ic)
 echo "DEFAULT_ACCOUNT_ID: $DEFAULT_ACCOUNT_ID"
 
 # Step 4: Set token details
-export TOKEN_NAME="Chandan ICP"
-export TOKEN_SYMBOL="CICP"
+export TOKEN_NAME="GRC Token"
+export TOKEN_SYMBOL="GRC"
 export TRANSFER_FEE=10_000  # 0.0001 ICP in e8s
-export PRE_MINTED_TOKENS=10_000_000_000  # Pre-mint 100 ICP tokens in e8s
+export PRE_MINTED_TOKENS=10_000_000_000  # Pre-mint 100 GRC tokens in e8s
 
 # Step 5: Deploy the ICRC2 token canister with initialization arguments
 dfx deploy icrc2_token_canister --network ic --argument "

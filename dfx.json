@@ -5,23 +5,33 @@
       "candid": "https://raw.githubusercontent.com/dfinity/ic/d87954601e4b22972899e9957e800406a0a6b929/rs/rosetta-api/icp_ledger/ledger.did",
       "wasm": "https://download.dfinity.systems/ic/d87954601e4b22972899e9957e800406a0a6b929/canisters/ledger-canister.wasm.gz"
     },
-    "BeGod_assethandler": {
-      "main": "src/BeGod_assethandler/assets.mo",
+    "Growtown_assethandler": {
+      "main": "src/Growtown_assethandler/assets.mo",
       "type": "motoko"
     },
-    "BeGod_backend": {
-      "main": "src/BeGod_backend/main.mo",
+    "Growntown_Backend": {
+      "main": "src/Growntown_Backend/main.mo",
       "type": "motoko"
     },
-    "BeGod_frontend": {
+    "Growntown_AdminFrontend": {
       "dependencies": [
-        "BeGod_backend"
+      "Growntown_Backend"
       ],
       "source": [
-        "src/BeGod_frontend/dist"
+        "src/Growntown_AdminFrontend/dist"
       ],
       "type": "assets",
-      "workspace": "BeGod_frontend"
+      "workspace": "Growntown_AdminFrontend"
+    },
+    "Growntown_Frontend": {
+      "dependencies": [
+        "Growntown_Backend"
+      ],
+      "source": [
+        "src/Growntown_Frontend/dist"
+      ],
+      "type": "assets",
+      "workspace": "Growntown_Frontend"
     }
   },
   "defaults": {
