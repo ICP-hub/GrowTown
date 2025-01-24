@@ -3,7 +3,7 @@ import { IoIosAdd } from "react-icons/io";
 
 import { RxCross2 } from "react-icons/rx";
 import Skeleton from "react-loading-skeleton";
-import { BeGod_assethandler } from "../../../../declarations/BeGod_assethandler";
+import { Growtown_assethandler } from "../../../../declarations/Growtown_assethandler";
 
 function LogoImageUploader({ captureUploadedbloburl }) {
   const [files, setFiles] = useState();
@@ -52,7 +52,7 @@ function LogoImageUploader({ captureUploadedbloburl }) {
   };
 
   // const UploadedNftImage = async (captureImage) => {
-  //   if (BeGod_assethandler) {
+  //   if (Growtown_assethandler) {
   //     try {
   //       console.log(captureImage);
 
@@ -63,7 +63,7 @@ function LogoImageUploader({ captureUploadedbloburl }) {
   //       // Step 2: Convert Blob to ArrayBuffer
   //       const arrayBuffer = await blob.arrayBuffer();
 
-  //       const result1 = await BeGod_assethandler?.uploadImg(id, [
+  //       const result1 = await Growtown_assethandler?.uploadImg(id, [
   //         ...new Uint8Array(arrayBuffer),
   //       ]);
   //       console.log(result1);
@@ -72,16 +72,16 @@ function LogoImageUploader({ captureUploadedbloburl }) {
   //       const acd = process.env.DFX_NETWORK;
   //       console.log(acd);
   //       if (acd == "local") {
-  //         const url = `http://127.0.0.1:4943/?canisterId=${process.env.CANISTER_ID_BEGOD_ASSETHANDLER}&imgid=${id}`;
+  //         const url = `http://127.0.0.1:4943/?canisterId=${process.env.CANISTER_ID_GROWTOWN_ASSETHANDLER}&imgid=${id}`;
   //         console.log("nft url", url);
   //         captureuploadedurl(url);
   //       } else if (acd === "ic") {
-  //         const url = `https://${process.env.CANISTER_ID_BEGOD_ASSETHANDLER}.raw.icp0.io/?imgid=${id}`;
+  //         const url = `https://${process.env.CANISTER_ID_GROWTOWN_ASSETHANDLER}.raw.icp0.io/?imgid=${id}`;
   //         console.log("nft url", url);
   //         captureuploadedurl(url);
   //       }
 
-  //       // const url = `http://127.0.0.1:4943/?canisterId=${process.env.CANISTER_ID_BEGOD_ASSETHANDLER}&imgid=${id}`;
+  //       // const url = `http://127.0.0.1:4943/?canisterId=${process.env.CANISTER_ID_GROWTOWN_ASSETHANDLER}&imgid=${id}`;
 
   //       // //return the url
   //       // console.log("nft url", url);

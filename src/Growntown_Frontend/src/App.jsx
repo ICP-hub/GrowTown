@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { createActor, Growntown_Backend } from "../../declarations/Growntown_Backend";
+import { createActor, Growntown_Backend } from "../../declarations/Growntown_Backend/index";
 import { AuthClient } from "@dfinity/auth-client";
 import { HttpAgent } from "@dfinity/agent";
 import { DelegationIdentity, Ed25519PublicKey, ECDSAKeyIdentity, DelegationChain } from "@dfinity/identity";

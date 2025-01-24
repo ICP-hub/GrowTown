@@ -14,7 +14,7 @@ import Useractivity from "./Useractivity";
 import Allorder from "./Allorder";
 import AllorderDetails from "./AllorderDetails";
 import UnauthorizedPage from "./collection/UnauthorizedPage";
-import { canisterId } from "../../../declarations/Growntown_Backend";
+import { canisterId } from "../../../declarations/Growntown_Backend/index.js";
 import { Principal } from "@dfinity/principal";
 import { useAuth } from "../utils/useAuthClient.jsx";
 import { useNavigate } from "react-router-dom";

@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import YellowButton from "../../components/button/YellowButton";
 import imageCompression from "browser-image-compression";
 import { v4 as uuidv4 } from "uuid";
-import { BeGod_assethandler } from "../../../../declarations/BeGod_assethandler";
+import { Growtown_assethandler } from "../../../../declarations/Growtown_assethandler";
 import Buttons from "../../Common/Buttons";
 
 const Modal = (props) => {

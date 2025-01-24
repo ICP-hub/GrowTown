@@ -3,12 +3,11 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { HttpAgent } from "@dfinity/agent";
 import { Principal } from "@dfinity/principal";
 import {
-  createActor,
-  Growntown_Backend,
-} from "../../../declarations/Growntown_Backend";
+  createActor
+} from "../../../declarations/Growntown_Backend/index";
 import { createActor as createLedgerActor } from "../../../declarations/icrc2_token_canister/index";
 import { PlugLogin, StoicLogin, NFIDLogin, IdentityLogin } from "ic-auth";
-import { idlFactory } from "../../../declarations/Growntown_Backend/index";
+import { idlFactory } from '../../../declarations/Growntown_Backend/Growntown_Backend.did.js';
 import { idlFactory as ledgerIdlFactory } from "../../../declarations/icrc2_token_canister/index";
 import { useDispatch } from "react-redux";
 import { setUser } from "../redux/authSlice";

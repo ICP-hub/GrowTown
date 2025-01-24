@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { RiFolder6Line, RiDeleteBinLine } from "react-icons/ri";
 import { RxCross2 } from "react-icons/rx";
-import { BeGod_assethandler } from "../../../../declarations/BeGod_assethandler";
+import { Growtown_assethandler } from "../../../../declarations/Growtown_assethandler";
 import { IoIosAdd } from "react-icons/io";
 
 function ImageUploader(props) {
@@ -55,7 +55,7 @@ function ImageUploader(props) {
   };
 
   // const UploadedNftImage = async (captureImage) => {
-  //   if (BeGod_assethandler) {
+  //   if (Growtown_assethandler) {
   //     try {
   //       console.log(captureImage);
 
@@ -65,7 +65,7 @@ function ImageUploader(props) {
 
   //       const arrayBuffer = await blob.arrayBuffer();
 
-  //       const result1 = await BeGod_assethandler?.uploadImg(id, [
+  //       const result1 = await Growtown_assethandler?.uploadImg(id, [
   //         ...new Uint8Array(arrayBuffer),
   //       ]);
   //       console.log(result1);
@@ -74,15 +74,15 @@ function ImageUploader(props) {
   //       const acd = process.env.DFX_NETWORK;
   //       console.log(acd);
   //       if (acd == "local") {
-  //         const url = `http://127.0.0.1:4943/?canisterId=${process.env.CANISTER_ID_BEGOD_ASSETHANDLER}&imgid=${id}`;
+  //         const url = `http://127.0.0.1:4943/?canisterId=${process.env.CANISTER_ID_GROWTOWN_ASSETHANDLER}&imgid=${id}`;
   //         console.log("nft url", url);
   //         imageurlchange(url);
   //       } else if (acd === "ic") {
-  //         const url = `https://${process.env.CANISTER_ID_BEGOD_ASSETHANDLER}.raw.icp0.io/?imgid=${id}`;
+  //         const url = `https://${process.env.CANISTER_ID_GROWTOWN_ASSETHANDLER}.raw.icp0.io/?imgid=${id}`;
   //         console.log("nft url", url);
   //         imageurlchange(url);
   //       }
-  //       // const url = `http://127.0.0.1:4943/?canisterId=${process.env.CANISTER_ID_BEGOD_ASSETHANDLER}&imgid=${id}`;
+  //       // const url = `http://127.0.0.1:4943/?canisterId=${process.env.CANISTER_ID_GROWTOWN_ASSETHANDLER}&imgid=${id}`;
   //       // //return the url
   //       // console.log("nft url", url);
   //       // imageurlchange(url);
