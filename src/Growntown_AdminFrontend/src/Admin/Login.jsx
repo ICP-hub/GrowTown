@@ -22,6 +22,7 @@ const Login = () => {
     }
     if (!isLoading) {
       if (isAuthenticated) {
+        console.log('isAuthenticated ');
         navigate("/admin/dashboard");
       } else {
         navigate("/admin/login");

@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import YellowButton from "../../components/button/YellowButton";
 import imageCompression from "browser-image-compression";
 import { v4 as uuidv4 } from "uuid";
-import { Growtown_assethandler } from "../../../../declarations/Growtown_assethandler";
+import { BeGod_assethandler } from "../../../../declarations/BeGod_assethandler";
 import Buttons from "../../Common/Buttons";
 
 const Modal = (props) => {
@@ -244,7 +244,7 @@ const Modal = (props) => {
       </div>
       <form className="flex flex-col gap-5">
         <div className="mt-1">
-          <label className="mt-4 w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[18px] leading-[25px]">
+          <label className="mt-4 w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             NFT Name
             <input
               value={nftName}
@@ -269,7 +269,7 @@ const Modal = (props) => {
         </div>
 
         <div className="mt-1 flex flex-col sm:flex-row sm:gap-4 md:flex-row md:gap-4 w-full h-[120px] md:h-[60px] mb-0">
-          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] md:text-[18px] leading-[25px]">
+          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             NFT Rarity
             <select
               className=" h-[38px] border  bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
@@ -300,7 +300,7 @@ const Modal = (props) => {
             </select>
           </label>
 
-          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] md:text-[18px] leading-[25px] ">
+          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px] ">
             Artist Name (Optional)
             <input
               value={arstistname}
@@ -325,7 +325,7 @@ const Modal = (props) => {
         </div>
 
         <div className="mt-4 flex flex-col sm:flex-row sm:gap-4 md:flex-row md:gap-4 w-full h-[120px] md:h-[60px] mb-0">
-          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] md:text-[18px] leading-[25px]">
+          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             NFT Type
             <select
               className=" h-[38px] border  bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
@@ -347,7 +347,7 @@ const Modal = (props) => {
             </select>
           </label>
 
-          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] md:text-[18px] leading-[25px]">
+          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] sm:text-[16px] lg:text-[18px]leading-[25px]">
             Quantity:
             <input
               value={nftQuantity}
@@ -371,7 +371,7 @@ const Modal = (props) => {
         </div>
 
         <div className="mt-3">
-          <label className="w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[18px] leading-[25px]">
+          <label className="w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             Head Image
             {type === "add" || hideImageUpload ? (
               <ImageUploader
@@ -398,7 +398,7 @@ const Modal = (props) => {
         </div>
 
         <div className="mt-2">
-          <label className="w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[18px] leading-[25px]">
+          <label className="w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             Full Image
             {type === "add" || hideImageUpload ? (
               <ImageUploader
@@ -425,7 +425,7 @@ const Modal = (props) => {
         </div>
 
         <div className="mt-1">
-          <label className="w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[18px] leading-[25px]">
+          <label className="w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             Head HD Image (Optional)
             {type === "add" || hideImageUpload ? (
               <ImageUploader
@@ -458,7 +458,7 @@ const Modal = (props) => {
         </div>
 
         <div className="mt-1">
-          <label className="w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[18px] leading-[25px]">
+          <label className="w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             Full HD Image (Optional)
             {type === "add" || hideImageUpload ? (
               <ImageUploader
@@ -491,7 +491,7 @@ const Modal = (props) => {
         </div>
 
         <div className="mt-1 flex flex-col sm:flex-row sm:gap-4 md:flex-row md:gap-4 w-full h-[120px] md:h-[60px] mb-0">
-          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] md:text-[18px] leading-[25px]">
+          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2  text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             NFT Season:
             <select
               className=" h-[38px] border  bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
@@ -516,7 +516,7 @@ const Modal = (props) => {
             </select>
           </label>
 
-          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] md:text-[18px] leading-[25px]">
+          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             Border Color:
             <select
               className=" h-[38px] border  bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
@@ -537,7 +537,7 @@ const Modal = (props) => {
         </div>
 
         <div className="mt-4">
-          <label className="mt-[20px] w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[20px] leading-[25px]">
+          <label className="mt-[20px] w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4  text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             Price (in ICP)
             <input
               value={nftPrice}
@@ -558,7 +558,7 @@ const Modal = (props) => {
         </div>
 
         <div className="mt-1">
-          <label className="w-[100%] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[20px] leading-[25px]">
+          <label className="w-[100%] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             NFT's Description
             <textarea
               value={nftDescription}
@@ -579,7 +579,7 @@ const Modal = (props) => {
         </div>
         <div className="flex justify-center mt-2 md:mt-3">
           {type === "add" && (
-            <div className="flex  justify-center gap-[10%]  md:gap-[20%] items-center">
+            <div className="flex  justify-center gap-[10%] items-center">
             <div onClick={() => toggleModal()}>
               <Buttons bgColor="black" hover={{textColor:'text-red-600', scale:'scale-110'}} textColor="white" buttonName={"Cancel"} />
             </div>

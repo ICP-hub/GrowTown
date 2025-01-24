@@ -26,6 +26,8 @@ const CollectionCard = ({ handleDelete, collectiondata, index }) => {
                     </button>
                 </div>
 
+                {console.log('imgUrl',JSON.parse(collectiondata[4]).collectionImageURL )}
+
                 {/* Updated Image Rendering */}
                 <img
                     className=" object-cover rounded-xl h-[70%] w-full "

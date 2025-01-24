@@ -17,7 +17,7 @@ import { LuFilter } from "react-icons/lu";
 import { RxCross2 } from "react-icons/rx";
 import { IoCheckmarkOutline } from "react-icons/io5";
 import { Box, Button } from "@chakra-ui/react";
-import { Growtown_assethandler } from "../../../../declarations/Growtown_assethandler";
+import { BeGod_assethandler } from "../../../../declarations/BeGod_assethandler";
 import { useNavigate } from "react-router-dom";
 import TokenModal from "./TokenModal";
 
@@ -224,7 +224,7 @@ function CollectionDetails() {
   }, [currentpage]);
 
   const UploadedNftImageusingBase64 = async (base64File) => {
-    if (Growtown_assethandler) {
+    if (BeGod_assethandler) {
       try {
         console.log(base64File);
 
@@ -241,7 +241,7 @@ function CollectionDetails() {
         }
 
         // Upload the image to the canister
-        const result1 = await Growtown_assethandler?.uploadImg(id, [
+        const result1 = await BeGod_assethandler?.uploadImg(id, [
           ...arrayBuffer,
         ]);
         console.log(result1);
@@ -251,19 +251,90 @@ function CollectionDetails() {
         console.log(acd);
 
         if (acd === "local") {
-          const url = `http://127.0.0.1:4943/?canisterId=${process.env.CANISTER_ID_GROWTOWN_ASSETHANDLER}&imgid=${id}`;
-          console.log("NFT URL (local):", url);
+          const url = `http://127.0.0.1:4943/?canisterId=${process.env.CANISTER_ID_BEGOD_ASSETHANDLER}&imgid=${id}`;
+          console.log(" URL (local):", url);
           return url;
           // imageurlchange(url);
         } else if (acd === "ic") {
-          const url = `https://${process.env.CANISTER_ID_GROWTOWN_ASSETHANDLER}.raw.icp0.io/?imgid=${id}`;
-          console.log("NFT URL (IC):", url);
+          const url = `https://${process.env.CANISTER_ID_BEGOD_ASSETHANDLER}.raw.icp0.io/?imgid=${id}`;
+          console.log(" URL (IC):", url);
           // imageurlchange(url);
           return url;
         }
       } catch (error) {
         console.error("Error uploading Base64 file:", error);
       }
+    }
+  };
+
+  const mintToken = async (
+    principalStringg,
+    tokenName,
+    tokenSymbol,
+    tokenDecimal,
+    tokenAmount,
+    tokenImage,
+  ) => {
+    try {
+      const imageurl1 = await UploadedNftImageusingBase64(tokenImage);
+
+
+      // console.log("in mint", principalStringg);
+      const principalString = principalStringg;
+      const principal = Principal.fromText(principalString);
+      // console.log(principal);
+      const date = new Date();
+      const formattedDate = date.toISOString();
+      const metadata = JSON.stringify({
+        chain: "ICP",
+        date: formattedDate,
+        imageurl1
+      });
+
+      const metadataContainer = {
+        json: metadata,
+      };
+
+      // const es8_price = parseInt(parseFloat(nftprice) * 100000000);
+
+      const result = await backendActor?.mintExtFungible(
+        principal,
+        tokenName,
+        tokenSymbol,
+        tokenDecimal,
+        metadataContainer ? [metadataContainer] : [],
+        tokenAmount,
+
+      );
+
+      console.log(result, "Token mint data");
+      // if (result?.status == "Error: Not all tokens were minted successfully.") {
+      //   toast.error(result?.status);
+      // }
+
+      if (result instanceof Error) {
+        toast.error(result);
+      } else {
+        // await getListing(principal);
+        toast.success("Token added");
+        toast("Fetching Tokens, Please Wait! ...", {
+          icon: "⚠️",
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+        await fetchNFTs();
+      }
+
+      return result;
+    } catch (error) {
+      console.error("Error Creating Tokens:", error);
+      toast.error("Error creating Tokens");
+      return error;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -385,69 +456,41 @@ function CollectionDetails() {
     }
   };
 
-  // const getNftTokenId = async (principal, nftIdentifier, nftprice) => {
-  //   try {
-  //     // console.log(principal, nftIdentifier, nftprice);
-  //     // const principall = Principal.fromText(principal);
-  //     const res = await listPrice(principal, nftIdentifier, nftprice);
-  //     // console.log(res, "res data");
-  //   } catch (error) {
-  //     console.error("Error fetching NFT token ID:", error);
-  //     toast.error("Error in getNftTokenId");
-  //     return error;
-  //   }
-  // };
+  const getAddedTokenDetails = async (tokenDetails) => {
+    // Disable further calls if already loading
+    if (loading) return;
+    setLoading(true);
 
-  // const listPrice = async (principal, tokenidentifier, price) => {
-  //   try {
-  //     // console.log("called");
-  //     const finalPrice = price;
+    try {
+      toast("Token creating, Please Wait! ...", {
+        icon: "⚠️",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+      const mintResult = await mintToken(
+        principalStringg,
+        tokenDetails.tokenName,
+        tokenDetails.tokenSymbol,
+        tokenDetails.tokenDecimal,
+        tokenDetails.tokenAmount,
+        tokenDetails.tokenImage,
 
-  //     const priceE8s = finalPrice ? finalPrice : null;
 
-  //     const request = {
-  //       token: tokenidentifier,
-  //       from_subaccount: [],
-  //       price: priceE8s ? [priceE8s] : [],
-  //     };
-  //     const result = await backendActor?.listprice(principal, request);
-  //     if (result) {
-  //       console.log("List Price Result:", result);
-  //       // await getListing(principal);
-  //     } else {
-  //       throw new Error("listprice is not working");
-  //       toast.error("listprice is not working");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error listing price:", error);
-  //     toast.error("Error listing price");
-  //     return error; // Return error
-  //   }
-  // };
+      );
+      console.log(mintResult);
 
-  // const getListing = async (principal) => {
-  //   try {
-  //     // console.log(principal);
-  //     const principalString = Principal.fromUint8Array(principal._arr);
-  //     // toast("Featching NFTs,Please Wait! ...", {
-  //     //   icon: "⚠️",
-  //     //   style: {
-  //     //     borderRadius: "10px",
-  //     //     background: "#333",
-  //     //     color: "#fff",
-  //     //   },
-  //     // });
-  //     const result = await backendActor?.listings(principalString);
-  //     console.log("Listing", result);
 
-  //     // fetchNFTs();
-  //     // setLoading(false);
-  //   } catch (error) {
-  //     console.error("Error fetching listing:", error);
-  //     toast.error("Error fetching listing");
-  //     return error; // Return error
-  //   }
-  // };
+    } catch (error) {
+      console.error("Error in get added nft: ", error);
+      toast.error("Error in get added nft");
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   const getAddedNftDetails = async (nftDetails) => {
     // Disable further calls if already loading
@@ -687,7 +730,7 @@ function CollectionDetails() {
                   <BackButton />
                 </span>
                 <div className="flex justify-end w-full ml-auto lg:-ml-12 gap-x-6 md:ml-0 sm:ml-auto">
-                <YellowButton methodName={() => toggleTokenModal()}>
+                  <YellowButton methodName={() => toggleTokenModal()}>
                     Add Token
                   </YellowButton>
                   <YellowButton methodName={() => toggleModal()}>
@@ -764,11 +807,10 @@ function CollectionDetails() {
                       onClickAnyFilter(dropdownItems.type);
                     }}
                     className={`rounded-full flex justify-center items-center gap-1 
-                                     h-full p-2 bg-[#000] text-[#FCD378]  hover:border-[#FCD378] border-2 ${
-                                       currentDropDown === dropdownItems.type
-                                         ? "border-[#FCD378]"
-                                         : " border-gray-800"
-                                     }`}
+                                     h-full p-2 bg-[#000] text-[#FCD378]  hover:border-[#FCD378] border-2 ${currentDropDown === dropdownItems.type
+                        ? "border-[#FCD378]"
+                        : " border-gray-800"
+                      }`}
                   >
                     <BiCategory />
                     Category ({currentCardType.charAt(0)}
@@ -782,19 +824,17 @@ function CollectionDetails() {
                       onClickAnyFilter(dropdownItems.price);
                     }}
                     className={`rounded-full flex justify-center items-center gap-1 
-                                     p-2 bg-[#000] text-[#FCD378]  hover:border-[#FCD378] border-2 ${
-                                       currentDropDown === dropdownItems.price
-                                         ? "border-[#FCD378]"
-                                         : " border-gray-800"
-                                     }`}
+                                     p-2 bg-[#000] text-[#FCD378]  hover:border-[#FCD378] border-2 ${currentDropDown === dropdownItems.price
+                        ? "border-[#FCD378]"
+                        : " border-gray-800"
+                      }`}
                   >
                     <CiDollar size={22} />
                     Price (
-                    {`${
-                      !isNaN(applyPriceRange.from) && !isNaN(applyPriceRange.to)
+                    {`${!isNaN(applyPriceRange.from) && !isNaN(applyPriceRange.to)
                         ? `${applyPriceRange.from} - ${applyPriceRange.to} `
                         : ""
-                    }`}{" "}
+                      }`}{" "}
                     ICP)
                   </button>
                   {currentDropDown === dropdownItems.price && (
@@ -825,12 +865,11 @@ function CollectionDetails() {
                       </div>
                       <div className="">
                         <button
-                          className={`w-20 border-none bg-[#FCD378] text-black h-6 mr-3 rounded-full ${
-                            isNaN(applyPriceRange.from) ||
-                            isNaN(applyPriceRange.to)
+                          className={`w-20 border-none bg-[#FCD378] text-black h-6 mr-3 rounded-full ${isNaN(applyPriceRange.from) ||
+                              isNaN(applyPriceRange.to)
                               ? "opacity-30"
                               : "opacity-100"
-                          } `}
+                            } `}
                           disabled={
                             isNaN(applyPriceRange.from) ||
                             isNaN(applyPriceRange.to)
@@ -849,11 +888,10 @@ function CollectionDetails() {
                           Cancel
                         </button>
                         <button
-                          className={`w-20 border-none bg-[#FCD378] text-black h-6 rounded-full ${
-                            isNaN(fromPrice) || isNaN(toPrice)
+                          className={`w-20 border-none bg-[#FCD378] text-black h-6 rounded-full ${isNaN(fromPrice) || isNaN(toPrice)
                               ? "opacity-30"
                               : "opacity-100"
-                          }`}
+                            }`}
                           onClick={() => {
                             onClickAnyFilter(dropdownItems.price);
                             updateApplyPriceRange({
@@ -880,11 +918,10 @@ function CollectionDetails() {
                       onClickAnyFilter(dropdownItems.filter);
                     }}
                     className={` absolute rounded-full flex justify-center items-center gap-1 
-                                    w-full h-full p-2 bg-[#000] text-[#FCD378]  hover:border-[#FCD378] border-2 ${
-                                      currentDropDown === dropdownItems.filter
-                                        ? "border-[#FCD378]"
-                                        : " border-gray-800"
-                                    }`}
+                                    w-full h-full p-2 bg-[#000] text-[#FCD378]  hover:border-[#FCD378] border-2 ${currentDropDown === dropdownItems.filter
+                        ? "border-[#FCD378]"
+                        : " border-gray-800"
+                      }`}
                   >
                     <RiArrowUpDownFill />
                     {currentFilterOption}
@@ -1012,13 +1049,13 @@ function CollectionDetails() {
                     <div className="flex items-center justify-center h-screen">
                       <TokenModal
                         toggleModal={setTokenModal}
-                        principalString={principalStringg}      
+                        getAddedTokenDetails={getAddedTokenDetails}
                       />
                     </div>
                   </div>
                 </div>
               )}
-              
+
               {modal && (
                 <div className="fixed top-0 bottom-0 left-0 right-0 w-screen h-screen">
                   <div className="w-screen h-screen top-0 left-0 right-0 bottom-0 fixed bg-[rgba(37,37,37,0.84)]">
@@ -1086,11 +1123,10 @@ function CollectionDetails() {
                                 onClickAnyFilter(dropdownItems.type);
                               }}
                               className={`rounded-md flex justify-center items-center gap-1 
-                                                w-full h-full p-2 bg-[#000]  text-[#FCD378]  hover:border-[#FCD378] border border-[#FCD378] ${
-                                                  currentDropDown ===
-                                                    dropdownItems.filter &&
-                                                  "opacity-10"
-                                                } `}
+                                                w-full h-full p-2 bg-[#000]  text-[#FCD378]  hover:border-[#FCD378] border border-[#FCD378] ${currentDropDown ===
+                                dropdownItems.filter &&
+                                "opacity-10"
+                                } `}
                             >
                               <BiCategory />
                               Category ({currentCardType.charAt(0)}
@@ -1108,12 +1144,11 @@ function CollectionDetails() {
                             >
                               <CiDollar size={20} />
                               Price (
-                              {`${
-                                !isNaN(applyPriceRange.from) &&
-                                !isNaN(applyPriceRange.to)
+                              {`${!isNaN(applyPriceRange.from) &&
+                                  !isNaN(applyPriceRange.to)
                                   ? `${applyPriceRange.from} - ${applyPriceRange.to} `
                                   : ""
-                              }`}{" "}
+                                }`}{" "}
                               ICP)
                             </button>
                             {currentDropDown === dropdownItems.price && (
@@ -1144,12 +1179,11 @@ function CollectionDetails() {
                                 </div>
                                 <div className="">
                                   <button
-                                    className={`w-[80px] border-none bg-[#FCD378] text-black h-[24px] mr-3 rounded-full ${
-                                      isNaN(applyPriceRange.from) ||
-                                      isNaN(applyPriceRange.to)
+                                    className={`w-[80px] border-none bg-[#FCD378] text-black h-[24px] mr-3 rounded-full ${isNaN(applyPriceRange.from) ||
+                                        isNaN(applyPriceRange.to)
                                         ? "opacity-20"
                                         : "opacity-100"
-                                    } `}
+                                      } `}
                                     disabled={
                                       isNaN(applyPriceRange.from) ||
                                       isNaN(applyPriceRange.to)
@@ -1168,11 +1202,10 @@ function CollectionDetails() {
                                     Cancel
                                   </button>
                                   <button
-                                    className={`w-[80px] border-none bg-[#FCD378] text-black h-[24px] rounded-full ${
-                                      isNaN(fromPrice) || isNaN(toPrice)
+                                    className={`w-[80px] border-none bg-[#FCD378] text-black h-[24px] rounded-full ${isNaN(fromPrice) || isNaN(toPrice)
                                         ? "opacity-20"
                                         : "opacity-100"
-                                    }`}
+                                      }`}
                                     onClick={() => {
                                       onClickAnyFilter(dropdownItems.price);
                                       updateApplyPriceRange({
@@ -1201,11 +1234,10 @@ function CollectionDetails() {
                                 onClickAnyFilter(dropdownItems.filter);
                               }}
                               className={` absolute rounded-md flex justify-center items-center gap-1 
-                                                w-full h-full p-2 bg-[#000] text-[#FCD378]  border-[#FCD378] border ${
-                                                  currentDropDown ===
-                                                    dropdownItems.type &&
-                                                  "opacity-5"
-                                                }  `}
+                                                w-full h-full p-2 bg-[#000] text-[#FCD378]  border-[#FCD378] border ${currentDropDown ===
+                                dropdownItems.type &&
+                                "opacity-5"
+                                }  `}
                             >
                               <RiArrowUpDownFill />
                               {currentFilterOption}
@@ -1239,8 +1271,8 @@ function CollectionDetails() {
                                       </li>
                                       {currentFilterOption ===
                                         eachFilter.optionId && (
-                                        <IoCheckmarkOutline />
-                                      )}
+                                          <IoCheckmarkOutline />
+                                        )}
                                     </div>
                                     {index != filterListOptions.length - 1 && (
                                       <hr className="my-1 border-t border-[#FCD378]" />
