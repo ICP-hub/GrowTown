@@ -41,7 +41,7 @@ export const useAuthClient = (options = defaultOptions) => {
       setAuthClient(client);
     });
   }, [dispatch]);
-  const backendCanisterId = process.env.CANISTER_ID_BEGOD_BACKEND;
+  const backendCanisterId = process.env.CANISTER_ID_GROWNTOWN_BACKEND;
 
   const login = (val) => {
     return new Promise(async (resolve, reject) => {

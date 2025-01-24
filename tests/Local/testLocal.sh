@@ -12,7 +12,7 @@ LEDGERID=$(dfx ledger account-id);
 echo $LEDGERID
 
 USER_PRINCIPAL=$(dfx identity get-principal)
-CANISTER=$(dfx canister id BeGod_backend)
+CANISTER=$(dfx canister id Growntown_Backend)
 echo "USER_PRINCIPAL: $USER_PRINCIPAL"
 echo "CANISTER: $CANISTER"
 
