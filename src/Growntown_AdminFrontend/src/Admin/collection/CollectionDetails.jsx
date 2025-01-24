@@ -17,7 +17,7 @@ import { LuFilter } from "react-icons/lu";
 import { RxCross2 } from "react-icons/rx";
 import { IoCheckmarkOutline } from "react-icons/io5";
 import { Box, Button } from "@chakra-ui/react";
-import { BeGod_assethandler } from "../../../../declarations/BeGod_assethandler";
+import { Growtown_assethandler } from "../../../../declarations/Growtown_assethandler";
 import { useNavigate } from "react-router-dom";
 import TokenModal from "./TokenModal";
 
@@ -224,7 +224,7 @@ function CollectionDetails() {
   }, [currentpage]);
 
   const UploadedNftImageusingBase64 = async (base64File) => {
-    if (BeGod_assethandler) {
+    if (Growtown_assethandler) {
       try {
         console.log(base64File);
 
@@ -241,7 +241,7 @@ function CollectionDetails() {
         }
 
         // Upload the image to the canister
-        const result1 = await BeGod_assethandler?.uploadImg(id, [
+        const result1 = await Growtown_assethandler?.uploadImg(id, [
           ...arrayBuffer,
         ]);
         console.log(result1);
@@ -251,12 +251,12 @@ function CollectionDetails() {
         console.log(acd);
 
         if (acd === "local") {
-          const url = `http://127.0.0.1:4943/?canisterId=${process.env.CANISTER_ID_BEGOD_ASSETHANDLER}&imgid=${id}`;
+          const url = `http://127.0.0.1:4943/?canisterId=${process.env.CANISTER_ID_GROWTOWN_ASSETHANDLER}&imgid=${id}`;
           console.log(" URL (local):", url);
           return url;
           // imageurlchange(url);
         } else if (acd === "ic") {
-          const url = `https://${process.env.CANISTER_ID_BEGOD_ASSETHANDLER}.raw.icp0.io/?imgid=${id}`;
+          const url = `https://${process.env.CANISTER_ID_GROWTOWN_ASSETHANDLER}.raw.icp0.io/?imgid=${id}`;
           console.log(" URL (IC):", url);
           // imageurlchange(url);
           return url;
