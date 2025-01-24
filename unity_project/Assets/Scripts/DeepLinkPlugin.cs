@@ -17,8 +17,13 @@ namespace IC.GameKit
 
         private void Awake()
         {
-            // Register action for deep link activated.
+#if UNITY_ANDROID || UNITY_IOS
+            // Register action for deep link activated for mobile platforms.
             Application.deepLinkActivated += OnDeepLinkActivated;
+#elif UNITY_WEBGL
+            // In WebGL, listen for deep link messages differently if needed.
+            Debug.Log("WebGL deep link handling to be implemented separately.");
+#endif
         }
 
         public void Start()
@@ -28,8 +33,14 @@ namespace IC.GameKit
 
         public void OpenBrowser()
         {
-            var target = mTestICPAgent.greetFrontend + "?sessionkey=" + ByteUtil.ToHexString(mTestICPAgent.TestIdentity.PublicKey.ToDerEncoding());
+            string target = mTestICPAgent.greetFrontend + "?sessionkey=" + ByteUtil.ToHexString(mTestICPAgent.TestIdentity.PublicKey.ToDerEncoding());
+
+#if UNITY_WEBGL
+            // Open URL in a new browser tab in WebGL
+            Application.ExternalEval($"window.open('{target}', '_blank')");
+#else
             Application.OpenURL(target);
+#endif
         }
 
         public void OnDeepLinkActivated(string url)
@@ -41,24 +52,23 @@ namespace IC.GameKit
             var indexOfDelegation = url.IndexOf(kDelegationParam);
             if (indexOfDelegation == -1)
             {
-                Debug.LogError("Cannot find delegation");
+                Debug.LogError("Cannot find delegation in URL.");
                 return;
             }
 
-            var delegationString = HttpUtility.UrlDecode(url.Substring(indexOfDelegation + kDelegationParam.Length));
+            string delegationString = HttpUtility.UrlDecode(url.Substring(indexOfDelegation + kDelegationParam.Length));
             mTestICPAgent.DelegationIdentity = ConvertJsonToDelegationIdentity(delegationString);
         }
 
         internal DelegationIdentity ConvertJsonToDelegationIdentity(string jsonDelegation)
         {
             var delegationChainModel = JsonConvert.DeserializeObject<DelegationChainModel>(jsonDelegation);
-            if (delegationChainModel == null && delegationChainModel.delegations.Length == 0)
+            if (delegationChainModel == null || delegationChainModel.delegations.Length == 0)
             {
                 Debug.LogError("Invalid delegation chain.");
                 return null;
             }
 
-            // Initialize DelegationIdentity.
             var delegations = new List<SignedDelegation>();
             foreach (var signedDelegationModel in delegationChainModel.delegations)
             {
@@ -79,3 +89,4 @@ namespace IC.GameKit
         }
     }
 }
+

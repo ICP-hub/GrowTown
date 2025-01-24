@@ -13,13 +13,17 @@
 # generated files
 **/declarations/
 
-# rust
-target/
+# motoko
+.mops
 
 # frontend code
 node_modules/
 dist/
-.svelte-kit/
+Growntown_Frontend/node_modules/
+Growntown_Frontend/dist/
+Growntown_AdminFrontend/dist/
+Growntown_AdminFrontend/node_modules/
+
 
 # environment variables
 .env

@@ -1,53 +1,3 @@
-// import React, { Suspense, lazy } from "react";
-// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import Admin from "./Admin/Admin";
-// import Login from "./Admin/Login";
-// import Profile from "./pages/Profile";
-// import CollectionDetail from "./pages/CollectionDetail";
-// import NftDetails from "./components/NftDetails";
-// import Hero from "./pages/Hero";
-// import BuyNft from "./pages/BuyNft";
-// import PageNotFound from "./Admin/PageNotFound";
-// import Activity from "./pages/Activity";
-// import UnauthorizedPage from "./Admin/collection/UnauthorizedPage";
-
-// // Introduce a manual delay for testing
-// const simulateNetworkDelay = (ms) => {
-//   return new Promise((resolve) => setTimeout(resolve, ms));
-// };
-
-// // Lazy load the FullpageLoader with a simulated delay
-// const FullpageLoader = lazy(() =>
-//   simulateNetworkDelay(2000).then(() => import("./Loader/FullpageLoader"))
-// );
-
-// function App() {
-//   return (
-//     <div>
-//       <Suspense fallback={<FullpageLoader />}>
-//         <Routes>
-//           <Route path="/" element={<Hero />}></Route>
-//           <Route path="/profile" element={<Profile />} />
-//           <Route path="/activity" element={<Activity />} />
-//           <Route
-//             path="/collection/:collectionName"
-//             element={<CollectionDetail />}
-//           />
-//           <Route path="/Nft/:Nftname" element={<NftDetails />} />
-//           <Route path="/Nft/:Nftname/buy" element={<BuyNft />} />
-//           <Route path="/admin/login" element={<Login />} />
-//           <Route path="/admin/*" element={<Admin />} />
-//           <Route path="/unauth/*" element={<UnauthorizedPage />} />
-//           <Route path="*" element={<PageNotFound />} />
-//           <Route path="/unauth" element={<UnauthorizedPage />} />
-//         </Routes>
-//       </Suspense>
-//     </div>
-//   );
-// }
-
-// export default App;
-
 
 import React, { useState, useEffect } from "react";
 import { createActor, Growntown_Backend } from "../../declarations/Growntown_Backend";
@@ -63,15 +13,17 @@ const App = () => {
   const [greeting, setGreeting] = useState("");
   const [loading, setLoading] = useState(false);
 
-console.log('delegationChain',delegationChain)
-
+  console.log('actor:', actor);
+  console.log('delegationChain:', delegationChain);
+  console.log('greeting:', greeting);
+  console.log('appPublicKey:', appPublicKey);
 
   // Extract the session key from URL on component mount
   useEffect(() => {
-    const url = window.location.href;
-    const publicKeyIndex = url.indexOf("sessionkey=");
-    if (publicKeyIndex !== -1) {
-      const publicKeyString = url.substring(publicKeyIndex + "sessionkey=".length);
+    const urlParams = new URLSearchParams(window.location.search);
+    const publicKeyString = urlParams.get("sessionkey");
+
+    if (publicKeyString) {
       setAppPublicKey(Ed25519PublicKey.fromDer(fromHexString(publicKeyString)));
     }
   }, []);
@@ -84,9 +36,11 @@ console.log('delegationChain',delegationChain)
         identity: middleKeyIdentity,
       });
 
+      const iiUrl ="https://identity.ic0.app/#authorize";
+
       await new Promise((resolve) => {
         authClient.login({
-          identityProvider: "https://identity.ic0.app/#authorize",
+          identityProvider: iiUrl,
           onSuccess: resolve,
         });
       });
@@ -94,9 +48,21 @@ console.log('delegationChain',delegationChain)
       const middleIdentity = authClient.getIdentity();
       const agent = new HttpAgent({ identity: middleIdentity });
 
-      const newActor = createActor(process.env.GREET_BACKEND_CANISTER_ID, {
-        agent,
-      });
+      // Fetch root key when running locally
+      if (process.env.DFX_NETWORK === "local") {
+        console.log("Fetching root key for local development...");
+        await agent.fetchRootKey();
+      }
+
+      // Fetch canister ID from environment variable
+      const canisterId = process.env.CANISTER_ID_GROWNTOWN_BACKEND;
+      console.log('Canister ID:', canisterId);
+
+      if (!canisterId) {
+        throw new Error("Canister ID is undefined. Ensure it's set in the environment variables.");
+      }
+
+      const newActor = createActor(canisterId, { agent });
       setActor(newActor);
 
       if (appPublicKey && middleIdentity instanceof DelegationIdentity) {
@@ -142,20 +108,25 @@ console.log('delegationChain',delegationChain)
 
   return (
     <div style={{ textAlign: "center", padding: "20px" }}>
-      <h1 className="text-white"> DFINITY Greeting App</h1>
+      <h1 className="text-black">DFINITY Greeting App</h1>
       <div className="flex flex-col">
-      <button  className="text-black bg-white mb-4" onClick={handleLogin}>Login</button>
-      <button className="text-black bg-white" onClick={handleAuthorize} disabled={!delegationChain}>
-        Authorize 
-      </button>
-      <button onClick={handleGreet} disabled={loading}>
-        {loading ? "Loading..." : "Greet"}
-      </button>
+        <button className="text-white bg-black mb-4" onClick={handleLogin}>
+          Login
+        </button>
+        <button
+          className="text-white bg-black mb-4"
+          onClick={handleAuthorize}
+          disabled={!delegationChain}
+        >
+          Authorize
+        </button>
+        <button className="text-white bg-black" onClick={handleGreet} disabled={loading}>
+          {loading ? "Loading..." : "Greet"}
+        </button>
       </div>
-      {greeting && <p id="greeting" className="text-white">{greeting}</p>}
+      {greeting && <p id="greeting" className="text-black">{greeting}</p>}
     </div>
   );
 };
 
 export default App;
-

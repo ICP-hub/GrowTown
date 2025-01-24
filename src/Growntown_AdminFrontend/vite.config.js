@@ -3,25 +3,29 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import environment from 'vite-plugin-environment';
 import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config({ path: '../../.env' });
+// Load environment variables from the correct path
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 export default defineConfig({
+  base: '/',
+  publicDir: 'public',
   build: {
     emptyOutDir: true,
     rollupOptions: {
-      external: ['focus-lock/constants', 'detect-node-es', 'get-nonce']
-    }
+      external: id => /node_modules/.test(id), 
+    },
   },
   optimizeDeps: {
     esbuildOptions: {
       define: {
-        global: "globalThis",
+        global: 'globalThis',
       },
     },
   },
   server: {
-    port: 3001, 
+    port: 3001,
     proxy: {
       "/api": {
         target: "http://127.0.0.1:4943",
@@ -29,26 +33,29 @@ export default defineConfig({
       },
     },
     watch: {
-      usePolling: true,
+      usePolling: false,
     },
   },
   plugins: [
     react(),
-    environment("all", { prefix: "CANISTER_" }),
-    environment("all", { prefix: "DFX_" }),
+    environment('all', { prefix: 'CANISTER_' }),
+    environment('all', { prefix: 'DFX_' }),
   ],
   resolve: {
     alias: [
       {
-        find: "declarations",
-        replacement: fileURLToPath(
-          new URL("../declarations", import.meta.url)
-        ),
+        find: 'declarations',
+        replacement: fileURLToPath(new URL('../declarations', import.meta.url)),
       },
       {
         find: '@dfinity/identity/lib/cjs/buffer',
         replacement: 'buffer/',
       },
     ],
+    extensions: ['.js', '.ts', '.jsx', '.tsx'],
+  },
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
   },
 });
+

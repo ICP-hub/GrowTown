@@ -7,7 +7,7 @@
     "setup": "npm i && dfx canister create Growntown_Backend && dfx generate Growntown_Backend && dfx deploy",
     "start": "vite --port 3000",
     "prebuild": "dfx generate",
-    "build": "tsc && vite build",
+    "build": "NODE_OPTIONS='--max-old-space-size=8192' tsc && vite build",
     "format": "prettier --write \"src/**/*.{json,js,jsx,ts,tsx,css,scss}\""
   },
   "dependencies": {
