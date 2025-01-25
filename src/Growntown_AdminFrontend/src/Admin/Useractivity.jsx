@@ -17,7 +17,7 @@ import {
 import { CloseIcon } from "@chakra-ui/icons";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useAuth } from "../utils/useAuthClient.jsx";
+import { useAuths } from "../utils/useAuthClient.jsx";
 import { useSelector } from "react-redux";
 import { Principal } from "@dfinity/principal";
 import { SkeletonTheme } from "react-loading-skeleton";
@@ -29,7 +29,7 @@ import BackButton from "./collection/BackButton.jsx";
 import YellowButton from "../components/button/YellowButton.jsx";
 import Buttons from "../Common/Buttons.jsx";
 function Users() {
-  const { backendActor } = useAuth();
+  const { backendActor } = useAuths();
 
   const [loading, setLoading] = useState(false);
   const [alluser, setalluser] = useState([]);

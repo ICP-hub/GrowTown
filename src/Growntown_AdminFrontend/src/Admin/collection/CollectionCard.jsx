@@ -11,7 +11,7 @@ const CollectionCard = ({ handleDelete, collectiondata, index }) => {
         >
             <div
                 key={index}
-                className="relative bg-[#29292C] w-[90%] h-full px-4 py-4 shadow-lg text-white flex flex-col gap-y-4 rounded-xl border transition-transform duration-300 ease-in-out border-[#50B248] hover:scale-110"
+                className="relative bg-[#29292C] w-[95%] h-full px-6 py-6 shadow-lg text-white flex flex-col gap-y-4 rounded-xl border transition-transform duration-300 ease-in-out border-[#50B248] hover:scale-105"
 
             >
                 <div className="absolute top-2 right-2">
@@ -26,9 +26,11 @@ const CollectionCard = ({ handleDelete, collectiondata, index }) => {
                     </button>
                 </div>
 
+                {console.log('imgUrl',JSON.parse(collectiondata[4]).collectionImageURL )}
+
                 {/* Updated Image Rendering */}
                 <img
-                    className=" object-cover rounded-xl h-[70%] w-full "
+                    className="object-cover rounded-xl h-[300px] w-full"
                     src={
                         JSON.parse(collectiondata[4]).collectionImageURL ||
                         "default-image.jpg"

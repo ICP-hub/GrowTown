@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useAuth } from "../utils/useAuthClient.jsx";
+import { useAuths } from "../utils/useAuthClient.jsx";
 import { setUser } from "../redux/authSlice.js";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -10,17 +10,17 @@ import { canisterId } from "../../../declarations/Growntown_Backend/index.js";
 import { Principal } from "@dfinity/principal";
 
 function DashBoard() {
-  const { backendActor } = useAuth();
+  const { backendActor } = useAuths();
   const [user, setUser] = useState();
   const [nfts, setnfts] = useState();
   const [collections, setcollections] = useState();
   const navigate = useNavigate();
   const [loading, setloading] = useState(false);
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useAuths();
 
   useEffect(() => {
     if (!isAuthenticated) {
-      navigate("/login");
+      navigate("/");
     } else {
       const fetching = async () => {
         // await getTotalNFT();

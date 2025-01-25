@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../utils/useAuthClient.jsx";
+import { useAuths } from "../utils/useAuthClient.jsx";
 import LoginButton from "./components/LoginButton.jsx";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { adminlogin, isAuthenticated, logout } = useAuth();
+  const { adminlogin, isAuthenticated, logout } = useAuths();
   const [isLoading, setIsLoading] = useState(true);
 
   // Trigger the animation effect for wallet options
@@ -22,6 +22,7 @@ const Login = () => {
     }
     if (!isLoading) {
       if (isAuthenticated) {
+        console.log('isAuthenticated ');
         navigate("/admin/dashboard");
       } else {
         navigate("/admin/login");

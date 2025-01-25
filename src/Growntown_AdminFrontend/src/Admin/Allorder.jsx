@@ -14,13 +14,13 @@ import {
 import { CopyIcon } from "@chakra-ui/icons";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useAuth } from "../utils/useAuthClient.jsx";
+import { useAuths } from "../utils/useAuthClient.jsx";
 import { Principal } from "@dfinity/principal";
 import { SkeletonTheme } from "react-loading-skeleton";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 function Allorder() {
-  const { backendActor } = useAuth();
+  const { backendActor } = useAuths();
   const [loading, setLoading] = useState(false);
   const [allorder, setallorder] = useState([]);
   let [currentpage, setcurrentpage] = useState(1);
