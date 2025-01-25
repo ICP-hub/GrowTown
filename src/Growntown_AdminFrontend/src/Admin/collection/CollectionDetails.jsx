@@ -724,17 +724,17 @@ function CollectionDetails() {
             </div>
           ) : (
             <div className="w-full">
-              {/* Back button and action buttons */}
-              <div className="flex flex-col-2 ">
+              /* Back button and action buttons */
+              <div className="flex flex-col-2 mb-8">
                 <span className="hidden sm:block">
                   <BackButton />
                 </span>
-                <div className="flex justify-end w-full ml-auto lg:-ml-12 gap-x-6 md:ml-0 sm:ml-auto">
+                <div className="flex justify-end w-full ml-auto gap-x-4 sm:gap-x-6">
                   <YellowButton methodName={() => toggleTokenModal()}>
                     Add Token
                   </YellowButton>
                   <YellowButton methodName={() => toggleModal()}>
-                    Add NFT
+                    Add NFT 
                   </YellowButton>
                   <Link to={"/admin/collection/create"}>
                     <YellowButton>Add Collection</YellowButton>
@@ -743,30 +743,49 @@ function CollectionDetails() {
               </div>
 
               {/* Collection details section */}
-              <div className="flex flex-col md:flex-row gap-x-8 items-center bg-[#29292c] w-full p-10 text-[#FFFFFF] rounded-md my-10 justify-between">
-                <img
-                  className="w-32 h-32"
-                  src={
-                    JSON.parse(collectiondata[4]).collectionImageURL ||
-                    "default-image.jpg"
-                  }
-                  alt={collectiondata[2]}
-                />
-                <div className="space-y-4">
-                  <div className="flex justify-between">
-                    <h1 className="text-sm font-semibold md:text-3xl">
+              <div className="flex flex-col md:flex-row items-start bg-[#29292c] w-full p-6 md:p-8 text-[#FFFFFF] rounded-lg my-8 shadow-xl">
+                <div className="flex-shrink-0 md:mr-8">
+                  <img
+                    className="w-40 h-40 md:w-48 md:h-48 rounded-xl object-cover border-2 border-[#FCD378] shadow-lg transform hover:scale-105 transition-transform duration-300"
+                    src={
+                      JSON.parse(collectiondata[4]).collectionImageURL ||
+                      "default-image.jpg"
+                    }
+                    alt={collectiondata[2]}
+                  />
+                </div>
+
+                <div className="flex flex-col space-y-6 w-full mt-6 md:mt-0">
+                  <div className="flex flex-col space-y-2">
+                    <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#FCD378] tracking-wide">
                       {collectiondata[2]}
                     </h1>
+                    <p className="text-sm md:text-base font-Quicksand text-gray-300 leading-relaxed max-w-3xl">
+                      {colldescription}
+                    </p>
                   </div>
-                  <p className="text-sm font-normal font-Quicksand md:text-xl">
-                    {colldescription}
-                  </p>
-                  <h3 className="text-sm font-bold font-Quicksand md:text-xl">
-                    Collection ID - {principalStringg}
-                  </h3>
-                  <h3 className="text-sm font-bold font-Quicksand md:text-xl">
-                    Collection Color - {colcolor}
-                  </h3>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-[#1f1f22] p-4 rounded-lg">
+                    <div className="flex flex-col space-y-2">
+                      <span className="text-xs text-gray-400 uppercase tracking-wider">Collection ID</span>
+                      <h3 className="text-sm font-medium font-Quicksand text-[#FCD378] truncate hover:text-clip">
+                        {principalStringg}
+                      </h3>
+                    </div>
+
+                    <div className="flex flex-col space-y-2">
+                      <span className="text-xs text-gray-400 uppercase tracking-wider">Collection Color</span>
+                      <div className="flex items-center space-x-3">
+                        <div 
+                          className="w-6 h-6 rounded-full border-2 border-white/20 shadow-md" 
+                          style={{backgroundColor: colcolor}}
+                        />
+                        <h3 className="text-sm font-medium font-Quicksand text-white">
+                          {colcolor}
+                        </h3>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
