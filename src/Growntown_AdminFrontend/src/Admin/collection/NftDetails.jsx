@@ -4,13 +4,13 @@ import { ArrowBackIcon } from "@chakra-ui/icons";
 import BackButton from "./BackButton";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useAuth } from "../../utils/useAuthClient.jsx";
+import { useAuths } from "../../utils/useAuthClient.jsx";
 import { Principal } from "@dfinity/principal";
 import toast from "react-hot-toast";
 
 const NftDetails = () => {
   const { collectionId, nftId } = useParams();
-  const { backendActor } = useAuth();
+  const { backendActor } = useAuths();
   const navigate = useNavigate();
   const location = useLocation();
   const [loading, setLoading] = useState(true); // To handle loading state

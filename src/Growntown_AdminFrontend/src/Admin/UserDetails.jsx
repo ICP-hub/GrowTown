@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box } from "@chakra-ui/react";
 import BackButton from "./collection/BackButton";
-import { useAuth } from "../utils/useAuthClient.jsx";
+import { useAuths } from "../utils/useAuthClient.jsx";
 import { Principal } from "@dfinity/principal";
 import { useLocation } from "react-router-dom";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
@@ -10,7 +10,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 const UserDetails = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true); // Loading state for skeletons
-  const { backendActor } = useAuth();
+  const { backendActor } = useAuths();
   const location = useLocation();
   const { user } = location.state || {};
 

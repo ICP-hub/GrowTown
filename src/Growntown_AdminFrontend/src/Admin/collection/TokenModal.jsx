@@ -3,7 +3,7 @@ import { RxCross2 } from 'react-icons/rx';
 import Buttons from '../../Common/Buttons';
 import ImageUploader from './ImageUploader';
 import toast from 'react-hot-toast';
-import { useAuth } from '../../utils/useAuthClient';
+import { useAuths } from '../../utils/useAuthClient';
 import WarningModal from './WarningModal';
 import SuccessModal from './SuccessModal';
 import { Principal } from '@dfinity/principal';
@@ -16,7 +16,7 @@ const TokenModal = ({toggleModal, getAddedTokenDetails}) => {
   const [tokenImage,setTokenImage]=useState('')
   const [tokenImageUrl, seTokentImageurl]=useState('')
   const [showModal,setShowModal]=useState(false)
-   const { backendActor } = useAuth();
+   const { backendActor } = useAuths();
    const [Success, setsuccess]=useState(false)
 
   console.log('tokenDetails=>',tokenName,tokenDecimal,tokenSymbol,'tokenImageUrl',tokenImageUrl)

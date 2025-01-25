@@ -4,7 +4,7 @@ import YellowButton from "../../components/button/YellowButton";
 import BackButton from "./BackButton";
 import NftCard from "./NftCard.jsx";
 import { Principal } from "@dfinity/principal";
-import { useAuth } from "../../utils/useAuthClient.jsx";
+import { useAuths } from "../../utils/useAuthClient.jsx";
 import Modal from "./NftModal.jsx";
 import toast from "react-hot-toast";
 import Skeleton from "react-loading-skeleton";
@@ -97,7 +97,7 @@ function CollectionDetails() {
   const [totalpage, settotalpage] = useState(0);
   const [loading, setLoading] = useState(false);
   // const [showLoader, setShowLoader] = useState(false);
-  const { backendActor, canisterId } = useAuth();
+  const { backendActor, canisterId } = useAuths();
   const { id } = useParams();
   const location = useLocation();
   const { collectiondata } = location.state || {};

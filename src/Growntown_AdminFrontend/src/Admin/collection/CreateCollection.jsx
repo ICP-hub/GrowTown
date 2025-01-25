@@ -13,7 +13,7 @@ import { GoPlus } from "react-icons/go";
 import { BiPlus } from "react-icons/bi";
 import BackButton from "./BackButton.jsx";
 import YellowButton from "../../components/button/YellowButton.jsx";
-import { useAuth } from "../../utils/useAuthClient.jsx";
+import { useAuths } from "../../utils/useAuthClient.jsx";
 import { Principal } from "@dfinity/principal";
 import { Opt } from "@dfinity/candid/lib/cjs/idl";
 import Skeleton from "react-loading-skeleton";
@@ -40,7 +40,7 @@ const CreateCollection = () => {
   const [nftRows, setNftRows] = useState([{ id: "", description: "" }]); // Initial row
   const [modal, setModal] = useState(false);
   const [nftCardsList, setNftCardsList] = useState([]);
-  const { backendActor, canisterId } = useAuth();
+  const { backendActor, canisterId } = useAuths();
 
   const [base64String, setBase64String] = useState("");
   const [nftType, setnfttype] = useState("");

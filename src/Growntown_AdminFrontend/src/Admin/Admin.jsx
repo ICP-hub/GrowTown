@@ -16,20 +16,21 @@ import AllorderDetails from "./AllorderDetails";
 import UnauthorizedPage from "./collection/UnauthorizedPage";
 import { canisterId } from "../../../declarations/Growntown_Backend/index.js";
 import { Principal } from "@dfinity/principal";
-import { useAuth } from "../utils/useAuthClient.jsx";
+import { useAuths } from "../utils/useAuthClient.jsx";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 function Admin() {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-  const { backendActor, principal } = useAuth();
+  const { backendActor, principal } = useAuths();
   const navigate = useNavigate();
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const {isAuthenticated}=useAuths();
 
   // Prevent duplicate calls in React Strict Mode
   const [isInitialRender, setIsInitialRender] = useState(true);
-
+   
+  console.log('backendActoer',backendActor); 
   // Toggle sidebar visibility
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -37,18 +38,25 @@ function Admin() {
 
   // Redirect to login if not authenticated
   if (!isAuthenticated) {
-    return <Navigate to="/admin/login" replace />;
+    navigate('/')
   }
 
   // Function to check admin ID
   const checkingAdminId = async () => {
+    console.log('hellog')
     setLoading(true);
 
     if (backendActor) {
       try {
+        console.log('canisterId', canisterId)
         const canister = Principal.fromText(canisterId);
+        console.log('canisterId', canisterId, ' & ',canister)
         const principalid = Principal.fromText(principal);
+        console.log('principal', principal, ' & ', principalid )
         const result = await backendActor.isController(canister, principalid);
+        console.log('result', result  )
+
+         console.log('result', result)
 
         if (result === true) {
           toast.success("Admin login successful");
@@ -59,9 +67,10 @@ function Admin() {
         }
         setLoading(false);
       } catch (error) {
+      
         console.error("Error checking admin ID:", error);
         toast.error("Error checking admin ID:", error);
-        navigate("/admin/login");
+        navigate("/");
       } finally {
       }
     }
@@ -69,11 +78,10 @@ function Admin() {
 
   useEffect(() => {
     // Prevent duplicate calls in development mode
-    if (isInitialRender) {
-      setIsInitialRender(false);
+    if (backendActor) {
       checkingAdminId();
     }
-  }, [isInitialRender]);
+  }, [backendActor]);
 
   if (loading) {
     return (
