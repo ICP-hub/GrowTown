@@ -56,7 +56,7 @@ const UserDetails = () => {
 
   return (
     <SkeletonTheme baseColor="#202020" highlightColor="#444">
-      <div className="w-11/12 overflow-y-scroll pt-10 px-10 pb-8 h-screen no-scrollbar md:w-full  lg:pt-20">
+      <div className="w-11/12 overflow-y-scroll pt-10 px-10 pb-8 h-screen no-scrollbar  md:px-28 lg:pt-20">
         {/* Back Button */}
         <div className="flex justify-between text-center">
           <BackButton />

@@ -14,6 +14,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Link } from "react-router-dom";
 import { FaCheckCircle } from "react-icons/fa";
 import { toast } from "react-hot-toast";
+import { useAuths } from "../utils/useAuthClient";
 
 
 const sideBarData = [
@@ -89,9 +90,11 @@ function SidebarContent({ onClose, className, setIsOpen }) {
   const [Copied, setCopied] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
+  const {logout}=useAuths()
 
-  const logoutHandler = () => {
-    dispatch(logoutUserAndClear());
+  const logoutHandler = async() => {
+    // dispatch(logoutUserAndClear());
+    await logout()
   };
 
   const handleCopy = () => {

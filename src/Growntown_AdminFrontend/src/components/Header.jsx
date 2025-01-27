@@ -2,40 +2,42 @@ import React, { useEffect, useState } from 'react';
 import { ConnectWallet, useBalance, useIdentityKit } from "@nfid/identitykit/react";
 import { useAuths } from '../utils/useAuthClient';
 import { useNavigate } from 'react-router-dom';
+import Skeleton from 'react-loading-skeleton';
 
 
 
 
-const ConnectBtn = ({ onClick }) => { 
-    const {login}=useAuths();
+const ConnectBtn = ({ onClick }) => {
+    const { login, isAuthenticated } = useAuths();
 
-
-    return(
-    <button
-      onClick={login}
-      className="w-[120px] md:w-[150px] lg:w-[190px] h-[25px] lg:h-[32px] 
+    return (
+        <button
+            onClick={login}
+            className="w-[120px] md:w-[150px] lg:w-[190px] h-[25px] lg:h-[32px] 
           dxl:h-[35px] text-[10px] md:text-[15px] dlg:text-[19px] font-[400] items-center justify-center  rounded-xl p-[1.5px] bg-gradient-to-r from-[#f09787]  to-[#CACCF5]"
-    >
-      <div className="bg-gray-950 w-full h-full  rounded-xl flex items-center justify-center ">
-        Connect Wallet
-      </div>
-    </button>
-  );}
+        >
+            <div className="bg-gray-950 w-full h-full  rounded-xl flex items-center justify-center ">
+
+                Connect Wallet
+
+            </div>
+        </button>
+    );
+}
 
 
 
 const Header = () => {
-    const {isAuthenticated, logout}=useAuths();
-    const navigate=useNavigate()
+    const { isAuthenticated, logout } = useAuths();
+    const navigate = useNavigate()
 
-    // useEffect(()=>{
-    //     if(isAuthenticated){
-    //         navigate('/admin')
-    //     }
-    // },[isAuthenticated])
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate("/admin/dashboard")
+        }
+    }, [isAuthenticated])
 
     const navText = ['Characters', 'About', 'Gameplay', 'Subscribe'];
-    const socialImg = ['prime_twitter.svg', 'ic_baseline-discord.svg', 'lineicons_telegram.svg'];
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -61,31 +63,19 @@ const Header = () => {
                         ))}
                     </ul>
 
-                    {/* Social Links */}
+                    {/* Connect Wallet */}
                     <div className="hidden md:flex space-x-5">
-                        {/* {socialImg.map((img, index) => (
-                            <img
-                                key={index}
-                                src={`images/${img}`}
-                                alt="social icon"
-                                className="h-7 w-7 hover:opacity-80 cursor-pointer"
+
+                        <div className="hidden font-posterama md:block">
+                            <ConnectWallet
+                                connectButtonComponent={ConnectBtn}
+                                className="rounded-full bg-black"
                             />
-                        ))} */}
+                        </div>
 
-                        {!isAuthenticated ? (
-                            <div className="hidden font-posterama md:block">
 
-                                <ConnectWallet
-                                    connectButtonComponent={ConnectBtn}
-                                    className="rounded-full bg-black"
-                                />
-                            </div>
-                        )
-                        :
 
-                        <h1 onClick={async()=>await logout()}>Logged in</h1>
-                    
-                    }
+
 
                     </div>
 
@@ -128,14 +118,11 @@ const Header = () => {
                         ))}
                     </ul>
                     <div className="flex justify-center mt-4 space-x-4">
-                        {socialImg.map((img, index) => (
-                            <img
-                                key={index}
-                                src={`images/${img}`}
-                                alt="social icon"
-                                className="h-6 w-6 hover:opacity-80 cursor-pointer"
-                            />
-                        ))}
+
+                        <ConnectWallet
+                            connectButtonComponent={ConnectBtn}
+                            className="rounded-full bg-black"
+                        />
                     </div>
                 </div>
             </nav>
