@@ -59,7 +59,7 @@ const TokenModal = ({toggleModal, getAddedTokenDetails}) => {
 
 
   return (
-    <div className="add_new_Token_popup_bg_container  w-full sm:w-[70%] shadow-lg lg:w-[50%] mx-4 xl:w-[40%]  border p-10  rounded-xl border-[#50B248]">
+    <div className="add_new_Token_popup_bg_container  w-full sm:w-[70%] shadow-lg lg:w-[50%] mx-4 xl:w-[40%]  border p-6 sm:p-10  rounded-xl border-[#50B248]">
       <div className="flex   items-center justify-end">
         <button className="text-[#ffffff]" onClick={() => toggleModal()}>
           <RxCross2 size={25} />

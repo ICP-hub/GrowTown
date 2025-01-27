@@ -102,8 +102,8 @@ function Admin() {
       style={{ fontFamily: "sans-serif !important" }}
     >
       <Link to="/admin">
-      <div className=" absolute right-4 md1:left-4  p-1 z-50  top-5 ">
-         <img src="images/Grow town logo.png" className="bg-white p-1 rounded-lg"/>
+      <div className=" absolute right-4 lg:left-4  p-1 z-50  top-4">
+         <img src="images/Grow town logo 2.png" className=" p-1 rounded-lg mb-2"/>
       </div>
       </Link>
       <SideBar isOpen={isOpen} toggleSidebar={toggleSidebar} />

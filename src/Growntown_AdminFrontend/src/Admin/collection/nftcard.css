@@ -3,10 +3,9 @@
   position: relative;
   margin: 20px auto;
   perspective: 1000px; /* Enables 3D effect */
-  width: 300px; /* Fixed width for larger screens */
-  height: 400px; /* Fixed height for larger screens */
+  width: 300px; /* Default width for larger screens */
+  height: 400px; /* Default height for larger screens */
 }
-
 
 /* Inner card */
 .flip-card-inner {
@@ -26,6 +25,7 @@
   height: 100%;
   backface-visibility: hidden;
   border-radius: 10px;
+  overflow: hidden; /* Ensure content stays within rounded corners */
 }
 
 /* Back face rotated */
@@ -44,7 +44,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 1rem;
 }
 
 /* Styles for the front face */
@@ -62,6 +61,8 @@
   align-items: center;
   justify-content: center;
   text-align: center;
+  padding: 20px; /* Add padding for better spacing */
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
 /* Responsive styles */
@@ -73,7 +74,7 @@
   }
 
   .flip-card-inner {
-    height: 250px; /* Set a fixed height for smaller screens */
+    height: 250px; /* Adjust height for smaller screens */
   }
 }
 
