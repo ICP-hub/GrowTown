@@ -90,7 +90,7 @@ function SidebarContent({ onClose, className, setIsOpen }) {
   const [Copied, setCopied] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-  const {logout}=useAuths()
+  const {accounts,logout}=useAuths()
 
   const logoutHandler = async() => {
     // dispatch(logoutUserAndClear());
@@ -152,8 +152,8 @@ function SidebarContent({ onClose, className, setIsOpen }) {
           <div className="flex items-center">
             <input
               value={
-                user
-                  ? `${user.slice(0, 5)}......${user.slice(-6)}`
+                accounts
+                  ? `${accounts.slice(0, 5)}......${accounts.slice(-6)}`
                   : "No User"
               }
               readOnly

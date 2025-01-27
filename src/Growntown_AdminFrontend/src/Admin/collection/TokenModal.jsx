@@ -59,7 +59,7 @@ const TokenModal = ({toggleModal, getAddedTokenDetails}) => {
 
 
   return (
-    <div className="add_new_Token_popup_bg_container border border-[#50B248]">
+    <div className="add_new_Token_popup_bg_container  w-full sm:w-[70%] shadow-lg lg:w-[50%] mx-4 xl:w-[40%]  border p-10  rounded-xl border-[#50B248]">
       <div className="flex   items-center justify-end">
         <button className="text-[#ffffff]" onClick={() => toggleModal()}>
           <RxCross2 size={25} />
@@ -68,7 +68,7 @@ const TokenModal = ({toggleModal, getAddedTokenDetails}) => {
       <form className="flex flex-col gap-5">
         <div className="mt-1">
           <label className="mt-4 w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] md:text-[18px] leading-[25px]">
-            NFT Name
+            Token Name
             <input
               value={tokenName}
               onChange={(e) => {

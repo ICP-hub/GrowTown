@@ -236,9 +236,9 @@ const Modal = (props) => {
 
 
   return (
-    <div className="add_new_nft_popup_bg_container border border-[#50B248]">
+    <div className="add_new_nft_popup_bg_container w-full sm:w-[70%] shadow-lg lg:w-[50%] mx-4 xl:w-[40%] h-[90%] rounded-xl overflow-y-scroll no-scrollbar p-10 border border-[#50B248]">
       <div className="flex   items-center justify-end">
-        <button className="text-[#ffffff]" onClick={() => toggleModal()}>
+        <button className="text-[#ffffff] cursor-pointer" onClick={() => toggleModal()}>
           <RxCross2 size={25} />
         </button>
       </div>

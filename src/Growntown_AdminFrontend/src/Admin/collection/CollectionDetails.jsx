@@ -786,9 +786,9 @@ function CollectionDetails() {
 
               {/* NFT list section */}
               <div className="hidden sm:flex items-center justify-between text-[12px] md:text-sm lg:text-base ml-2">
-                <div className="relative min-w-[160px] md:min-w-[180px] flex justify-center lg:mr-5">
+                <div className="relative   min-w-[160px] md:min-w-[180px] flex justify-center lg:mr-5">
                   {currentDropDown === dropdownItems.type && (
-                    <ul className="absolute top-10 left-0 mt-2 bg-black text-[#FCD378] rounded shadow-lg  p-0 list-none z-50 w-full h-[160px] overflow-y-auto ">
+                    <ul className="absolute no-scrollbar top-10 left-0 mt-2 bg-black text-[#FCD378] rounded shadow-lg  p-0 list-none z-50 w-full h-[160px] overflow-y-auto ">
                       {cardTypeList.map((eachType, index) => (
                         <>
                           <div
@@ -831,6 +831,7 @@ function CollectionDetails() {
                     {currentCardType.slice(1).toLowerCase()})
                   </button>
                 </div>
+
                 <div className="relative   flex justify-center">
                   <button
                     onClick={(e) => {
@@ -851,6 +852,7 @@ function CollectionDetails() {
                       }`}{" "}
                     ICP)
                   </button>
+
                   {currentDropDown === dropdownItems.price && (
                     <div
                       className="absolute top-10 border border-[#FCD378] mt-2 bg-black text-[#FCD378] rounded shadow-lg  p-4 z-50 h-[150px] flex flex-col items-center justify-around"
@@ -923,7 +925,7 @@ function CollectionDetails() {
                   )}
                 </div>
                 <div className=" relative lg:ml-auto mr-2 lg:mr-20 w-[160px] h-[40px] md:w-[180px] bottom-6">
-                  <span className="relative top-3 text-xs bg-gray-800 text-[#FCD378] rounded-full px-2 z-10 left-5 ">
+                  <span className="relative z-10 top-3 text-xs bg-gray-800 text-[#FCD378] rounded-full px-2  left-5 ">
                     Filter & Sort
                   </span>
                   <button
@@ -931,7 +933,7 @@ function CollectionDetails() {
                       e.stopPropagation();
                       onClickAnyFilter(dropdownItems.filter);
                     }}
-                    className={` absolute rounded-full flex justify-center items-center gap-1 
+                    className={` absolute  rounded-full flex justify-center items-center gap-1 
                                     w-full h-full p-2 bg-[#000] text-[#FCD378]  hover:border-[#FCD378] border-2 ${currentDropDown === dropdownItems.filter
                         ? "border-[#FCD378]"
                         : " border-gray-800"
@@ -941,7 +943,7 @@ function CollectionDetails() {
                     {currentFilterOption}
                   </button>
                   {currentDropDown === dropdownItems.filter && (
-                    <ul className="absolute top-[60px] left-0 mt-2 bg-black text-[#FCD378] rounded shadow-lg  p-0 list-none z-50 w-full h-[160px] overflow-y-auto ">
+                    <ul className="absolute top-[60px] left-0 mt-2 no-scrollbar bg-black text-[#FCD378] rounded shadow-lg  p-0 list-none z-50 w-full h-[160px] overflow-y-auto ">
                       {filterListOptions.map((eachFilter, index) => (
                         <>
                           <div
@@ -1037,11 +1039,11 @@ function CollectionDetails() {
           
 
               {tokenModal && (
-            <div className="fixed top-0 bottom-0 left-0 right-0 w-screen h-screen">
+            <div className="fixed z-50 top-0 bottom-0 left-0 right-0 w-screen h-screen">
               <div className="w-screen h-screen top-0 left-0 right-0 bottom-0 fixed bg-[rgba(37,37,37,0.84)]">
-                <div className="flex items-center justify-center h-screen">
+                <div className="flex items-center backdrop-blur-lg justify-center h-screen">
                   <TokenModal
-                    toggleModal={setTokenModal}
+                    toggleModal={toggleTokenModal}
                     getAddedTokenDetails={getAddedTokenDetails}
                   />
                 </div>
@@ -1050,9 +1052,9 @@ function CollectionDetails() {
           )}
 
           {modal && (
-            <div className="fixed top-0 bottom-0 left-0 right-0 w-screen h-screen">
+            <div className="fixed z-50 top-0 bottom-0 left-0 right-0 w-screen h-screen">
               <div className="w-screen h-screen top-0 left-0 right-0 bottom-0 fixed bg-[rgba(37,37,37,0.84)]">
-                <div className="flex items-center justify-center h-screen">
+                <div className="flex items-center justify-center h-screen backdrop-blur-lg">
                   <Modal
                     toggleModal={toggleModal}
                     getAddedNftDetails={getAddedNftDetails}
