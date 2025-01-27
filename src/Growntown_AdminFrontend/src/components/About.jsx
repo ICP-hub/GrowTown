@@ -31,10 +31,7 @@ const About = () => {
       <div className='md:w-[55%] px-10 absolute z-20 text-center overflow-hidden'>
         <h1 className=' text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-[#4B2519] font-bold'>ABOUT GROW TOWN</h1>
         <p className=' lg:text-xl xl:text-2xl  mt-8 font-semibold '>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Autem maiores dolorem eos nobis rem optio quos aliquid, dolores enim eaque praesentium.
-          Eius minus quod ipsa ex repellat, nostrum possimus officiis maxime repellendus perferendis tenetur ducimus. Voluptatibus,
-          vero dolores ipsam rem unde ex sed itaque laboriosam vitae ipsum labore ad. Quidem voluptatum dolorem placeat quod inventore autem provident iure. Veritatis, ratione!
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+        GrowTown is a Web3 farming simulation game built on Internet Computer Protocol (ICP), blending NFTs, trading, and action gameplay. Players manage farms, grow crops, and trade assets in a decentralized marketplace. With a focus on global appeal, it targets the US, Brazil, Japan, and South Korea. Accessible via WebGL, GrowTown offers immersive, eco-conscious gameplay, fostering collaboration, competition, and real-world value through blockchain technology and community-driven innovation. 
         </p>
       </div>
 

@@ -39,7 +39,9 @@ const Gameplay = () => {
                 <h1 className=" text-3xl md:text-4xl lg:text-5xl xl:text-6xl mb-2 lg:mb-8 text-center lg:text-start text-[#FFF3C5] font-bold lg:mr-28">
                     GAMEPLAY
                 </h1>
-                <p className=' text-sm md:text-xl lg:text-2xl  text-center lg:text-start font-semibold'>   Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste illo quam iusto voluptatem  recusandae praesentium, minus deleniti accusantium doloribus repellendus vitae Lorem ipsum dolor sit amet consectetur, adipisicing elit. Enim, ullam! inventore alias non deserunt provident error nihil aliquid a at. Quae a unde, debitis at aspernatur adipisci enim tempora.</p>
+                <p className=' text-sm md:text-xl lg:text-2xl  text-center lg:text-start font-semibold'>  
+                GrowTown Gameplay combines farming, trading, and adventure in a dynamic Web3 ecosystem. Players cultivate crops, raise animals, and trade assets through an NFT marketplace. Action-packed quests, seasonal events, and eco-friendly challenges add excitement and depth. With opportunities to collaborate or compete, players can shape their farms and strategies. GrowTown offers immersive, creative, and rewarding gameplay, seamlessly integrating blockchain technology into an engaging farming simulation experience. 
+                     </p>
                 </div>
                
 

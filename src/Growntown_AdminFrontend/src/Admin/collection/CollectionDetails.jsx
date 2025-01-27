@@ -16,7 +16,7 @@ import { RiArrowUpDownFill } from "react-icons/ri";
 import { LuFilter } from "react-icons/lu";
 import { RxCross2 } from "react-icons/rx";
 import { IoCheckmarkOutline } from "react-icons/io5";
-import { Box, Button } from "@chakra-ui/react";
+// import { Box, Button } from "@chakra-ui/react";
 import { Growtown_assethandler } from "../../../../declarations/Growtown_assethandler";
 import { useNavigate } from "react-router-dom";
 import TokenModal from "./TokenModal";
@@ -686,20 +686,18 @@ function CollectionDetails() {
 
   return (
     <>
-      <SkeletonTheme baseColor="#202020" highlightColor="#282828">
+       <SkeletonTheme baseColor="#202020" highlightColor="#282828">
         <div
           onClick={onClickFilterContainer}
           className="w-[90%] overflow-y-scroll pt-10 px-10 pb-8 h-screen no-scrollbar no-scroll 2xl:ml-[7%] md:w-full lg:w-[90%] lg:pt-20"
         >
           {loading ? (
             <div>
-              {/* Skeleton for Back button and action buttons */}
+
               <div className="flex justify-between items-center mb-6">
                 <Skeleton width={100} height={40} />
                 <Skeleton width={120} height={40} />
               </div>
-
-              {/* Skeleton for Collection Details */}
               <div className="flex flex-col md:flex-row items-center bg-[#282828] p-10 rounded-md mb-10">
                 <Skeleton circle={true} width={128} height={128} />
                 <div className="flex flex-col space-y-4 ml-8">
@@ -708,8 +706,6 @@ function CollectionDetails() {
                   <Skeleton width={250} height={20} />
                 </div>
               </div>
-
-              {/* Skeleton for NFT Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-3">
                 {Array(6)
                   .fill()
@@ -724,7 +720,7 @@ function CollectionDetails() {
             </div>
           ) : (
             <div className="w-full">
-              /* Back button and action buttons */
+              {/*  Back button and action buttons */}
               <div className="flex flex-col-2 mb-8">
                 <span className="hidden sm:block">
                   <BackButton />
@@ -1015,15 +1011,14 @@ function CollectionDetails() {
                   )}
                 </div>
               </div>
-              {/* Pagination */}
               <div>
-                <Box
+                 <Box
                   mt="5%"
                   display="flex"
                   flexDirection="row"
                   alignItems="center"
                   justifyContent="center"
-                >
+                > 
                   {currentpage > 1 && (
                     <Button
                       mr="2"
@@ -1059,7 +1054,7 @@ function CollectionDetails() {
                       &gt;
                     </Button>
                   )}
-                </Box>
+                  </Box>
               </div>
 
               {tokenModal && (
@@ -1310,7 +1305,7 @@ function CollectionDetails() {
             </div>
           )}
         </div>
-      </SkeletonTheme>
+      </SkeletonTheme>  
     </>
   );
 }
