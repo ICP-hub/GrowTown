@@ -236,15 +236,15 @@ const Modal = (props) => {
 
 
   return (
-    <div className="add_new_nft_popup_bg_container border border-[#50B248]">
+    <div className="add_new_nft_popup_bg_container w-full sm:w-[70%] shadow-lg lg:w-[50%] mx-4 xl:w-[40%] h-[90%] rounded-xl overflow-y-scroll no-scrollbar p-10 border border-[#50B248]">
       <div className="flex   items-center justify-end">
-        <button className="text-[#ffffff]" onClick={() => toggleModal()}>
+        <button className="text-[#ffffff] cursor-pointer" onClick={() => toggleModal()}>
           <RxCross2 size={25} />
         </button>
       </div>
       <form className="flex flex-col gap-5">
         <div className="mt-1">
-          <label className="mt-4 w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
+          <label className="mt-4 w-[100%]  sm:h-[86px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             NFT Name
             <input
               value={nftName}
@@ -268,8 +268,8 @@ const Modal = (props) => {
           </label>
         </div>
 
-        <div className="mt-1 flex flex-col sm:flex-row sm:gap-4 md:flex-row md:gap-4 w-full h-[120px] md:h-[60px] mb-0">
-          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
+        <div className="sm:mt-1 flex flex-col sm:flex-row gap-2 sm:gap-4 md:flex-row md:gap-4 w-full md:h-[60px] mb-0">
+          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF]  sm:gap-2 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             NFT Rarity
             <select
               className=" h-[38px] border  bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
@@ -300,7 +300,7 @@ const Modal = (props) => {
             </select>
           </label>
 
-          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px] ">
+          <label className=" mt-2 sm:mt-0 w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px] ">
             Artist Name (Optional)
             <input
               value={arstistname}
@@ -324,7 +324,7 @@ const Modal = (props) => {
           </label>
         </div>
 
-        <div className="mt-4 flex flex-col sm:flex-row sm:gap-4 md:flex-row md:gap-4 w-full h-[120px] md:h-[60px] mb-0">
+        <div className="sm:mt-3 flex flex-col sm:flex-row sm:gap-4 md:flex-row md:gap-4 w-full  sm:h-[60px] mb-0">
           <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             NFT Type
             <select
@@ -347,7 +347,7 @@ const Modal = (props) => {
             </select>
           </label>
 
-          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] sm:text-[16px] lg:text-[18px]leading-[25px]">
+          <label className="mt-4 sm:mt-0 w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] sm:text-[16px] lg:text-[18px]leading-[25px]">
             Quantity:
             <input
               value={nftQuantity}

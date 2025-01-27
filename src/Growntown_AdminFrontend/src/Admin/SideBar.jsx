@@ -90,7 +90,7 @@ function SidebarContent({ onClose, className, setIsOpen }) {
   const [Copied, setCopied] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-  const {logout}=useAuths()
+  const {principal,logout}=useAuths()
 
   const logoutHandler = async() => {
     // dispatch(logoutUserAndClear());
@@ -152,15 +152,15 @@ function SidebarContent({ onClose, className, setIsOpen }) {
           <div className="flex items-center">
             <input
               value={
-                user
-                  ? `${user.slice(0, 5)}......${user.slice(-6)}`
+                principal
+                  ? `${principal.slice(0, 5)}......${principal.slice(-6)}`
                   : "No User"
               }
               readOnly
               className="bg-transparent w-36 text-white"
             />
-            {user && (
-              <CopyToClipboard text={user} onCopy={handleCopy}>
+            {principal && (
+              <CopyToClipboard text={principal} onCopy={handleCopy}>
                 <button className="ml-3 text-white hover:text-[#50B248]">
                  { !Copied ?  <MdContentCopy />
                  :

@@ -10,13 +10,13 @@ const PreviewCard = ({ colName, colImage, maxLimit, typeColor, description }) =>
   }, [colImage]);
 
   return (
-    <div className="relative bg-[#29292C] w-full h-[90%] px-4 py-4 text-white flex flex-col   gap-y-4 rounded-xl  border border-[#50B248]"
+    <div className={`relative w-full p-3 text-white flex flex-col   gap-y-4 rounded-xl  border border-${typeColor.toLowerCase()}-500 ]`}
     >
       {/* Image */}
        
           <img
-            className="object-cover rounded-xl w-full  h-80 hover:scale-105 transition-transform duration-300 ease-in-out"
-            src={imgUrl || 'image/questionMark.jpg'}
+            className="object-cover rounded-xl w-full   hover:scale-105 transition-transform duration-300 ease-in-out"
+            src={imgUrl || 'images/questionMark.jpg'}
             alt="Collection"
           />
 
@@ -28,14 +28,14 @@ const PreviewCard = ({ colName, colImage, maxLimit, typeColor, description }) =>
         </h2>
 
         {/* Type Color */}
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <p className="text-sm font-medium ">Color Type:</p>
           <span
             className={`text-sm font-semibold px-2 py-1 rounded-lg  text-${typeColor.toLowerCase()}-500`}
           >
             {typeColor}
           </span>
-        </div>
+        </div> */}
 
         {/* Max Limit */}
         <div className="flex items-center gap-2">

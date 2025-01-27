@@ -2,7 +2,7 @@ import React from 'react'
 
 const Buttons = ({ buttonName, hover, bgColor, textColor, icon }) => {
   return (
-    <div className={`flex cursor-pointer flex-col relative  w-32  lg:w-44 xl:w-60`} >
+    <div className={`flex cursor-pointer flex-col relative  w-[150px]  md:w-44 xl:w-56 2xl:60`} >
       <div
         className="mr-[1px] px-4 py-3 rounded-l-lg font-medium text-center"
         style={{
@@ -24,11 +24,11 @@ const Buttons = ({ buttonName, hover, bgColor, textColor, icon }) => {
         }}
       ></div>
       <div
-        className="absolute  flex items-center z-0 font-semibold whitespace-nowrap left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]"
+        className="absolute  flex items-center z-0 font-semibold whitespace-nowrap left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%]"
        
       >
-       <h1 className={` text-${textColor} hover:${hover?.textColor} transition-all ease-in-out hover:${hover?.scale}`}> {buttonName}  </h1>
-        {icon && <span className='ml-2 '> {icon} </span>}
+       <h1 className={` text-${textColor} ml-2 md:ml-0 hover:${hover?.textColor} transition-all ease-in-out hover:${hover?.scale}`}> {buttonName}  </h1>
+        {icon && <span className='sm:ml-1 '> {icon} </span>}
       </div>
     </div>
   )

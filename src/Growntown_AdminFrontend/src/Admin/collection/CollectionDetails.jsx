@@ -16,7 +16,6 @@ import { RiArrowUpDownFill } from "react-icons/ri";
 import { LuFilter } from "react-icons/lu";
 import { RxCross2 } from "react-icons/rx";
 import { IoCheckmarkOutline } from "react-icons/io5";
-// import { Box, Button } from "@chakra-ui/react";
 import { Growtown_assethandler } from "../../../../declarations/Growtown_assethandler";
 import { useNavigate } from "react-router-dom";
 import TokenModal from "./TokenModal";
@@ -686,7 +685,7 @@ function CollectionDetails() {
 
   return (
     <>
-       <SkeletonTheme baseColor="#202020" highlightColor="#282828">
+      <SkeletonTheme baseColor="#202020" highlightColor="#282828">
         <div
           onClick={onClickFilterContainer}
           className="w-[90%] overflow-y-scroll pt-10 px-10 pb-8 h-screen no-scrollbar no-scroll 2xl:ml-[7%] md:w-full lg:w-[90%] lg:pt-20"
@@ -730,7 +729,7 @@ function CollectionDetails() {
                     Add Token
                   </YellowButton>
                   <YellowButton methodName={() => toggleModal()}>
-                    Add NFT 
+                    Add NFT
                   </YellowButton>
                   <Link to={"/admin/collection/create"}>
                     <YellowButton>Add Collection</YellowButton>
@@ -772,9 +771,9 @@ function CollectionDetails() {
                     <div className="flex flex-col space-y-2">
                       <span className="text-xs text-gray-400 uppercase tracking-wider">Collection Color</span>
                       <div className="flex items-center space-x-3">
-                        <div 
-                          className="w-6 h-6 rounded-full border-2 border-white/20 shadow-md" 
-                          style={{backgroundColor: colcolor}}
+                        <div
+                          className="w-6 h-6 rounded-full border-2 border-white/20 shadow-md"
+                          style={{ backgroundColor: colcolor }}
                         />
                         <h3 className="text-sm font-medium font-Quicksand text-white">
                           {colcolor}
@@ -787,9 +786,9 @@ function CollectionDetails() {
 
               {/* NFT list section */}
               <div className="hidden sm:flex items-center justify-between text-[12px] md:text-sm lg:text-base ml-2">
-                <div className="relative min-w-[160px] md:min-w-[180px] flex justify-center lg:mr-5">
+                <div className="relative   min-w-[160px] md:min-w-[180px] flex justify-center lg:mr-5">
                   {currentDropDown === dropdownItems.type && (
-                    <ul className="absolute top-10 left-0 mt-2 bg-black text-[#FCD378] rounded shadow-lg  p-0 list-none z-50 w-full h-[160px] overflow-y-auto ">
+                    <ul className="absolute no-scrollbar top-10 left-0 mt-2 bg-black text-[#FCD378] rounded shadow-lg  p-0 list-none z-50 w-full h-[160px] overflow-y-auto ">
                       {cardTypeList.map((eachType, index) => (
                         <>
                           <div
@@ -832,6 +831,7 @@ function CollectionDetails() {
                     {currentCardType.slice(1).toLowerCase()})
                   </button>
                 </div>
+
                 <div className="relative   flex justify-center">
                   <button
                     onClick={(e) => {
@@ -847,11 +847,12 @@ function CollectionDetails() {
                     <CiDollar size={22} />
                     Price (
                     {`${!isNaN(applyPriceRange.from) && !isNaN(applyPriceRange.to)
-                        ? `${applyPriceRange.from} - ${applyPriceRange.to} `
-                        : ""
+                      ? `${applyPriceRange.from} - ${applyPriceRange.to} `
+                      : ""
                       }`}{" "}
                     ICP)
                   </button>
+
                   {currentDropDown === dropdownItems.price && (
                     <div
                       className="absolute top-10 border border-[#FCD378] mt-2 bg-black text-[#FCD378] rounded shadow-lg  p-4 z-50 h-[150px] flex flex-col items-center justify-around"
@@ -881,9 +882,9 @@ function CollectionDetails() {
                       <div className="">
                         <button
                           className={`w-20 border-none bg-[#FCD378] text-black h-6 mr-3 rounded-full ${isNaN(applyPriceRange.from) ||
-                              isNaN(applyPriceRange.to)
-                              ? "opacity-30"
-                              : "opacity-100"
+                            isNaN(applyPriceRange.to)
+                            ? "opacity-30"
+                            : "opacity-100"
                             } `}
                           disabled={
                             isNaN(applyPriceRange.from) ||
@@ -904,8 +905,8 @@ function CollectionDetails() {
                         </button>
                         <button
                           className={`w-20 border-none bg-[#FCD378] text-black h-6 rounded-full ${isNaN(fromPrice) || isNaN(toPrice)
-                              ? "opacity-30"
-                              : "opacity-100"
+                            ? "opacity-30"
+                            : "opacity-100"
                             }`}
                           onClick={() => {
                             onClickAnyFilter(dropdownItems.price);
@@ -924,7 +925,7 @@ function CollectionDetails() {
                   )}
                 </div>
                 <div className=" relative lg:ml-auto mr-2 lg:mr-20 w-[160px] h-[40px] md:w-[180px] bottom-6">
-                  <span className="relative top-3 text-xs bg-gray-800 text-[#FCD378] rounded-full px-2 z-10 left-5 ">
+                  <span className="relative z-10 top-3 text-xs bg-gray-800 text-[#FCD378] rounded-full px-2  left-5 ">
                     Filter & Sort
                   </span>
                   <button
@@ -932,7 +933,7 @@ function CollectionDetails() {
                       e.stopPropagation();
                       onClickAnyFilter(dropdownItems.filter);
                     }}
-                    className={` absolute rounded-full flex justify-center items-center gap-1 
+                    className={` absolute  rounded-full flex justify-center items-center gap-1 
                                     w-full h-full p-2 bg-[#000] text-[#FCD378]  hover:border-[#FCD378] border-2 ${currentDropDown === dropdownItems.filter
                         ? "border-[#FCD378]"
                         : " border-gray-800"
@@ -942,7 +943,7 @@ function CollectionDetails() {
                     {currentFilterOption}
                   </button>
                   {currentDropDown === dropdownItems.filter && (
-                    <ul className="absolute top-[60px] left-0 mt-2 bg-black text-[#FCD378] rounded shadow-lg  p-0 list-none z-50 w-full h-[160px] overflow-y-auto ">
+                    <ul className="absolute top-[60px] left-0 mt-2 no-scrollbar bg-black text-[#FCD378] rounded shadow-lg  p-0 list-none z-50 w-full h-[160px] overflow-y-auto ">
                       {filterListOptions.map((eachFilter, index) => (
                         <>
                           <div
@@ -1011,301 +1012,281 @@ function CollectionDetails() {
                   )}
                 </div>
               </div>
-              <div>
-                 <Box
-                  mt="5%"
-                  display="flex"
-                  flexDirection="row"
-                  alignItems="center"
-                  justifyContent="center"
-                > 
-                  {currentpage > 1 && (
-                    <Button
-                      mr="2"
-                      bg="#161618"
-                      color="white"
-                      border="1px"
-                      borderColor="gray.500"
-                      _hover={{ bg: "black" }}
-                      onClick={leftfunction}
-                    >
-                      &lt;
-                    </Button>
-                  )}
-                  <Button
-                    bg="#FCD37B"
-                    color="black"
-                    border="1px"
-                    borderColor="black"
-                    _hover={{ bg: "#D4A849" }}
+              <div className="mt-10 flex justify-center items-center gap-4">
+                {currentpage > 1 && (
+                  <button
+                    className="px-4 py-2 bg-gray-900 text-white border border-gray-500 rounded-md hover:bg-black"
+                    onClick={leftfunction}
                   >
-                    {currentpage}
-                  </Button>
-                  {currentpage < totalpage && (
-                    <Button
-                      ml="2"
-                      bg="#161618"
-                      color="white"
-                      border="1px"
-                      borderColor="gray.500"
-                      _hover={{ bg: "black" }}
-                      onClick={rightfunction}
-                    >
-                      &gt;
-                    </Button>
-                  )}
-                  </Box>
+                    &lt;
+                  </button>
+                )}
+                <button
+                  className="px-4 py-2 bg-yellow-400 text-black border border-black rounded-md hover:bg-yellow-500"
+                >
+                  {currentpage}
+                </button>
+                {currentpage < totalpage && (
+                  <button
+                    className="px-4 py-2 bg-gray-900 text-white border border-gray-500 rounded-md hover:bg-black"
+                    onClick={rightfunction}
+                  >
+                    &gt;
+                  </button>
+                )}
               </div>
 
+          
+
               {tokenModal && (
-                <div className="fixed top-0 bottom-0 left-0 right-0 w-screen h-screen">
-                  <div className="w-screen h-screen top-0 left-0 right-0 bottom-0 fixed bg-[rgba(37,37,37,0.84)]">
-                    <div className="flex items-center justify-center h-screen">
-                      <TokenModal
-                        toggleModal={setTokenModal}
-                        getAddedTokenDetails={getAddedTokenDetails}
-                      />
-                    </div>
-                  </div>
+            <div className="fixed z-50 top-0 bottom-0 left-0 right-0 w-screen h-screen">
+              <div className="w-screen h-screen top-0 left-0 right-0 bottom-0 fixed bg-[rgba(37,37,37,0.84)]">
+                <div className="flex items-center backdrop-blur-lg justify-center h-screen">
+                  <TokenModal
+                    toggleModal={toggleTokenModal}
+                    getAddedTokenDetails={getAddedTokenDetails}
+                  />
                 </div>
-              )}
+              </div>
+            </div>
+          )}
 
-              {modal && (
-                <div className="fixed top-0 bottom-0 left-0 right-0 w-screen h-screen">
-                  <div className="w-screen h-screen top-0 left-0 right-0 bottom-0 fixed bg-[rgba(37,37,37,0.84)]">
-                    <div className="flex items-center justify-center h-screen">
-                      <Modal
-                        toggleModal={toggleModal}
-                        getAddedNftDetails={getAddedNftDetails}
-                        type="add"
-                      />
-                    </div>
-                  </div>
+          {modal && (
+            <div className="fixed z-50 top-0 bottom-0 left-0 right-0 w-screen h-screen">
+              <div className="w-screen h-screen top-0 left-0 right-0 bottom-0 fixed bg-[rgba(37,37,37,0.84)]">
+                <div className="flex items-center justify-center h-screen backdrop-blur-lg">
+                  <Modal
+                    toggleModal={toggleModal}
+                    getAddedNftDetails={getAddedNftDetails}
+                    type="add"
+                  />
                 </div>
-              )}
+              </div>
+            </div>
+          )}
 
-              {isDisplayFiltersPopup && (
-                <div className="fixed top-0 bottom-0 left-0 right-0 z-20 w-screen h-screen md:hidden">
-                  <div className="w-screen h-screen top-0 bottom-0 right-0 left-0 fixed bg-[rgba(49,49,49,0.8)]">
-                    <div className="flex items-center justify-center h-screen w-screen ">
-                      <div
-                        className={`h-[40vh] w-[90vw] bg-[#111] rounded-md p-5 overflow-auto `}
+          {isDisplayFiltersPopup && (
+            <div className="fixed top-0 bottom-0 left-0 right-0 z-20 w-screen h-screen md:hidden">
+              <div className="w-screen h-screen top-0 bottom-0 right-0 left-0 fixed bg-[rgba(49,49,49,0.8)]">
+                <div className="flex items-center justify-center h-screen w-screen ">
+                  <div
+                    className={`h-[40vh] w-[90vw] bg-[#111] rounded-md p-5 overflow-auto `}
+                  >
+                    <div className="flex items-center justify-end">
+                      <button
+                        className="text-[#FCD378] bottom-1 z-10"
+                        onClick={() => updateFiltersDisplayStatus(false)}
                       >
-                        <div className="flex items-center justify-end">
-                          <button
-                            className="text-[#FCD378] bottom-1 z-10"
-                            onClick={() => updateFiltersDisplayStatus(false)}
-                          >
-                            <RxCross2 size={20} />
-                          </button>
-                        </div>
-                        <div className="flex flex-col items-center justify-around h-[80%] text-[16px]">
-                          <div className="relative w-full flex justify-center">
-                            {currentDropDown === dropdownItems.type && (
-                              <ul className="absolute top-10 left-0 mt-2 bg-black border border-[#FCD378] text-[#FCD378] rounded shadow-lg  p-0 list-none z-50 w-full h-[130px] overflow-y-auto ">
-                                {cardTypeList.map((eachType, index) => (
-                                  <>
-                                    <div
-                                      key={eachType.cardId}
-                                      className="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-purple-900"
-                                      onClick={() => {
-                                        if (
-                                          eachType.cardId != currentCardType
-                                        ) {
-                                          updateCardType(eachType.cardId);
-                                          onClickAnyFilter(dropdownItems.type);
-                                        }
-                                      }}
-                                    >
-                                      <li key={eachType.cardId}>
-                                        {eachType.displayText}
-                                      </li>
-                                      {currentCardType === eachType.cardId && (
-                                        <IoCheckmarkOutline />
-                                      )}
-                                    </div>
-                                    {index != cardTypeList.length - 1 && (
-                                      <hr className="my-1 border-t border-[#FCD378]" />
-                                    )}
-                                  </>
-                                ))}
-                              </ul>
-                            )}
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onClickAnyFilter(dropdownItems.type);
-                              }}
-                              className={`rounded-md flex justify-center items-center gap-1 
+                        <RxCross2 size={20} />
+                      </button>
+                    </div>
+                    <div className="flex flex-col items-center justify-around h-[80%] text-[16px]">
+                      <div className="relative w-full flex justify-center">
+                        {currentDropDown === dropdownItems.type && (
+                          <ul className="absolute top-10 left-0 mt-2 bg-black border border-[#FCD378] text-[#FCD378] rounded shadow-lg  p-0 list-none z-50 w-full h-[130px] overflow-y-auto ">
+                            {cardTypeList.map((eachType, index) => (
+                              <>
+                                <div
+                                  key={eachType.cardId}
+                                  className="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-purple-900"
+                                  onClick={() => {
+                                    if (
+                                      eachType.cardId != currentCardType
+                                    ) {
+                                      updateCardType(eachType.cardId);
+                                      onClickAnyFilter(dropdownItems.type);
+                                    }
+                                  }}
+                                >
+                                  <li key={eachType.cardId}>
+                                    {eachType.displayText}
+                                  </li>
+                                  {currentCardType === eachType.cardId && (
+                                    <IoCheckmarkOutline />
+                                  )}
+                                </div>
+                                {index != cardTypeList.length - 1 && (
+                                  <hr className="my-1 border-t border-[#FCD378]" />
+                                )}
+                              </>
+                            ))}
+                          </ul>
+                        )}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onClickAnyFilter(dropdownItems.type);
+                          }}
+                          className={`rounded-md flex justify-center items-center gap-1 
                                                 w-full h-full p-2 bg-[#000]  text-[#FCD378]  hover:border-[#FCD378] border border-[#FCD378] ${currentDropDown ===
-                                dropdownItems.filter &&
-                                "opacity-10"
-                                } `}
-                            >
-                              <BiCategory />
-                              Category ({currentCardType.charAt(0)}
-                              {currentCardType.slice(1).toLowerCase()})
-                            </button>
-                          </div>
-                          <div className="relative w-full  flex justify-center">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onClickAnyFilter(dropdownItems.price);
-                              }}
-                              className={`rounded-md flex justify-center items-center gap-1 w-[100%]
+                            dropdownItems.filter &&
+                            "opacity-10"
+                            } `}
+                        >
+                          <BiCategory />
+                          Category ({currentCardType.charAt(0)}
+                          {currentCardType.slice(1).toLowerCase()})
+                        </button>
+                      </div>
+                      <div className="relative w-full  flex justify-center">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onClickAnyFilter(dropdownItems.price);
+                          }}
+                          className={`rounded-md flex justify-center items-center gap-1 w-[100%]
                                                 p-2 bg-[#000] text-[#FCD378]  border border-[#FCD378]`}
-                            >
-                              <CiDollar size={20} />
-                              Price (
-                              {`${!isNaN(applyPriceRange.from) &&
-                                  !isNaN(applyPriceRange.to)
-                                  ? `${applyPriceRange.from} - ${applyPriceRange.to} `
-                                  : ""
-                                }`}{" "}
-                              ICP)
-                            </button>
-                            {currentDropDown === dropdownItems.price && (
-                              <div
-                                className="absolute top-10  mt-2 border border-[#FCD378] bg-black text-[#FCD378] rounded shadow-lg  p-1 z-50 w-[100%] h-[120px] flex flex-col items-center justify-around"
-                                onClick={(e) => e.stopPropagation()}
+                        >
+                          <CiDollar size={20} />
+                          Price (
+                          {`${!isNaN(applyPriceRange.from) &&
+                            !isNaN(applyPriceRange.to)
+                            ? `${applyPriceRange.from} - ${applyPriceRange.to} `
+                            : ""
+                            }`}{" "}
+                          ICP)
+                        </button>
+                        {currentDropDown === dropdownItems.price && (
+                          <div
+                            className="absolute top-10  mt-2 border border-[#FCD378] bg-black text-[#FCD378] rounded shadow-lg  p-1 z-50 w-[100%] h-[120px] flex flex-col items-center justify-around"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <h1>Price in ICP</h1>
+                            <div className="flex items-center">
+                              <input
+                                value={fromPrice}
+                                onChange={(e) => {
+                                  updateFromPrice(parseInt(e.target.value));
+                                }}
+                                placeholder="From"
+                                type="number"
+                                className="w-20 mr-2 rounded-sm border text-[#FCD378] border-[#FCD378] bg-transparent outline-none p-1 text-sm"
+                              />
+                              <input
+                                value={toPrice}
+                                onChange={(e) => {
+                                  updateToPrice(parseInt(e.target.value));
+                                }}
+                                placeholder="to"
+                                type="number"
+                                className="w-20 rounded-sm border text-[#FCD378] border-[#FCD378] bg-transparent outline-none p-1 text-sm"
+                              />
+                            </div>
+                            <div className="">
+                              <button
+                                className={`w-[80px] border-none bg-[#FCD378] text-black h-[24px] mr-3 rounded-full ${isNaN(applyPriceRange.from) ||
+                                  isNaN(applyPriceRange.to)
+                                  ? "opacity-20"
+                                  : "opacity-100"
+                                  } `}
+                                disabled={
+                                  isNaN(applyPriceRange.from) ||
+                                  isNaN(applyPriceRange.to)
+                                }
+                                onClick={() => {
+                                  onClickAnyFilter(dropdownItems.none);
+                                  updateApplyPriceRange({
+                                    isApply: false,
+                                    from: NaN,
+                                    to: NaN,
+                                  });
+                                  updateFromPrice(NaN);
+                                  updateToPrice(NaN);
+                                }}
                               >
-                                <h1>Price in ICP</h1>
-                                <div className="flex items-center">
-                                  <input
-                                    value={fromPrice}
-                                    onChange={(e) => {
-                                      updateFromPrice(parseInt(e.target.value));
-                                    }}
-                                    placeholder="From"
-                                    type="number"
-                                    className="w-20 mr-2 rounded-sm border text-[#FCD378] border-[#FCD378] bg-transparent outline-none p-1 text-sm"
-                                  />
-                                  <input
-                                    value={toPrice}
-                                    onChange={(e) => {
-                                      updateToPrice(parseInt(e.target.value));
-                                    }}
-                                    placeholder="to"
-                                    type="number"
-                                    className="w-20 rounded-sm border text-[#FCD378] border-[#FCD378] bg-transparent outline-none p-1 text-sm"
-                                  />
-                                </div>
-                                <div className="">
-                                  <button
-                                    className={`w-[80px] border-none bg-[#FCD378] text-black h-[24px] mr-3 rounded-full ${isNaN(applyPriceRange.from) ||
-                                        isNaN(applyPriceRange.to)
-                                        ? "opacity-20"
-                                        : "opacity-100"
-                                      } `}
-                                    disabled={
-                                      isNaN(applyPriceRange.from) ||
-                                      isNaN(applyPriceRange.to)
-                                    }
-                                    onClick={() => {
-                                      onClickAnyFilter(dropdownItems.none);
-                                      updateApplyPriceRange({
-                                        isApply: false,
-                                        from: NaN,
-                                        to: NaN,
-                                      });
-                                      updateFromPrice(NaN);
-                                      updateToPrice(NaN);
-                                    }}
-                                  >
-                                    Cancel
-                                  </button>
-                                  <button
-                                    className={`w-[80px] border-none bg-[#FCD378] text-black h-[24px] rounded-full ${isNaN(fromPrice) || isNaN(toPrice)
-                                        ? "opacity-20"
-                                        : "opacity-100"
-                                      }`}
-                                    onClick={() => {
-                                      onClickAnyFilter(dropdownItems.price);
-                                      updateApplyPriceRange({
-                                        isApply: true,
-                                        from: fromPrice,
-                                        to: toPrice,
-                                      });
-                                    }}
-                                    disabled={
-                                      isNaN(fromPrice) || isNaN(toPrice)
-                                    }
-                                  >
-                                    Apply
-                                  </button>
-                                </div>
-                              </div>
-                            )}
+                                Cancel
+                              </button>
+                              <button
+                                className={`w-[80px] border-none bg-[#FCD378] text-black h-[24px] rounded-full ${isNaN(fromPrice) || isNaN(toPrice)
+                                  ? "opacity-20"
+                                  : "opacity-100"
+                                  }`}
+                                onClick={() => {
+                                  onClickAnyFilter(dropdownItems.price);
+                                  updateApplyPriceRange({
+                                    isApply: true,
+                                    from: fromPrice,
+                                    to: toPrice,
+                                  });
+                                }}
+                                disabled={
+                                  isNaN(fromPrice) || isNaN(toPrice)
+                                }
+                              >
+                                Apply
+                              </button>
+                            </div>
                           </div>
-                          <div className="relative  h-[40px] w-full bottom-5 ">
-                            <span className="relative top-3 text-xs bg-gray-800 text-[#FCD378] rounded-full px-2 z-10 left-5 ">
-                              Filter & Sort
-                            </span>
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onClickAnyFilter(dropdownItems.filter);
-                              }}
-                              className={` absolute rounded-md flex justify-center items-center gap-1 
+                        )}
+                      </div>
+                      <div className="relative  h-[40px] w-full bottom-5 ">
+                        <span className="relative top-3 text-xs bg-gray-800 text-[#FCD378] rounded-full px-2 z-10 left-5 ">
+                          Filter & Sort
+                        </span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onClickAnyFilter(dropdownItems.filter);
+                          }}
+                          className={` absolute rounded-md flex justify-center items-center gap-1 
                                                 w-full h-full p-2 bg-[#000] text-[#FCD378]  border-[#FCD378] border ${currentDropDown ===
-                                dropdownItems.type &&
-                                "opacity-5"
-                                }  `}
-                            >
-                              <RiArrowUpDownFill />
-                              {currentFilterOption}
-                            </button>
-                            {currentDropDown === dropdownItems.filter && (
-                              <ul className="absolute bottom-[30px] left-0 mt-2 border border-[#FCD378]  bg-black text-[#FCD378] rounded shadow-lg  p-0 list-none z-50 w-full h-[130px] overflow-y-auto ">
-                                {filterListOptions.map((eachFilter, index) => (
-                                  <>
-                                    <div
-                                      key={eachFilter.optionId}
-                                      className="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-purple-900"
-                                      onClick={() => {
-                                        if (
-                                          eachFilter.optionId !=
-                                          currentFilterOption
-                                        ) {
-                                          updateCurrentFilterOption(
-                                            eachFilter.optionId
-                                          );
-                                          onClickAnyFilter(
-                                            dropdownItems.filter
-                                          );
-                                        }
-                                      }}
-                                    >
-                                      <li
-                                        key={eachFilter.optionId}
-                                        className="h-[30px]"
-                                      >
-                                        {eachFilter.displayText}
-                                      </li>
-                                      {currentFilterOption ===
-                                        eachFilter.optionId && (
-                                          <IoCheckmarkOutline />
-                                        )}
-                                    </div>
-                                    {index != filterListOptions.length - 1 && (
-                                      <hr className="my-1 border-t border-[#FCD378]" />
+                            dropdownItems.type &&
+                            "opacity-5"
+                            }  `}
+                        >
+                          <RiArrowUpDownFill />
+                          {currentFilterOption}
+                        </button>
+                        {currentDropDown === dropdownItems.filter && (
+                          <ul className="absolute bottom-[30px] left-0 mt-2 border border-[#FCD378]  bg-black text-[#FCD378] rounded shadow-lg  p-0 list-none z-50 w-full h-[130px] overflow-y-auto ">
+                            {filterListOptions.map((eachFilter, index) => (
+                              <>
+                                <div
+                                  key={eachFilter.optionId}
+                                  className="flex items-center justify-between px-4 py-2 cursor-pointer hover:bg-purple-900"
+                                  onClick={() => {
+                                    if (
+                                      eachFilter.optionId !=
+                                      currentFilterOption
+                                    ) {
+                                      updateCurrentFilterOption(
+                                        eachFilter.optionId
+                                      );
+                                      onClickAnyFilter(
+                                        dropdownItems.filter
+                                      );
+                                    }
+                                  }}
+                                >
+                                  <li
+                                    key={eachFilter.optionId}
+                                    className="h-[30px]"
+                                  >
+                                    {eachFilter.displayText}
+                                  </li>
+                                  {currentFilterOption ===
+                                    eachFilter.optionId && (
+                                      <IoCheckmarkOutline />
                                     )}
-                                  </>
-                                ))}
-                              </ul>
-                            )}
-                          </div>
-                        </div>
+                                </div>
+                                {index != filterListOptions.length - 1 && (
+                                  <hr className="my-1 border-t border-[#FCD378]" />
+                                )}
+                              </>
+                            ))}
+                          </ul>
+                        )}
                       </div>
                     </div>
                   </div>
                 </div>
-              )}
+              </div>
             </div>
           )}
         </div>
-      </SkeletonTheme>  
+          )}
+      </div>
+    </SkeletonTheme >  
     </>
   );
 }
