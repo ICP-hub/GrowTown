@@ -103,7 +103,7 @@ function Admin() {
     >
       <Link to="/admin">
       <div className=" absolute right-4 md1:left-4  p-1 z-50  top-5 ">
-         <img src="image/Grow town logo.png" className="bg-white p-1 rounded-lg"/>
+         <img src="images/Grow town logo.png" className="bg-white p-1 rounded-lg"/>
       </div>
       </Link>
       <SideBar isOpen={isOpen} toggleSidebar={toggleSidebar} />

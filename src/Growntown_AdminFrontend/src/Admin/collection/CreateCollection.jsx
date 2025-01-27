@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { AddIcon, ArrowBackIcon } from "@chakra-ui/icons";
+
 import { useNavigate } from "react-router-dom";
 import DropzoneWithUrlInput from "../components/DropzoneWithUrlInput";
-import { Switch } from "@chakra-ui/react";
+
 import { idlFactory } from '../../../../declarations/Growntown_Backend/Growntown_Backend.did.js';
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { useSelector } from "react-redux";
