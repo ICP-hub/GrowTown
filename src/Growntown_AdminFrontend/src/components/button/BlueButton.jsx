@@ -1,12 +1,13 @@
-import React from 'react'
-// import { Button } from '@chakra-ui/react'
-const BlueButton = ({children}) => {
-  return (
-    <></>
-    // <Button bg="#1E62AC" _hover={{ bg: "#FCD390" }} className='border-[1px] border-[#FFFFFF]'>
-    //     {children}
-    // </Button>
-  )
-}
+import React from 'react';
 
-export default BlueButton
+const BlueButton = ({ children }) => {
+  return (
+    <button
+      className="px-4 py-2 bg-blue-700 text-white border border-white rounded-md hover:bg-yellow-400"
+    >
+      {children}
+    </button>
+  );
+};
+
+export default BlueButton;
