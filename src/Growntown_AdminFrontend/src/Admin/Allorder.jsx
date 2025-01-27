@@ -11,7 +11,7 @@ import {
   Box,
   Button,
 } from "@chakra-ui/react";
-import { CopyIcon } from "@chakra-ui/icons";
+import { MdContentCopy } from "react-icons/md";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useAuths } from "../utils/useAuthClient.jsx";
@@ -176,7 +176,7 @@ function Allorder() {
                             {`${orderid.slice(0, 4)}...${orderid.slice(-4)}`}
                             <CopyToClipboard text={orderid} onCopy={handleCopy}>
                               <button className="ml-3">
-                                <CopyIcon />
+                                <MdContentCopy />
                               </button>
                             </CopyToClipboard>
                           </Td>
@@ -189,7 +189,7 @@ function Allorder() {
                               onCopy={handleCopy}
                             >
                               <button className="ml-3">
-                                <CopyIcon />
+                                <MdContentCopy />
                               </button>
                             </CopyToClipboard>
                           </Td>

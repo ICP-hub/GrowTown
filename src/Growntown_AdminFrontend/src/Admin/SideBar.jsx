@@ -1,30 +1,21 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import {
-  IconButton,
-  Box,
-  CloseButton,
-  Flex,
-  Icon,
-  useColorModeValue,
-  Drawer,
-  DrawerContent,
-  useDisclosure,
-} from "@chakra-ui/react";
 import { TbMoneybag } from "react-icons/tb";
 import { MdOutlineDashboard, MdLogout } from "react-icons/md";
 import { LuCopyPlus } from "react-icons/lu";
 import { CiUser } from "react-icons/ci";
 import { FiMenu } from "react-icons/fi";
-import { CopyIcon } from "@chakra-ui/icons";
+import { MdContentCopy } from "react-icons/md";
+import { IoMdClose } from "react-icons/io";
 import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUserAndClear } from "../redux/authSlice";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { Link } from "react-router-dom";
+import { FaCheckCircle } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 
-// Sidebar data
+
 const sideBarData = [
   {
     text: "Dashboard",
@@ -49,12 +40,12 @@ const sideBarData = [
 ];
 
 export default function SimpleSidebar() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
-        onClose(); // Close sidebar automatically if screen is resized to >= 1024px (desktop)
+        setIsOpen(false);
       }
     };
 
@@ -62,39 +53,36 @@ export default function SimpleSidebar() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [onClose]);
+  }, []);
 
   return (
-    <Box
-      h={{ base: "fit-content", md: "full" }}
-      bg={useColorModeValue("#161618", "#29292C")}
-    >
+    <div className="h-full ">
+
+<div className=" hidden lg:block">
+      {/* Sidebar for large screens */}
       <SidebarContent
-        onClose={onClose}
-        display={{ base: "none", lg: "block" }} // Show sidebar on large screens (>= 1024px)
+        onClose={() => setIsOpen(false)}
+        className=""
       />
-      <Drawer
-        isOpen={isOpen}
-        placement="left"
-        onClose={onClose}
-        returnFocusOnClose={false}
-        onOverlayClick={onClose}
-        size="full"
-      >
-        <DrawerContent>
-          <SidebarContent onClose={onClose} />
-        </DrawerContent>
-      </Drawer>
-      <MobileNav display={{ base: "flex", lg: "none" }} onOpen={onOpen} />
+</div>
+      {/* Drawer for mobile */}
+      {isOpen && (
+        <div className="fixed inset-0 z-50 backdrop-blur-sm lg:hidden">
+          <SidebarContent onClose={() => setIsOpen(false)}
+          setIsOpen={setIsOpen} 
+          />
+        </div>
+      )}
+
+      {/* Mobile Nav */}
+      <MobileNav onOpen={() => setIsOpen(true)} />
       {/* Content container */}
-      <Box ml={{ base: 0, lg: 60 }} p="4">
-        {/* Content goes here */}
-      </Box>
-    </Box>
+      <div className="ml-0 lg:ml-60 p-4">{/* Content goes here */}</div>
+    </div>
   );
 }
 
-function SidebarContent({ onClose, ...rest }) {
+function SidebarContent({ onClose, className, setIsOpen }) {
   const loc = useLocation();
   const location = loc.pathname;
   const [hovered, setHovered] = useState(false);
@@ -108,131 +96,101 @@ function SidebarContent({ onClose, ...rest }) {
 
   const handleCopy = () => {
     toast.success("Copied");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <Box
-      bg={useColorModeValue("#29292C", "gray.900")}
-      w={{ base: "full", lg: 60, "2xl": 80 }}
-      pos="fixed"
-      h="full"
-      {...rest}
+    <div
+      className={`bg-[#29292C]  text-white  h-full fixed px-2  pr-4 flex flex-col justify-between ${className}`}
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-        <CloseButton
-          display={{ base: "flex", lg: "none" }}
-          color="white"
-          onClick={onClose}
+       
+      {/* Sidebar Links */}
+      <div
+        className="flex flex-col gap-1 mt-10 lg:mt-24 "
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+      >
+        <h1 onClick={()=>setIsOpen(false) }
+        className="text-white ml-5 mb-5 -mt-5 block lg:hidden "> <IoMdClose size={25}/>
+        </h1>
+
+        {sideBarData.map((link) => (
+          <NavItem
+            key={link.text}
+            icon={link.icon}
+            href={link.Link}
+            isActive={location.toLowerCase().includes(link.Link.toLowerCase())}
+            hovered={hovered}
+            onClose={onClose}
+          >
+            {link.text}
+          </NavItem>
+        ))}
+      </div>
+
+      {/* User Info */}
+      <div className="flex items-center justify-start px-8 pt-4 mb-9 border-t border-gray-700 gap-x-4">
+        <img
+          className="w-14 h-14 rounded-full object-contain"
+          src="/images/Admin.svg"
+          alt="Admin"
         />
-      </Flex>
-      <div className="h-[92%] flex flex-col justify-between">
-        <div
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
-          className="flex flex-col gap-1"
-        >
-          {sideBarData.map((link) => (
-            <NavItem
-              key={link.text}
-              icon={link.icon}
-              href={link.Link}
-              isActive={location
-                .toLowerCase()
-                .includes(link.Link.toLowerCase())}
-              hovered={hovered}
-              onClose={onClose}
+        <div className="space-y-2">
+          <div className="flex items-center gap-x-2">
+            <p className="lg:text-xl font-bold">Admin</p>
+            <button
+              onClick={logoutHandler}
+              className="rounded-full h-7 w-7 flex items-center justify-center  hover:bg-red-600"
             >
-              {link.text}
-            </NavItem>
-          ))}
-        </div>
-        <div className="flex items-center justify-start px-8 pt-4 mb-9 text-white border-t border-gray-700 gap-x-4 2xl:mb-8">
-          <img className="w-14 h-14 rounded-full object-contain" src="/images/Admin.svg" alt="Admin" />
-          <div className="space-y-2">
-            <div className="flex items-center justify-start gap-x-2">
-              <p className="text-lg font-bold">
-               <span className="text-[]">Admin</span>
-              </p>
-              <button
-                onClick={() => logoutHandler()}
-                className=" rounded-full h-7 w-7  "
-              >
-                <Icon as={MdLogout} w={5} h={5}  font="bold" />
-              </button>
-            </div>
-            <div className="flex flex-col">
-              <div>
-                <input
-                  value={
-                    user
-                      ? `${user.slice(0, 5)}......${user.slice(-6)}`
-                      : "No User"
-                  }
-                  readOnly
-                  className=" w-[70%] bg-inherit"
-                />
-                {user && (
-                  <CopyToClipboard text={user} onCopy={handleCopy}>
-                    <button className="ml-3">
-                      <CopyIcon />
-                    </button>
-                  </CopyToClipboard>
-                )}
-              </div>
-              {Copied && <p>Copied!</p>}
-            </div>
+              <MdLogout className="text-white w-5 h-5" />
+            </button>
+          </div>
+          <div className="flex items-center">
+            <input
+              value={
+                user
+                  ? `${user.slice(0, 5)}......${user.slice(-6)}`
+                  : "No User"
+              }
+              readOnly
+              className="bg-transparent w-36 text-white"
+            />
+            {user && (
+              <CopyToClipboard text={user} onCopy={handleCopy}>
+                <button className="ml-3 text-white hover:text-[#50B248]">
+                 { !Copied ?  <MdContentCopy />
+                 :
+                 <FaCheckCircle className="text-[#50B248]" />
+                }
+                   
+                </button>
+              </CopyToClipboard>
+            )}
           </div>
         </div>
       </div>
-    </Box>
+    </div>
   );
 }
 
 SidebarContent.propTypes = {
   onClose: PropTypes.func.isRequired,
+  className: PropTypes.string,
 };
 
-function NavItem({
-  icon,
-  children,
-  href,
-  isActive,
-  hovered,
-  onClose,
-  ...rest
-}) {
+function NavItem({ icon, children, href, isActive, onClose }) {
   return (
-    <Box
-      as={Link}
+    <Link
       to={href}
-      style={{ textDecoration: "none" }}
-      _focus={{ boxShadow: "none" }}
-      {...rest}
       onClick={onClose}
+      className={`flex items-center px-4 py-3 mx-4 my-2 rounded-lg text-white lg:text-xl font-semibold transition-colors duration-200 ${
+        isActive ? "bg-[#50B248] text-red-400" : "hover:bg-gray-700"
+      }`}
     >
-      <Flex
-        align="center"
-        font="bold"
-        p="4"
-        mx="4"
-        borderRadius="lg"
-        role="group"
-        color={isActive ? "black" : "white"}
-        cursor="pointer"
-        bg={isActive ? "#50B248" : ""}
-        _hover={{  color: "#fff" }}
-      >
-        {icon && (
-          <Icon
-            mr="4"
-            fontSize="24"
-            _groupHover={{ color: "#fff" }}
-            as={icon}
-          />
-        )}
-        <span className="text-xl font-semibold">{children}</span>
-      </Flex>
-    </Box>
+      {icon && <div className="mr-4 text-xl">{React.createElement(icon)}</div>}
+      <span>{children}</span>
+    </Link>
   );
 }
 
@@ -244,25 +202,16 @@ NavItem.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
-function MobileNav({ onOpen, ...rest }) {
+function MobileNav({ onOpen }) {
   return (
-    <Flex
-      ml={{ base: 0, lg: 60 }}
-      px={{ base: 4, lg: 24 }}
-      height="20"
-      alignItems="center"
-      bg={useColorModeValue("#161618", "gray.900")}
-      justifyContent="flex-start"
-      {...rest}
-    >
-      <IconButton
-        color="white"
-        variant="outline"
+    <div className="flex items-center px-4 h-16 bg-gray-900 text-white lg:hidden">
+      <button
         onClick={onOpen}
-        aria-label="open menu"
-        icon={<FiMenu />}
-      />
-    </Flex>
+        className="p-2 text-xl rounded-lg hover:bg-gray-600"
+      >
+        <FiMenu />
+      </button>
+    </div>
   );
 }
 

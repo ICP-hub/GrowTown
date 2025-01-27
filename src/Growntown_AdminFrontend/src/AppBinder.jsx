@@ -15,7 +15,8 @@ import {
   InternetIdentity,
 } from "@nfid/identitykit";
 import "@nfid/identitykit/react/styles.css";
-import { ChakraProvider } from "@chakra-ui/react";
+import React from "react";
+
 
 export function AppBinder() {
   // Define signers and canister ID
@@ -30,6 +31,9 @@ const signerClientOptions = {
   },
   keyType: 'Ed25519', // Use Ed25519 key type for compatibility
 };
+
+
+
 
   return (
     <BrowserRouter>
@@ -47,8 +51,8 @@ const signerClientOptions = {
     theme={IdentityKitTheme.SYSTEM}
     authType={IdentityKitAuthType.DELEGATION}
     signerClientOptions={signerClientOptions}
-  >
-     
+  >  
+  
         <Provider store={store}>
           <AuthProvider>
             <App />
