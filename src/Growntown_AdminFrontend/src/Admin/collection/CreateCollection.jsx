@@ -3,8 +3,7 @@ import { AddIcon, ArrowBackIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import DropzoneWithUrlInput from "../components/DropzoneWithUrlInput";
 import { Switch } from "@chakra-ui/react";
-import { idlFactory } from "../../../../declarations/BeGod_backend/BeGod_backend.did.js";
-import { canisterId } from "../../../../declarations/BeGod_backend";
+import { idlFactory } from '../../../../declarations/Growntown_Backend/Growntown_Backend.did.js';
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { useSelector } from "react-redux";
 import Modal from "./NftModal.jsx";
@@ -14,7 +13,7 @@ import { GoPlus } from "react-icons/go";
 import { BiPlus } from "react-icons/bi";
 import BackButton from "./BackButton.jsx";
 import YellowButton from "../../components/button/YellowButton.jsx";
-import { useAuth } from "../../utils/useAuthClient.jsx";
+import { useAuths } from "../../utils/useAuthClient.jsx";
 import { Principal } from "@dfinity/principal";
 import { Opt } from "@dfinity/candid/lib/cjs/idl";
 import Skeleton from "react-loading-skeleton";
@@ -25,7 +24,7 @@ import SuccessModal from "./SuccessModal.jsx";
 import toast from "react-hot-toast";
 import imageCompression from "browser-image-compression";
 import Createcollectionloader from "./Createcollectionloader.jsx";
-import { BeGod_assethandler } from "../../../../declarations/BeGod_assethandler";
+import { Growtown_assethandler } from "../../../../declarations/Growtown_assethandler";
 import ToggleSwitch from "./toggleSwitch";
 import { IoIosAdd } from "react-icons/io";
 import Buttons from "../../Common/Buttons";
@@ -41,7 +40,7 @@ const CreateCollection = () => {
   const [nftRows, setNftRows] = useState([{ id: "", description: "" }]); // Initial row
   const [modal, setModal] = useState(false);
   const [nftCardsList, setNftCardsList] = useState([]);
-  const { backendActor, canisterId } = useAuth();
+  const { backendActor, canisterId } = useAuths();
 
   const [base64String, setBase64String] = useState("");
   const [nftType, setnfttype] = useState("");
@@ -166,7 +165,7 @@ const CreateCollection = () => {
 
 
   const UploadedNftImageusingBase64 = async (base64File) => {
-    if (BeGod_assethandler) {
+    if (Growtown_assethandler) {
       try {
         // console.log(base64File);
 
@@ -183,7 +182,7 @@ const CreateCollection = () => {
         }
 
         // Upload the image to the canister
-        const result1 = await BeGod_assethandler?.uploadImg(id, [
+        const result1 = await Growtown_assethandler?.uploadImg(id, [
           ...arrayBuffer,
         ]);
         console.log(result1);
@@ -193,12 +192,12 @@ const CreateCollection = () => {
         console.log(acd);
 
         if (acd === "local") {
-          const url = `http://127.0.0.1:4943/?canisterId=${process.env.CANISTER_ID_BEGOD_ASSETHANDLER}&imgid=${id}`;
+          const url = `http://127.0.0.1:4943/?canisterId=${process.env.CANISTER_ID_GROWTOWN_ASSETHANDLER}&imgid=${id}`;
           console.log("NFT URL (local):", url);
           return url;
           // imageurlchange(url);
         } else if (acd === "ic") {
-          const url = `https://${process.env.CANISTER_ID_BEGOD_ASSETHANDLER}.raw.icp0.io/?imgid=${id}`;
+          const url = `https://${process.env.CANISTER_ID_GROWTOWN_ASSETHANDLER}.raw.icp0.io/?imgid=${id}`;
           console.log("NFT URL (IC):", url);
           // imageurlchange(url);
           return url;

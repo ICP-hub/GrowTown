@@ -8,8 +8,8 @@ namespace IC.GameKit
 {
     public class TestICPAgent : MonoBehaviour
     {
-        public string greetFrontend = "https://qsgof-4qaaa-aaaan-qekqq-cai.icp0.io/";
-        public string greetBackendCanister = "qvhir-riaaa-aaaan-qekqa-cai";
+        public string greetFrontend = "https://7kl52-gyaaa-aaaac-ahmgq-cai.icp0.io/";
+        public string greetBackendCanister = "7nk3o-laaaa-aaaac-ahmga-cai";
 
         Text mMyPrincipalText = null;
         Button mGreetButton = null;

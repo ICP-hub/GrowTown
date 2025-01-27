@@ -3,12 +3,12 @@ import { RxCross2 } from 'react-icons/rx';
 import Buttons from '../../Common/Buttons';
 import ImageUploader from './ImageUploader';
 import toast from 'react-hot-toast';
-import { useAuth } from '../../utils/useAuthClient';
+import { useAuths } from '../../utils/useAuthClient';
 import WarningModal from './WarningModal';
 import SuccessModal from './SuccessModal';
 import { Principal } from '@dfinity/principal';
 
-const TokenModal = ({toggleModal, principalString}) => {
+const TokenModal = ({toggleModal, getAddedTokenDetails}) => {
   const [tokenName, setTokenName]=useState('')
   const [tokenSymbol, setTokenSymbol]=useState('')
   const [tokenDecimal, setTokenDecimal]=useState('')
@@ -16,56 +16,33 @@ const TokenModal = ({toggleModal, principalString}) => {
   const [tokenImage,setTokenImage]=useState('')
   const [tokenImageUrl, seTokentImageurl]=useState('')
   const [showModal,setShowModal]=useState(false)
-   const { backendActor } = useAuth();
+   const { backendActor } = useAuths();
    const [Success, setsuccess]=useState(false)
 
-  console.log('tokenDetails=>',tokenName,tokenDecimal,tokenSymbol,'tokenImageUrl',tokenImageUrl, 'tokenImage=',tokenImage)
-  async function onClickAddButton(){
-    if(!tokenName || !tokenSymbol || !tokenDecimal || !tokenImage)
+  console.log('tokenDetails=>',tokenName,tokenDecimal,tokenSymbol,'tokenImageUrl',tokenImageUrl)
+
+
+  const onClickAddButton = () => {
+    // event.preventDefault();
+    if(!tokenName || !tokenSymbol || !tokenDecimal || !tokenAmount || !tokenImage)
       { toast.error("Please Fill all token details");
         return;
       }
-    togglewarning();
-  }
-
-  function togglewarning(){
-    setShowModal(!showModal)
-  }
-
-  const handleUpload = async () => {
-    console.log("upload clicked");
-    togglewarning();
-  
-    const principal = Principal.fromText(principalString);
-    console.log('principal=?', principal);
-  
-    try {
-      const metadataContainer = {
-        json: "",
-      };
-  
-      const decimalValue = Number(tokenDecimal);
-      const amountValue = BigInt(tokenAmount);
-  
-      const response = await backendActor?.mintExtFungible(
-        principal,
+      const tokenDetails = {
         tokenName,
-        tokenSymbol,
-        decimalValue, // Nat8
-        [metadataContainer],
-        amountValue // Nat
-      );
-      
-      if(response){}
-      console.log('Token upload response->', response);
-      toast.success("Token created successfully!");
-    } catch (err) {
-      console.log('Error while creating token:', err);
-      toast.error('Error while creating token');
-    }
+        tokenSymbol, 
+        tokenDecimal:Number(tokenDecimal),
+        tokenAmount:BigInt(tokenAmount),
+        tokenImage
+        
+      };
+      console.log("token details", tokenDetails);
+      getAddedTokenDetails(tokenDetails);
+      toggleModal();
+      toast.success("Card updated!");
+
   };
   
-
   const captureUploadedNftImageHDFile = async (files) => {
     const file = files[0];
     if (file) {
@@ -79,6 +56,8 @@ const TokenModal = ({toggleModal, principalString}) => {
       }
     }
   };
+
+
   return (
     <div className="add_new_Token_popup_bg_container border border-[#50B248]">
       <div className="flex   items-center justify-end">
@@ -194,7 +173,7 @@ const TokenModal = ({toggleModal, principalString}) => {
         </div>
 
         {/* metaData fields*/}  
-        <div className="flex mt-10 justify-between items-center">
+        <div className="flex mt-10 justify-center gap-[5%] items-center">
             <div onClick={() => toggleModal()}>
               <Buttons bgColor="black" hover={{textColor:'text-red-600', scale:'scale-110'}} textColor="white" buttonName={"Cancel"} />
             </div>

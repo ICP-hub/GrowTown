@@ -97,14 +97,14 @@ export const transferApprove = async (
       console.log(
         "ledger if condition start",
         metaData?.["icrc1:fee"],
-        process.env.CANISTER_ID_BEGOD_BACKEND
+        process.env.CANISTER_ID_GROWNTOWN_BACKEND
       );
       const totatSendBalance = Number(amnt);
       const transaction = {
         amount: Number(amnt) + Number(metaData?.["icrc1:fee"]),
         from_subaccount: [],
         spender: {
-          owner: Principal.fromText(process.env.CANISTER_ID_BEGOD_BACKEND),
+          owner: Principal.fromText(process.env.CANISTER_ID_GROWNTOWN_BACKEND),
           subaccount: [],
         },
         fee: [metaData?.["icrc1:fee"]],

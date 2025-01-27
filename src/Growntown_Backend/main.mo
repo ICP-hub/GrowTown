@@ -64,6 +64,12 @@ actor Main {
 
   type SubAccount = ExtCore.SubAccount;
 
+
+
+
+
+
+
   public type ListRequest = {
     token : TokenIdentifier;
     from_subaccount : ?SubAccount;
@@ -139,9 +145,53 @@ actor Main {
   type CommonError = ExtCore.CommonError;
   type MetadataLegacy = ExtCommon.Metadata;
 
+
+
+
+ public type SupportedStandard = {
+        url: Text;
+        name: Text;
+    };
+
+    public type Icrc28TrustedOriginsResponse = {
+        trusted_origins: [Text];
+    };
+
+    // Function to return supported standards
+    public query func icrc10_supported_standards() : async [SupportedStandard] {
+        return [
+            {
+                url = "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-10/ICRC-10.md";
+                name = "ICRC-10";
+            },
+            {
+                url = "https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md";
+                name = "ICRC-28";
+            }
+        ];
+    };
+
+    // Function to return trusted origins
+    public func icrc28_trusted_origins() : async Icrc28TrustedOriginsResponse {
+        let trusted_origins = [
+            "https://7ynkd-kiaaa-aaaac-ahmfq-cai.icp0.io",
+            "http://localhost:3001",
+            "http://bd3sg-teaaa-aaaaa-qaaba-cai.localhost:4943",
+            "http://127.0.0.1:4943/?canisterId=bd3sg-teaaa-aaaaa-qaaba-cai",
+            "http://127.0.0.1:4943",
+        ];
+
+        return {
+            trusted_origins = trusted_origins;
+        };
+    };
+
+
+
   /* -------------------------------------------------------------------------- */
   /*                         Data Maps                                          */
   /* -------------------------------------------------------------------------- */
+
 
   // Maps user and the collection canisterIds they create
   private var usersCollectionMap = TrieMap.TrieMap<Principal, [(Time.Time, Principal)]>(Principal.equal, Principal.hash);

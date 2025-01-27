@@ -147,7 +147,7 @@ function SidebarContent({ onClose, ...rest }) {
           ))}
         </div>
         <div className="flex items-center justify-start px-8 pt-4 mb-9 text-white border-t border-gray-700 gap-x-4 2xl:mb-8">
-          <img className="w-14 h-14 rounded-full object-contain" src="/image/Admin.svg" alt="Admin" />
+          <img className="w-14 h-14 rounded-full object-contain" src="/images/Admin.svg" alt="Admin" />
           <div className="space-y-2">
             <div className="flex items-center justify-start gap-x-2">
               <p className="text-lg font-bold">

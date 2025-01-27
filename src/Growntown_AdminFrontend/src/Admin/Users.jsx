@@ -16,13 +16,13 @@ import {
 import { CloseIcon } from "@chakra-ui/icons";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { useAuth } from "../utils/useAuthClient.jsx";
+import { useAuths } from "../utils/useAuthClient.jsx";
 import { Principal } from "@dfinity/principal";
 import { SkeletonTheme } from "react-loading-skeleton";
 import toast from "react-hot-toast";
 
 function Users() {
-  const { backendActor } = useAuth();
+  const { backendActor } = useAuths();
   const [loading, setLoading] = useState(false);
   const [alluser, setalluser] = useState([]);
   const [principal, setprincipal] = useState([]);

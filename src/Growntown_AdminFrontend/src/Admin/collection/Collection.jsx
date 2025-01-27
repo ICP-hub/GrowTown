@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import YellowButton from "../../components/button/YellowButton";
 import { Link } from "react-router-dom";
 import BackButton from "./BackButton";
-import { useAuth } from "../../utils/useAuthClient.jsx";
+import { useAuths } from "../../utils/useAuthClient.jsx";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { SkeletonTheme } from "react-loading-skeleton";
@@ -15,7 +15,7 @@ import { IoIosAdd } from "react-icons/io";
 import CollectionCard from "./CollectionCard";
 
 function Collection() {
-  const { backendActor } = useAuth();
+  const { backendActor } = useAuths();
   const [coll, setColl] = useState([]); // Initialize as an empty array
   const [loading, setLoading] = useState(false);
   const [showDialog, setShowDialog] = useState(false); // Modal state

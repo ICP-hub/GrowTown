@@ -3,17 +3,23 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import environment from 'vite-plugin-environment';
 import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config({ path: '../../.env' });
+// Load environment variables from the correct path
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 export default defineConfig({
+  base: '/',
+  publicDir: 'public',  // Ensuring static files are served correctly
   build: {
     emptyOutDir: true,
     rollupOptions: {
-      external: ['focus-lock/constants', 'detect-node-es', 'get-nonce']
-    }
+      external: id => /node_modules/.test(id),
+    },
   },
   optimizeDeps: {
+    exclude: ['chunk-LH5267NO'],  // Exclude specific dependency
+    include: ['react', 'react-dom', '@vitejs/plugin-react'],
     esbuildOptions: {
       define: {
         global: 'globalThis',
@@ -29,7 +35,7 @@ export default defineConfig({
       },
     },
     watch: {
-      usePolling: true,
+      usePolling: false,
     },
   },
   plugins: [
@@ -47,14 +53,11 @@ export default defineConfig({
         find: '@dfinity/identity/lib/cjs/buffer',
         replacement: 'buffer/',
       },
-      // {
-      //   find: 'crypto',
-      //   replacement: 'crypto-browserify',
-      // },
-      // {
-      //   find: 'stream',
-      //   replacement: 'stream-browserify',
-      // }
-    ],    
+    ],
+    extensions: ['.js', '.ts', '.jsx', '.tsx'],
+  },
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
   },
 });
+
