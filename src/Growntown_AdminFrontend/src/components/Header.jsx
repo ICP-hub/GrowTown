@@ -54,7 +54,7 @@ const Header = () => {
                     <ul className="hidden md:flex  md:text-xl font-bold text-[#4B2519] space-x-6">
                         {navText.map((text, index) => (
                             <a href={`#${text}`} key={index}>
-                                <li className="hover:text-[#FFF3C5] cursor-pointer">
+                                <li className="hover:text-[#FFF3C5] cursor-pointer text-2xl">
                                     {text}
                                 </li>
                             </a>
