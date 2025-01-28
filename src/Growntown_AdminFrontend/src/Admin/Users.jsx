@@ -11,8 +11,8 @@ function Users() {
   const { backendActor } = useAuths();
   const [loading, setLoading] = useState(false);
   const [alluser, setalluser] = useState([]);
-  const [principal, setprincipal] = useState([]);
-  let [currentpage, setcurrentpage] = useState(1);
+  const [currentpage, setcurrentpage] = useState(1);
+
   const [totalpage, settotalpage] = useState();
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -36,18 +36,9 @@ function Users() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const loadStart = Date.now();
       await getallDUser();
-      const loadTime = Date.now() - loadStart;
-
-      const remainingTime = 3000 - loadTime;
-      if (remainingTime > 0) {
-        setTimeout(() => setLoading(false), remainingTime);
-      } else {
-        setLoading(false);
-      }
+      setLoading(false);
     };
-
     fetchData();
   }, []);
 
@@ -76,31 +67,28 @@ function Users() {
   };
 
   return (
-    <div className="w-full px-10 pb-8 mt-10 md:mt-0 h-screen mx-auto pt-5 sm:pt-6 md:pt-16 lg:pt-28">
-      <div className="flex flex-col items-center justify-center ">
+    <div className="w-full px-4 md:px-10  min-h-screen mx-auto pt-4 bg-[#121212] text-white flex flex-col items-center rounded-2xl">
+      <h2 className="text-2xl font-semibold text-white mb-4 text-start">Users</h2>
+      <div className="w-full flex flex-col items-center">
         {/* Search Box */}
-        <div className="flex items-center mt-5 w-full md:w-10/12">
-
-          <>
-            <input
-              type="text"
-              placeholder="Search by Name"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full  mr-1 h-12 px-4 text-white bg-gray-800 border border-[#50B248] rounded-md focus:outline-none placeholder-gray-400"
-            />
-            <button
-              onClick={clearSearch}
-              className=" h-12 w-12 flex justify-center items-center  text-red-500 bg-transparent border border-red-500 rounded-md hover:bg-red-500 hover:text-white"
-            >
-              <IoMdClose size={20} />
-            </button>
-          </>
-
+        <div className="flex items-center w-full mb-4">
+          <input
+            type="text"
+            placeholder="Search by Name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full h-10 px-4 text-white bg-[#1E1E1E] border border-[#50B248] rounded-md focus:outline-none placeholder-gray-400"
+          />
+          <button
+            onClick={clearSearch}
+            className="h-10 w-10 ml-2 flex justify-center items-center text-red-500 bg-transparent border border-red-500 rounded-md hover:bg-red-500 hover:text-white"
+          >
+            <IoMdClose size={20} />
+          </button>
         </div>
 
         {/* Table */}
-        <div className="mt-5 w-full md:w-10/12">
+        <div className="mt-5 w-full">
           <div className="overflow-x-auto">
             <table className="w-full border border-[#50B248] text-left">
               <thead className="bg-[#50B248]">
