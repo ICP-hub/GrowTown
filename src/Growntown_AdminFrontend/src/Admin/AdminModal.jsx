@@ -30,7 +30,7 @@ const AdminModal = () => {
 
     return (
         <div className="rounded-xl text-white bg-[#161618] border shadow-xl border-[#50B248]/30 shadow-[#50B248]/10 transition-all duration-300 ease-in-out transform hover:scale-105">
-            <div className="bg-gradient-to-b from-[#3D9635] to-[#50B248] h-14 w-full rounded-t-lg"></div>
+            <div className="bg-gradient-to-b from-[#3D9635] to-[#50B248] h-8 w-full rounded-t-lg"></div>
             
             <div className="p-4 px-6 -mt-10">
                 <div className="flex gap-2 items-center">

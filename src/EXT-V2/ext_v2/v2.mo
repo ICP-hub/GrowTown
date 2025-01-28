@@ -30,7 +30,7 @@ import List "mo:base/List";
 import Buffer "mo:base/Buffer";
 import _TrieMap "mo:base/TrieMap";
 import _Debug "mo:base/Debug";
-import Encoding "mo:encoding/Binary";
+import _Encoding "mo:encoding/Binary";
 //Cap
 import Cap "mo:cap/Cap";
 import Queue "../motoko/util/Queue";
