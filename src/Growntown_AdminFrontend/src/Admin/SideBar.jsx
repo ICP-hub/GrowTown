@@ -57,7 +57,7 @@ export default function SimpleSidebar() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-[#1a1a1a] to-black">
+    <div className=" bg-gradient-to-br from-gray-900 via-[#1a1a1a] to-black">
       <div className="hidden lg:block">
         <SidebarContent onClose={() => setIsOpen(false)} />
       </div>
@@ -69,7 +69,7 @@ export default function SimpleSidebar() {
       )}
 
       <MobileNav onOpen={() => setIsOpen(true)} />
-      <div className="ml-0 lg:ml-[280px] p-4">{/* Content goes here */}</div>
+      <div className="ml-0 lg:ml-[280px] ">{/* Content goes here */}</div>
     </div>
   );
 }
@@ -101,7 +101,7 @@ function SidebarContent({ onClose, className, setIsOpen }) {
         bg-gradient-to-b from-[#29292C]/95 via-[#1a1a1a]/95 to-black/95
         border-r border-white/10
         shadow-[0_0_25px_rgba(0,0,0,0.3)]
-        w-[310px] h-full fixed 
+        w-[280px] h-full fixed 
         flex flex-col
         ${className}
       `}
@@ -112,7 +112,7 @@ function SidebarContent({ onClose, className, setIsOpen }) {
           <img src="images/Grow town logo 2.png" alt="Logo" className="h-12" />
           <button 
             onClick={() => setIsOpen(false)}
-            className="lg:hidden p-2 rounded-lg hover:bg-white/5 transition-all duration-300"
+            className="lg:hidden p-2 rounded-lg text-gray-400 hover:bg-white/5 transition-all duration-300"
           >
             <IoMdClose size={22} />
           </button>
@@ -135,7 +135,7 @@ function SidebarContent({ onClose, className, setIsOpen }) {
       </div>
 
       {/* User Profile Section */}
-      <div className="m-4 p-4 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-md border border-white/10 shadow-lg">
+      {/* <div className="m-4 p-4 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-md border border-white/10 shadow-lg">
         <div className="flex items-center gap-3">
           <div className="relative group">
             <div className="absolute -inset-0.5 bg-gradient-to-r from-[#50B248] to-[#3D9635] rounded-lg blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
@@ -177,7 +177,8 @@ function SidebarContent({ onClose, className, setIsOpen }) {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
+
     </div>
   );
 }

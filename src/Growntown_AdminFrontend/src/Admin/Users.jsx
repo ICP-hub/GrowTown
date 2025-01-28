@@ -76,7 +76,7 @@ function Users() {
   };
 
   return (
-    <div className="w-11/12 px-10 pb-8 h-screen mx-auto pt-5 sm:pt-6 md:pt-16 lg:pt-28">
+    <div className="w-full px-10 pb-8 mt-10 md:mt-0 h-screen mx-auto pt-5 sm:pt-6 md:pt-16 lg:pt-28">
       <div className="flex flex-col items-center justify-center ">
         {/* Search Box */}
         <div className="flex items-center mt-5 w-full md:w-10/12">
