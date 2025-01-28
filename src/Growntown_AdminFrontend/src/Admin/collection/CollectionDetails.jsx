@@ -688,7 +688,7 @@ function CollectionDetails() {
       <SkeletonTheme baseColor="#202020" highlightColor="#282828">
         <div
           onClick={onClickFilterContainer}
-          className="w-[90%] overflow-y-scroll pt-10 px-10 pb-8 h-screen no-scrollbar no-scroll 2xl:ml-[7%] md:w-full lg:w-[90%] lg:pt-20"
+          className="w-full h-screen overscroll-none overflow-scroll pt-8  pb-8 no-scrollbar px-8"
         >
           {loading ? (
             <div>
