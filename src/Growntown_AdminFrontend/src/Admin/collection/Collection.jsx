@@ -99,117 +99,105 @@ function Collection() {
 
   return (
     <SkeletonTheme baseColor="#202020" highlightColor="#282828">
-      <div className="w-[90%] h-screen overscroll-none overflow-scroll pt-10 px-10 pb-8 no-scrollbar 2xl:ml-[7%] md:w-full lg:w-[90%] lg:pt-20">
-        {/* Flex container for back button and collection buttons */}
-        <div className="flex justify-between items-center w-full mb-6 mt-5">
-          {/* Back button (hidden on small screens) */}
+      <div className="w-full h-screen overscroll-none overflow-scroll pt-8  pb-8 no-scrollbar px-8  ">
+      {/* Header Section */}
+      <div className="flex justify-between items-center w-full mb-8 mt-4">
+        <div className="flex items-center gap-4">
           <div className="hidden sm:block">
-            <BackButton />
+            <BackButton text="Admin<Collection" />
           </div>
-          {/* Create collection button */}
-          <div className="flex space-x-4">
-            <Link to="/Admin/collection/create">
-              <Buttons
-                buttonName="Create Collection"
-                bgColor="white"
-                icon={<IoIosAdd size={30} />}
-              />
-            </Link>
-          </div>
-        </div>
-
-        {/* Search Collection */}
-        <div className="flex justify-center items-center w-full mb-6">
-          <div className="relative w-full md:w-[60%] lg:w-[40%]">
+          {/* Search Section moved here */}
+          <div className="relative w-[300px]">
             <input
               type="text"
               placeholder="Search collections..."
-              className="w-full px-5 py-3 rounded-xl bg-[#29292C] border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#50B248] transition-all duration-300"
+              className="w-full px-6 py-4 rounded-2xl bg-[#1E1E1E] border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#50B248] transition-all duration-300 text-sm"
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button
-              className="absolute top-1/2 right-3 transform -translate-y-1/2 p-2 rounded-full bg-[#50B248] text-white hover:bg-[#3D9635] transition-all"
-            >
+            <button className="absolute top-1/2 right-4 transform -translate-y-1/2 p-2.5 rounded-xl bg-[#50B248] text-white hover:bg-[#3D9635] transition-all duration-300">
               <CiSearch className="w-5 h-5" />
             </button>
           </div>
         </div>
-
-        {/* Loader skeleton when loading */}
-        {loading ? (
-          <div className="grid w-full gap-6 lg:grid-cols-3 sm:grid-cols-1 md:grid-cols-2">
-            {Array(6)
-              .fill()
-              .map((_, index) => (
-                <CollectionCardSkeleton key={index} />
-              ))}
-          </div>
-        ) : (
-          <div className="w-full flex justify-center mt-10 items-center">
-            {/* Grid of collections */}
-            {filteredCollections.length > 0 ? (
-              <div className="grid w-full gap-6 lg:grid-cols-3 sm:grid-cols-1 md:grid-cols-2">
-                {filteredCollections.map((collectiondata, index) => (
-                  <CollectionCard
-                    key={index}
-                    collectiondata={collectiondata}
-                    handleDelete={handleDelete}
-                    index={index}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="flex justify-center items-center w-full h-full">
-                <p className="text-white text-2xl text-center">
-                  No collections available
-                </p>
-              </div>
-            )}
-          </div>
-        )}
+        <Link to="/Admin/collection/create">
+          <Buttons
+            buttonName="Create Collection"
+            bgColor="white"
+            icon={<IoIosAdd size={24} className="text-black" />}
+            className="hover:shadow-lg transition-all duration-300"
+          />
+        </Link>
       </div>
 
-      {/* Confirmation Modal */}
-      {showDialog && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50">
-          <div className="relative bg-[#29292C] p-8 px-10 rounded-md text-center text-white w-full sm:w-[90%] md:w-[500px] shadow-lg">
-            {/* Close Button */}
-            <button
-              className="absolute top-4 right-4 text-white hover:text-gray-400 text-2xl"
-              onClick={cancelDelete}
-            >
-              <IoClose />
-            </button>
-            {/* Warning Icon and Text */}
-            <div className="flex flex-col items-center">
-              <BiErrorCircle className="text-yellow-500 text-6xl mb-4" />
-              <p className="text-lg font-semibold mb-4">
-                Warning! This action cannot be undone.
-              </p>
-              <p className="mb-6">
-                Are you sure you want to delete this collection?
-              </p>
-            </div>
-            {/* Buttons */}
-            <div className="flex justify-between space-x-2">
-              <button
-                className="w-full px-6 py-3 bg-gray-600 rounded-md text-white text-lg hover:bg-gray-700"
-                onClick={cancelDelete}
-              >
-                Cancel
-              </button>
-              <button
-                className="w-full px-6 py-3 bg-[#FCD37B] rounded-md text-black text-lg hover:bg-yellow-500"
-                onClick={confirmDelete}
-              >
-                Delete
-              </button>
-            </div>
+      {/* Content Section */}
+      {loading ? (
+        <div className="grid w-full gap-8 lg:grid-cols-3 sm:grid-cols-1 md:grid-cols-2">
+        {Array(6).fill().map((_, index) => (
+          <CollectionCardSkeleton key={index} />
+        ))}
+        </div>
+      ) : (
+        <div className="w-full flex justify-center items-center">
+        {filteredCollections.length > 0 ? (
+          <div className="grid w-full gap-10 lg:grid-cols-4 sm:grid-cols-1 md:grid-cols-2">
+          {filteredCollections.map((collectiondata, index) => (
+            <CollectionCard
+            key={index}
+            collectiondata={collectiondata}
+            handleDelete={handleDelete}
+            index={index}
+            />
+          ))}
           </div>
+        ) : (
+          <div className="flex justify-center items-center w-full h-[50vh]">
+          <p className="text-white text-xl font-medium opacity-80">
+            No collections available
+          </p>
+          </div>
+        )}
         </div>
       )}
+      </div>
+
+      {/* Modal */}
+      {showDialog && (
+      <div className="fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50">
+        <div className="relative bg-[#1E1E1E] p-8 px-10 rounded-2xl text-center text-white w-full sm:w-[90%] md:w-[480px] shadow-2xl border border-white/10">
+        <button
+          className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors duration-300 text-2xl"
+          onClick={cancelDelete}
+        >
+          <IoClose />
+        </button>
+        <div className="flex flex-col items-center">
+          <BiErrorCircle className="text-[#FCD37B] text-6xl mb-5" />
+          <p className="text-lg font-semibold mb-3">
+          Warning! This action cannot be undone.
+          </p>
+          <p className="mb-6 text-gray-400">
+          Are you sure you want to delete this collection?
+          </p>
+        </div>
+        <div className="flex justify-between space-x-4">
+          <button
+          className="w-full px-6 py-3.5 bg-[#2D2D2D] rounded-xl text-white text-base font-medium hover:bg-[#353535] transition-all duration-300"
+          onClick={cancelDelete}
+          >
+          Cancel
+          </button>
+          <button
+          className="w-full px-6 py-3.5 bg-[#FCD37B] rounded-xl text-black text-base font-medium hover:bg-[#f3c65e] transition-all duration-300"
+          onClick={confirmDelete}
+          >
+          Delete
+          </button>
+        </div>
+        </div>
+      </div>
+      )}
     </SkeletonTheme>
-  );
+    );
 }
 
 export default Collection;
