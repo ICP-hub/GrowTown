@@ -835,7 +835,7 @@ const CreateCollection = () => {
                       onClick={() => navigate(-1)}
                       className="w-[30%] mt-10 mr-4 sm:w-[25%] md:w-[15%] h-[43px] text-[#FFFFFF] "
                     >
-                      <Buttons buttonName={"Cancel"} textColor="white" bgColor="black" />
+                      <Buttons buttonName={"Cancel"} textColor="white" bgColor="#242426" />
                     </div>
 
                     <div onClick={handleSubmit} className="mt-10 ml-4">
