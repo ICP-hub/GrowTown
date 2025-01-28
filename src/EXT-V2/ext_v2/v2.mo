@@ -23,13 +23,13 @@ import AID "../motoko/util/AccountIdentifier";
 import ExtCore "../motoko/ext/Core";
 import ExtCommon "../motoko/ext/Common";
 import ExtAllowance "../motoko/ext/Allowance";
-import ExtNonFungible "../motoko/ext/NonFungible";
+import _ExtNonFungible "../motoko/ext/NonFungible";
 //EXTv2 SALE
 import Int64 "mo:base/Int64";
 import List "mo:base/List";
 import Buffer "mo:base/Buffer";
-import TrieMap "mo:base/TrieMap";
-import Debug "mo:base/Debug";
+import _TrieMap "mo:base/TrieMap";
+import _Debug "mo:base/Debug";
 import Encoding "mo:encoding/Binary";
 //Cap
 import Cap "mo:cap/Cap";
@@ -337,7 +337,7 @@ actor class EXTNFT(init_owner : Principal) = this {
     streaming_strategy = null;
     upgrade = false;
   };
-  let HTTP_BAD_REQUEST : HttpResponse = {
+  let _HTTP_BAD_REQUEST : HttpResponse = {
     status_code = 400;
     headers = [];
     body = Blob.fromArray([]);
@@ -389,28 +389,28 @@ actor class EXTNFT(init_owner : Principal) = this {
   };
 
   //Heartbeat
-  public shared (msg) func heartbeat_external() : async () {
+  public shared (_msg) func heartbeat_external() : async () {
     if (data_internalRunHeartbeat == true) {
       try {
         await heartbeat_paymentSettlements();
         await heartbeat_disbursements();
         await heartbeat_capEvents();
         await heartbeat_assetCanisters();
-      } catch (e) {
+      } catch (_e) {
         data_internalRunHeartbeat := false;
       };
     };
   };
 
-  public shared (msg) func heartbeat_myself() : async () {
+  public shared (_msg) func heartbeat_myself() : async () {
       try {
         await heartbeat_paymentSettlements();
         await heartbeat_disbursements();
-      }catch e {};
+      }catch _e {};
   };
 
 
-  public shared (msg) func heartbeat_assetCanisters() : async () {
+  public shared (_msg) func heartbeat_assetCanisters() : async () {
     if (Cycles.balance() < ASSET_CANISTER_CYCLES_TOPUP) return ();
     for ((a, s) in _assetCanisters.entries()) {
       var acService : EXTAssetService = actor (Principal.toText(a));
@@ -422,14 +422,14 @@ actor class EXTNFT(init_owner : Principal) = this {
       if (Cycles.balance() < ASSET_CANISTER_CYCLES_TOPUP) return ();
     };
   };
-  public shared (msg) func heartbeat_disbursements() : async () {
+  public shared (_msg) func heartbeat_disbursements() : async () {
     while (Queue.size(_disbursements) > 0 and data_internalRunHeartbeat) {
       var last = Queue.next(_disbursements);
       switch (last.0) {
         case (?d) {
           _disbursements := last.1;
           try {
-            var bh = await ExternalService_ICPLedger.send_dfx({
+            var _bh = await ExternalService_ICPLedger.send_dfx({
               memo = 0;
               amount = { e8s = d.3 };
               fee = { e8s = 10000 };
@@ -437,7 +437,7 @@ actor class EXTNFT(init_owner : Principal) = this {
               to = d.1;
               created_at_time = null;
             });
-          } catch (e) {
+          } catch (_e) {
             _disbursements := Queue.add(d, _disbursements);
           };
         };
@@ -445,16 +445,16 @@ actor class EXTNFT(init_owner : Principal) = this {
       };
     };
   };
-  public shared (msg) func heartbeat_paymentSettlements() : async () {
+  public shared (_msg) func heartbeat_paymentSettlements() : async () {
     for ((paymentAddress, settlement) in _expiredPaymentSettlements().vals()) {
       switch (settlement.purchase) {
-        case (#nft t) ignore (ext_marketplaceSettle(paymentAddress));
-        case (#sale q) ignore (ext_saleSettle(paymentAddress));
+        case (#nft _t) ignore (ext_marketplaceSettle(paymentAddress));
+        case (#sale _q) ignore (ext_saleSettle(paymentAddress));
         case (_) {};
       };
     };
   };
-  public shared (msg) func heartbeat_capEvents() : async () {
+  public shared (_msg) func heartbeat_capEvents() : async () {
     while (Queue.size(_capEvents) > 0 and data_internalRunHeartbeat) {
       var last = Queue.next(_capEvents);
       switch (last.0) {
@@ -462,7 +462,7 @@ actor class EXTNFT(init_owner : Principal) = this {
           _capEvents := last.1;
           try {
             ignore await ExternalService_Cap.insert(event);
-          } catch (e) {
+          } catch (_e) {
             _capEvents := Queue.add(event, _capEvents);
           };
         };
@@ -564,7 +564,7 @@ actor class EXTNFT(init_owner : Principal) = this {
       config_canCreateAssetCanister := true;
       let newp = Principal.fromActor(b);
       _assetCanisters.put(newp, 0);
-    } catch (e) {
+    } catch (_e) {
       config_canCreateAssetCanister := true;
       assert (false);
     };
@@ -665,7 +665,7 @@ actor class EXTNFT(init_owner : Principal) = this {
       };
     };
   };
-  public query func extdata_supply(token : TokenIdentifier) : async Result.Result<Balance, CommonError> {
+  public query func extdata_supply(_token : TokenIdentifier) : async Result.Result<Balance, CommonError> {
     #ok(data_supply);
   };
   public query func ext_metadata(token : TokenIdentifier) : async Result.Result<Metadata, CommonError> {
@@ -702,11 +702,11 @@ actor class EXTNFT(init_owner : Principal) = this {
     await _ext_internal_marketplaceList(msg.caller, request);
   };*/
 
-  public shared (msg) func ext_marketplaceList(caller : Principal, request : ListRequest) : async Result.Result<(), CommonError> {
+  public shared (_msg) func ext_marketplaceList(caller : Principal, request : ListRequest) : async Result.Result<(), CommonError> {
     await _ext_internal_marketplaceList(caller, request);
   };
 
-  public shared (msg) func ext_marketplacePurchase(tokenid : TokenIdentifier, price : Nat64, buyer : AccountIdentifier) : async Result.Result<(AccountIdentifier, Nat64), CommonError> {
+  public shared (_msg) func ext_marketplacePurchase(tokenid : TokenIdentifier, price : Nat64, buyer : AccountIdentifier) : async Result.Result<(AccountIdentifier, Nat64), CommonError> {
     if (ExtCore.TokenIdentifier.isPrincipal(tokenid, Principal.fromActor(this)) == false) {
       return #err(#InvalidToken(tokenid));
     };
@@ -725,7 +725,7 @@ actor class EXTNFT(init_owner : Principal) = this {
     };
   };
 
-  public shared (msg) func ext_marketplaceSettle(paymentaddress : AccountIdentifier) : async Result.Result<(), CommonError> {
+  public shared (_msg) func ext_marketplaceSettle(paymentaddress : AccountIdentifier) : async Result.Result<(), CommonError> {
     switch (await ext_checkPayment(paymentaddress)) {
       case (?(settlement, response)) {
         switch (response) {
@@ -792,7 +792,7 @@ actor class EXTNFT(init_owner : Principal) = this {
     assert (_isAdmin(msg.caller));
     assert (groups.size() > 0);
     switch (data_saleCurrent) {
-      case (?s) return false;
+      case (?_s) return false;
       case (_) {
         let seed : Blob = await Random.blob();
         data_saleTokensForSale := shuffleTokens(seed, switch (_owners.get("0000")) { case (?t) t; case (_) [] });
@@ -941,7 +941,7 @@ actor class EXTNFT(init_owner : Principal) = this {
       case (_) return true;
     };
   };
-  public shared (msg) func ext_salePurchase(groupId : Nat, amount : Nat64, quantity : Nat64, address : AccountIdentifier) : async Result.Result<(AccountIdentifier, Nat64), Text> {
+  public shared (_msg) func ext_salePurchase(groupId : Nat, amount : Nat64, quantity : Nat64, address : AccountIdentifier) : async Result.Result<(AccountIdentifier, Nat64), Text> {
     switch (data_saleCurrent) {
       case (?data_saleCurrent) {
         if (availableTokens() == 0) {
@@ -999,7 +999,7 @@ actor class EXTNFT(init_owner : Principal) = this {
       };
     };
   };
-  public shared (msg) func ext_saleSettle(paymentaddress : AccountIdentifier) : async Result.Result<(), Text> {
+  public shared (_msg) func ext_saleSettle(paymentaddress : AccountIdentifier) : async Result.Result<(), Text> {
     switch (await ext_checkPayment(paymentaddress)) {
       case (?(settlement, response)) {
         switch (response) {
@@ -1066,13 +1066,13 @@ actor class EXTNFT(init_owner : Principal) = this {
       case (_) return #err("Nothing to settle");
     };
   };
-  public query (msg) func ext_saleTransactions() : async [SaleTransaction] {
+  public query (_msg) func ext_saleTransactions() : async [SaleTransaction] {
     data_saleTransactions;
   };
-  public query (msg) func ext_saleCurrent() : async ?Sale {
+  public query (_msg) func ext_saleCurrent() : async ?Sale {
     data_saleCurrent;
   };
-  public query (msg) func ext_saleSettings(address : AccountIdentifier) : async ?SaleDetails {
+  public query (_msg) func ext_saleSettings(address : AccountIdentifier) : async ?SaleDetails {
     switch (data_saleCurrent) {
       case (?cs) {
         var groupId : Nat = 0;
@@ -1098,11 +1098,11 @@ actor class EXTNFT(init_owner : Principal) = this {
       case (_) null;
     };
   };
-  public shared (msg) func ext_capInit() : async () {
+  public shared (_msg) func ext_capInit() : async () {
     if (Option.isNull(cap_rootBucketId)) {
       try {
         cap_rootBucketId := await ExternalService_Cap.handshake(Principal.toText(Principal.fromActor(this)), 1_000_000_000_000);
-      } catch e {};
+      } catch _e {};
     };
   };
   //HTTP Views
@@ -1435,7 +1435,7 @@ actor class EXTNFT(init_owner : Principal) = this {
           case (#canister a) {
             let acService : EXTAssetService = actor (a.canister);
             switch (await acService.getAssetChunk(a.id, 0)) {
-              case (?(ctype, chunk, last)) {
+              case (?(ctype, chunk, _last)) {
                 return {
                   status_code = 200;
                   headers = [("content-type", ctype), ("cache-control", "public, max-age=15552000")];
@@ -2132,7 +2132,7 @@ func _ext_internalMarketplaceListings_2() : [(TokenIndex, Listing, Metadata, Nat
   public shared (msg) func addAsset(handle : AssetHandle, id : Nat32, ctype : Text, name : Text, canister : Text) : async () {
     await _ext_internal_assetAdd(msg.caller, handle, ctype, name, #canister({ id = id; canister = canister }) : AssetType, 0);
   };
-  public query (msg) func salesSettings(address : AccountIdentifier) : async SaleSettings {
+  public query (_msg) func salesSettings(_address : AccountIdentifier) : async SaleSettings {
     return {
       price = 0;
       salePrice = 0;
@@ -2145,27 +2145,27 @@ func _ext_internalMarketplaceListings_2() : [(TokenIndex, Listing, Metadata, Nat
       bulkPricing = [];
     } : SaleSettings;
   };
-  public query (msg) func saleTransactions() : async [SaleTransaction] {
+  public query (_msg) func saleTransactions() : async [SaleTransaction] {
     data_saleTransactions;
   };
-  public shared (msg) func reserve(amount : Nat64, quantity : Nat64, address : AccountIdentifier, _subaccountNOTUSED : SubAccount) : async Result.Result<(AccountIdentifier, Nat64), Text> {
+  public shared (_msg) func reserve(_amount : Nat64, _quantity : Nat64, _address : AccountIdentifier, _subaccountNOTUSED : SubAccount) : async Result.Result<(AccountIdentifier, Nat64), Text> {
     return #err("Please use v2 sale methods");
     //await ext_salePurchase(0, amount, quantity, address);
   };
-  public shared (msg) func retreive(paymentaddress : AccountIdentifier) : async Result.Result<(), Text> {
+  public shared (_msg) func retreive(_paymentaddress : AccountIdentifier) : async Result.Result<(), Text> {
     return #err("Please use v2 sale methods");
     //await ext_saleSettle(paymentaddress);
   };
   public shared (msg) func transfer(request : TransferRequest) : async TransferResponse {
     await _ext_internal_transfer(msg.caller, request);
   };
-  public shared (msg) func lock(tokenid : TokenIdentifier, price : Nat64, address : AccountIdentifier, _subaccountNOTUSED : SubAccount) : async Result.Result<AccountIdentifier, CommonError> {
+  public shared (_msg) func lock(tokenid : TokenIdentifier, price : Nat64, address : AccountIdentifier, _subaccountNOTUSED : SubAccount) : async Result.Result<AccountIdentifier, CommonError> {
     switch (await ext_marketplacePurchase(tokenid, price, address)) {
       case (#ok p) return #ok(p.0);
       case (#err e) return #err(e);
     };
   };
-  public shared (msg) func settle(tokenid : TokenIdentifier) : async Result.Result<(), CommonError> {
+  public shared (_msg) func settle(tokenid : TokenIdentifier) : async Result.Result<(), CommonError> {
     switch (
       Array.find(
         Iter.toArray(_paymentSettlements.entries()),
@@ -2232,7 +2232,7 @@ func _ext_internalMarketplaceListings_2() : [(TokenIndex, Listing, Metadata, Nat
       };
     };
   };
-  public query func supply(token : TokenIdentifier) : async Result.Result<Balance, CommonError> {
+  public query func supply(_token : TokenIdentifier) : async Result.Result<Balance, CommonError> {
     #ok(data_supply);
   };
   public query func getRegistry() : async [(TokenIndex, AccountIdentifier)] {
@@ -2622,7 +2622,7 @@ public query func try2getAllNonFungibleTokenData() : async [(TokenIndex, Account
   //     },
   //   );
   // };
-  public query (msg) func allSettlements() : async [(
+  public query (_msg) func allSettlements() : async [(
     TokenIndex,
     {
       seller : Principal;
@@ -2636,10 +2636,10 @@ public query func try2getAllNonFungibleTokenData() : async [(TokenIndex, Account
   public query func stats() : async (Nat64, Nat64, Nat64, Nat64, Nat, Nat, Nat) {
     _ext_internalStats();
   };
-  public shared (msg) func adminKillHeartbeat() : async () {
+  public shared (_msg) func adminKillHeartbeat() : async () {
     await heartbeat_stop();
   };
-  public shared (msg) func adminStartHeartbeat() : async () {
+  public shared (_msg) func adminStartHeartbeat() : async () {
     await heartbeat_start();
   };
   public query func isHeartbeatRunning() : async Bool {
