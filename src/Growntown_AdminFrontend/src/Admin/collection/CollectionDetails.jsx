@@ -19,6 +19,8 @@ import { IoCheckmarkOutline } from "react-icons/io5";
 import { Growtown_assethandler } from "../../../../declarations/Growtown_assethandler";
 import { useNavigate } from "react-router-dom";
 import TokenModal from "./TokenModal";
+import { GrNext } from "react-icons/gr";
+import { GrPrevious } from "react-icons/gr";
 
 const cardTypeList = [
   {
@@ -688,7 +690,7 @@ function CollectionDetails() {
       <SkeletonTheme baseColor="#202020" highlightColor="#282828">
         <div
           onClick={onClickFilterContainer}
-          className="w-full h-screen overscroll-none overflow-scroll pt-8  pb-8 no-scrollbar px-8"
+          className="w-full h-screen overscroll-none overflow-scroll pt-8  pb-8 no-scrollbar px-8 mt-8"
         >
           {loading ? (
             <div>
@@ -725,15 +727,15 @@ function CollectionDetails() {
                   <BackButton />
                 </span>
                 <div className="flex justify-end w-full ml-auto gap-x-4 sm:gap-x-6">
-                  <YellowButton methodName={() => toggleTokenModal()}>
+                  {/* <YellowButton methodName={() => toggleTokenModal()}>
                     Add Token
-                  </YellowButton>
+                  </YellowButton> */}
                   <YellowButton methodName={() => toggleModal()}>
                     Add NFT
                   </YellowButton>
-                  <Link to={"/admin/collection/create"}>
+                  {/* <Link to={"/admin/collection/create"}>
                     <YellowButton>Add Collection</YellowButton>
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
 
@@ -1018,11 +1020,11 @@ function CollectionDetails() {
                     className="px-4 py-2 bg-gray-900 text-white border border-gray-500 rounded-md hover:bg-black"
                     onClick={leftfunction}
                   >
-                    &lt;
+                    <GrPrevious/>
                   </button>
                 )}
                 <button
-                  className="px-4 py-2 bg-yellow-400 text-black border border-black rounded-md hover:bg-yellow-500"
+                  className="px-4 py-2 bg-[#50B248] text-black border border-black rounded-md translate-all duration-200 hover:bg-yellow-500"
                 >
                   {currentpage}
                 </button>
@@ -1031,7 +1033,7 @@ function CollectionDetails() {
                     className="px-4 py-2 bg-gray-900 text-white border border-gray-500 rounded-md hover:bg-black"
                     onClick={rightfunction}
                   >
-                    &gt;
+                    <GrNext/>
                   </button>
                 )}
               </div>
