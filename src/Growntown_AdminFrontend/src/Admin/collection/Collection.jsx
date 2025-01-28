@@ -142,39 +142,41 @@ function Collection() {
           </Link>
         </div>
 
-        {/* Content Section */}
-        {loading ? (
-          <div className="grid w-full gap-8 lg:grid-cols-3 sm:grid-cols-1 md:grid-cols-2">
-            {Array(6)
+      {/* Content Section */}
+            {loading ? (
+            <div className="grid w-full gap-8 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 sm:grid-cols-1 md:grid-cols-2 justify-center">
+              {Array(6)
               .fill()
               .map((_, index) => (
-                <CollectionCardSkeleton key={index} />
+            <CollectionCardSkeleton key={index} />
               ))}
-          </div>
-        ) : (
-          <div className="w-full flex justify-center items-center">
-            {currentCollections.length > 0 ? (
-              <div className="grid w-full gap-10 lg:grid-cols-4 sm:grid-cols-1 md:grid-cols-2">
+            </div>
+            ) : (
+            <div className="w-full flex justify-center items-center">
+              {currentCollections.length > 0 ? (
+              <div className="grid w-full gap-8 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 sm:grid-cols-1 md:grid-cols-2 justify-center">
                 {currentCollections.map((collectiondata, index) => (
+                <div className="col-span-1">
                   <CollectionCard
-                    key={index}
-                    collectiondata={collectiondata}
-                    handleDelete={handleDelete}
-                    index={index}
+                  key={index}
+                  collectiondata={collectiondata}
+                  handleDelete={handleDelete}
+                  index={index}
                   />
+                </div>
                 ))}
               </div>
-            ) : (
+              ) : (
               <div className="flex justify-center items-center w-full h-[50vh]">
-                <p className="text-white text-xl font-medium opacity-80">
-                  No collections available
-                </p>
+            <p className="text-white text-xl font-medium opacity-80">
+              No collections available
+            </p>
               </div>
+              )}
+            </div>
             )}
-          </div>
-        )}
 
-        {/* Pagination */}
+            {/* Pagination */}
         <div className="flex justify-center mt-16">
           {currentPage > 1 && (
             <button
