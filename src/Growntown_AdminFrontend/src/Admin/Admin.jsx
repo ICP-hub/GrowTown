@@ -102,10 +102,10 @@ function Admin() {
 
   return (
     <div
-      className="flex items-start justify-center flex-row md:flex-row sm:flex-col admin-control-font"
+      className="flex items-start justify-center flex-row md:flex-row  admin-control-font"
       style={{ fontFamily: "sans-serif !important" }}
     >
-      <div className="absolute z-10 rounded-full bg-white right-5 top-5"
+      <div className="absolute z-10 rounded-full bg-white right-6 top-6"
         onClick={() => setToggleProfile(!toggleProfile)}
       >
         <img
@@ -115,11 +115,12 @@ function Admin() {
         />
       </div>
 
-      {toggleProfile && (
-    <div className="absolute z-10 rounded-lg right-5 top-[60px] transition-all duration-300 ease-in-out transform">
+      <div
+        className={`absolute z-10 rounded-lg right-5 top-16 transition-all duration-300 ease-in-out transform ${toggleProfile ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+          }`}
+      >
         <AdminModal />
-    </div>
-)}
+      </div>
 
 
 
