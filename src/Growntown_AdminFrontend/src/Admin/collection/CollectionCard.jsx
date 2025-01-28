@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const CollectionCard = ({ handleDelete, collectiondata, index }) => {
     const [isHovered, setIsHovered] = useState(false);
-
+    console.log('collectiondata', collectiondata)
     return (
         <Link
             to={`/Admin/collection/collectionDetails/${collectiondata[0]}`}
@@ -18,7 +18,7 @@ const CollectionCard = ({ handleDelete, collectiondata, index }) => {
             >
                 {/* Glow effect */}
                 <div className="absolute -inset-0.5 bg-gradient-to-b from-[#3D9635] to-[#50B248] rounded-xl blur opacity-0 group-hover:opacity-20 transition duration-500"></div>
-                
+
                 <div className="relative h-full backdrop-blur-sm bg-gradient-to-b from-[#29292C]/95 via-[#1a1a1a]/95 to-black/95 rounded-xl border border-white/10 shadow-lg shadow-black/20 overflow-hidden transition-all duration-300 group-hover:border-[#50B248]/30 group-hover:shadow-[#50B248]/10">
                     <div className="relative h-[220px] w-full overflow-hidden  rounded-lg border border-white/5">
                         <img
@@ -29,7 +29,7 @@ const CollectionCard = ({ handleDelete, collectiondata, index }) => {
                             }
                             alt={`collection`}
                         />
-                        
+
                         {/* Overlay gradient */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
@@ -55,17 +55,20 @@ const CollectionCard = ({ handleDelete, collectiondata, index }) => {
                             <FaTrashAlt className="w-4 h-4 text-white" />
                         </button>
                     </div>
-                    
+
                     <div className="p-5">
                         <h3 className="text-xl font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-2">
                             {collectiondata[2]?.charAt(0).toUpperCase() + collectiondata[2]?.slice(1)} Collection
                         </h3>
-                        <p className="text-sm text-gray-400 mb-2">by <span className="text-[#50B248]">@vimlesh</span></p>
+                        <p className="text-sm text-gray-400 mb-2">by <span className="text-[#50B248]">{collectiondata[1].toString()}</span></p>
                         <div className="flex items-center gap-2 mt-4">
-                            <div className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10">
-                                <p className="text-sm text-gray-300">30 Items</p>
+                            <div className="px-3 py-1.5 rounded-full bg-white/5 border max-h-12   overflow-y-scroll no-scrollbar border-white/10">
+                                <p className="text-sm text-gray-300 h-full  ">
+                                    {JSON.parse(collectiondata[4])?.description}
+                                </p>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

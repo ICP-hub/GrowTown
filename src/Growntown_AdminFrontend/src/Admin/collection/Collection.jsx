@@ -13,6 +13,8 @@ import { Principal } from "@dfinity/principal";
 import Buttons from "../../Common/Buttons";
 import { IoIosAdd } from "react-icons/io";
 import CollectionCard from "./CollectionCard";
+import CollectionCardSkeleton from "../../Common/CollectionCardSkeleton";
+import { CiSearch } from "react-icons/ci";
 
 function Collection() {
   const { backendActor } = useAuths();
@@ -20,6 +22,7 @@ function Collection() {
   const [loading, setLoading] = useState(false);
   const [showDialog, setShowDialog] = useState(false); // Modal state
   const [collectionToDelete, setCollectionToDelete] = useState(null); // Track the collection to delete
+  const [searchQuery, setSearchQuery] = useState(""); // Search query state
 
   const getCollection = async () => {
     setLoading(true);
@@ -29,7 +32,7 @@ function Collection() {
 
         const tempArray = [];
         if (result && Array.isArray(result)) {
-          console.log('resultCollection=>',result)
+          console.log("resultCollection=>", result);
           result.forEach((item) => {
             if (item && item.length > 1) {
               item[1].forEach((value) => {
@@ -88,6 +91,12 @@ function Collection() {
     }
   };
 
+  // Filtered collections for search
+  const filteredCollections = coll.filter((collectiondata) =>
+    collectiondata[2].toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  );
+
   return (
     <SkeletonTheme baseColor="#202020" highlightColor="#282828">
       <div className="w-[90%] h-screen overscroll-none overflow-scroll pt-10 px-10 pb-8 no-scrollbar 2xl:ml-[7%] md:w-full lg:w-[90%] lg:pt-20">
@@ -100,8 +109,29 @@ function Collection() {
           {/* Create collection button */}
           <div className="flex space-x-4">
             <Link to="/Admin/collection/create">
-               <Buttons buttonName="Create Collection" bgColor="white" icon={<IoIosAdd size={30}/>}/>
+              <Buttons
+                buttonName="Create Collection"
+                bgColor="white"
+                icon={<IoIosAdd size={30} />}
+              />
             </Link>
+          </div>
+        </div>
+
+        {/* Search Collection */}
+        <div className="flex justify-center items-center w-full mb-6">
+          <div className="relative w-full md:w-[60%] lg:w-[40%]">
+            <input
+              type="text"
+              placeholder="Search collections..."
+              className="w-full px-5 py-3 rounded-xl bg-[#29292C] border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#50B248] transition-all duration-300"
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button
+              className="absolute top-1/2 right-3 transform -translate-y-1/2 p-2 rounded-full bg-[#50B248] text-white hover:bg-[#3D9635] transition-all"
+            >
+              <CiSearch className="w-5 h-5" />
+            </button>
           </div>
         </div>
 
@@ -111,23 +141,21 @@ function Collection() {
             {Array(6)
               .fill()
               .map((_, index) => (
-                <div
-                  key={index}
-                  className="bg-[#29292C] w-full h-full px-10 py-6 flex flex-col justify-center items-center gap-y-4 rounded-md border-transparent border"
-                >
-                  <Skeleton circle width={160} height={160} />
-                  <Skeleton width={140} height={30} />
-                  <Skeleton width={140} height={30} />
-                </div>
+                <CollectionCardSkeleton key={index} />
               ))}
           </div>
         ) : (
           <div className="w-full flex justify-center mt-10 items-center">
             {/* Grid of collections */}
-            {coll.length > 0 ? (
+            {filteredCollections.length > 0 ? (
               <div className="grid w-full gap-6 lg:grid-cols-3 sm:grid-cols-1 md:grid-cols-2">
-                {coll.map((collectiondata, index) => (
-                  <CollectionCard collectiondata={collectiondata} handleDelete={handleDelete} index={index} />
+                {filteredCollections.map((collectiondata, index) => (
+                  <CollectionCard
+                    key={index}
+                    collectiondata={collectiondata}
+                    handleDelete={handleDelete}
+                    index={index}
+                  />
                 ))}
               </div>
             ) : (
@@ -166,17 +194,13 @@ function Collection() {
             <div className="flex justify-between space-x-2">
               <button
                 className="w-full px-6 py-3 bg-gray-600 rounded-md text-white text-lg hover:bg-gray-700"
-                onClick={(e) => {
-                  cancelDelete();
-                }}
+                onClick={cancelDelete}
               >
                 Cancel
               </button>
               <button
                 className="w-full px-6 py-3 bg-[#FCD37B] rounded-md text-black text-lg hover:bg-yellow-500"
-                onClick={(e) => {
-                  confirmDelete();
-                }}
+                onClick={confirmDelete}
               >
                 Delete
               </button>

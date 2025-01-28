@@ -625,7 +625,7 @@ const CreateCollection = () => {
 
   return (
     <SkeletonTheme baseColor="#202020" highlightColor="#444">
-      <div className="w-[90%] overflow-y-scroll pt-10 md:px-10 pb-8 h-screen no-scrollbar  no-scroll 2xl:ml-[4%] md:w-full  lg:pt-20">
+      <div className="w-[90%] overflow-y-scroll pt-10 md:px-10 pb-8 h-screen no-scrollbar  no-scroll 2xl:ml-[4%] md:w-full  lg:pt-20 bg-gradient-to-b from-[#29292C]/95 via-[#1a1a1a]/95 to-black/95">
         {/* <Createcollectionloader done={done} total={total} /> */}
         {loading ? (
           <Createcollectionloader done={done} total={totalnft} />
@@ -656,7 +656,7 @@ const CreateCollection = () => {
               <div className="hidden xl:block my-8  mr-4  rounded-xl col-span-4"> 
                 <PreviewCard colName={name} colImage={Ufile} maxLimit={maxLimit} typeColor={collColor} description={description} />
                  </div>
-            <div className="my-8 col-span-12 border border-[#50B248] p-4 lg:px-8 rounded-xl bg-[#29292C] xl:col-span-8 ">
+            <div className="my-8 col-span-12 border border-[#50B248] p-4 lg:px-8 rounded-xl  xl:col-span-8 ">
               <div className="flex flex-col md:flex-row gap-x-8 items-center  w-full  px-1 py-2 text-[#FFFFFF] justify-start rounded-md">
                 <div className="flex flex-col w-full gap-2 mt-4 space-y-4">
                   {/* Collection Name and Max Limit */}

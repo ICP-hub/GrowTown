@@ -81,7 +81,7 @@ function SidebarContent({ onClose, className, setIsOpen }) {
   const [Copied, setCopied] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-  const {logout}=useAuths()
+  const {principal,logout}=useAuths()
 
   const logoutHandler = async() => {
     // dispatch(logoutUserAndClear());
@@ -109,7 +109,7 @@ function SidebarContent({ onClose, className, setIsOpen }) {
       {/* Logo Section */}
       <div className="pt-6 px-6">
         <div className="flex items-center justify-between border-b border-white/10 pb-6">
-          <img src="/images/logo.png" alt="Logo" className="h-8" />
+          <img src="images/Grow town logo 2.png" alt="Logo" className="h-12" />
           <button 
             onClick={() => setIsOpen(false)}
             className="lg:hidden p-2 rounded-lg hover:bg-white/5 transition-all duration-300"
@@ -158,15 +158,15 @@ function SidebarContent({ onClose, className, setIsOpen }) {
               </button>
             </div>
             
-            <div className="flex items-center mt-1.5 gap-2">
+            <div className="flex items-center justify-between mt-1.5">
               <input
-                value={user ? `${user.slice(0, 5)}......${user.slice(-6)}` : "No User"}
+                value={principal ? `${principal.slice(0, 5)}......${principal.slice(-6)}` : "No User"}
                 readOnly
                 className="text-sm bg-transparent text-gray-400 w-[120px] outline-none"
               />
-              {user && (
-                <CopyToClipboard text={user} onCopy={handleCopy}>
-                  <button className="p-1.5 rounded-md hover:bg-white/5 transition-all duration-300 hover:scale-110">
+              {principal && (
+                <CopyToClipboard text={principal} onCopy={handleCopy}>
+                  <button className="p-1.5 rounded-md hover:bg-white/5 transition-all  duration-300 hover:scale-110">
                     {!Copied ? 
                       <MdContentCopy className="w-4 h-4 text-gray-400" /> :
                       <FaCheckCircle className="w-4 h-4 text-[#50B248]" />
