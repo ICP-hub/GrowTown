@@ -103,7 +103,7 @@ function LogoImageUploader({ captureUploadedbloburl }) {
 
   return (
     <div className="mt-1">
-      <div className="flex justify-center border items-center pr-2  border-dashed   h-[30px] md:h-[150px] -mt-1 m-0 rounded-md">
+      <div className="flex justify-center border items-center pr-2  border-dashed h-[120px] md:h-[150px] -mt-1 m-0 rounded-md">
         {!hideUpload && (
           <input
             id={Date.now()}

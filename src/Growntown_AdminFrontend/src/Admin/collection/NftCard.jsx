@@ -22,7 +22,7 @@ const NftCard = ({ id, list, collectiondata }) => {
 
   return (
     <div
-      className="rounded-lg flip-card"
+      className="rounded-lg nftcard-container"
       style={{
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -44,7 +44,7 @@ const NftCard = ({ id, list, collectiondata }) => {
           <img
             src={image}
             alt={name}
-            className="w-[98%] h-[98%] rounded-lg object-cover"
+            className="w-[98%] h-[98%] rounded-lg object-cover "
           />
         </div>
         {/* Back Side */}

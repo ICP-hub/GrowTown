@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box } from "@chakra-ui/react";
+// import { Box } from "@chakra-ui/react";
 import BackButton from "./collection/BackButton.jsx";
 
 import { Principal } from "@dfinity/principal";
@@ -38,17 +38,17 @@ const AllorderDetails = () => {
         </div>
 
         {/* Order Info */}
-        <Box
+        {/* <Box
           color="white"
           className="flex flex-col items-center justify-center"
-        >
+        > */}
           {/* Order Details */}
-          <Box
+          {/* <Box
             w={{ base: "90%", sm: "100%", md: "85%", "2xl": "90%" }}
             mx={{ base: "4%", sm: "8%", md: "7%", lg: "7%", "2xl": "10%" }}
             mt="5%"
             className="bg-[#29292C] mt-[15%] sm:mt-[8%] md:mt-[5%] flex flex-col sm:flex-row w-full p-6 rounded-lg shadow-lg"
-          >
+          > */}
             <div className="h-1/2 sm:h-full sm:w-1/2 md:w-[70%] lg:w-[60%] flex flex-col gap-6 pl-[5%] sm:mt-8 sm:mb-8 md:mt-[5vh] lg:mt-0 md:mb-0 sm:justify-center md:justify-center">
               {loading ? (
                 <>
@@ -148,8 +148,8 @@ const AllorderDetails = () => {
                 </>
               )}
             </div>
-          </Box>
-        </Box>
+          {/* </Box>
+        </Box> */}
       </div>
     </SkeletonTheme>
   );

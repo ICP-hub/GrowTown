@@ -3,27 +3,30 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import environment from 'vite-plugin-environment';
 import dotenv from 'dotenv';
-import path from 'path';
 
-// Load environment variables from the correct path
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+dotenv.config({ path: '../../.env' });
 
 export default defineConfig({
-  base: '/',
-  publicDir: 'public',
   build: {
     emptyOutDir: true,
     rollupOptions: {
-      external: id => /node_modules/.test(id), 
+      output: {
+        manualChunks: (id) => {
+          if (id.includes("node_modules")) {
+            return "vendor";
+          }
+        },
+      },
     },
   },
   optimizeDeps: {
     esbuildOptions: {
       define: {
-        global: 'globalThis',
+        global: "globalThis",
       },
     },
   },
+  publicDir: 'public', 
   server: {
     port: 3001,
     proxy: {
@@ -32,24 +35,43 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
-    watch: {
-      usePolling: false,
-    },
   },
   plugins: [
     react(),
-    environment('all', { prefix: 'CANISTER_' }),
-    environment('all', { prefix: 'DFX_' }),
+    environment("all", { prefix: "CANISTER_" }),
+    environment("all", { prefix: "DFX_" }),
   ],
   resolve: {
     alias: [
       {
-        find: 'declarations',
-        replacement: fileURLToPath(new URL('../declarations', import.meta.url)),
+        find: "declarations",
+        replacement: fileURLToPath(
+          new URL("../declarations", import.meta.url)
+        ),
       },
       {
         find: '@dfinity/identity/lib/cjs/buffer',
         replacement: 'buffer/',
+      },
+      {
+        find: 'stream',
+        replacement: 'stream-browserify',
+      },
+      {
+        find: 'crypto',
+        replacement: 'crypto-browserify',
+      },
+      {
+        find: 'vm',
+        replacement: 'vm-browserify',
+      },
+      {
+        find: 'process',
+        replacement: 'process/browser',
+      },
+      {
+        find: 'util',
+        replacement: 'util/',
       },
     ],
     extensions: ['.js', '.ts', '.jsx', '.tsx'],
@@ -58,4 +80,3 @@ export default defineConfig({
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
   },
 });
-

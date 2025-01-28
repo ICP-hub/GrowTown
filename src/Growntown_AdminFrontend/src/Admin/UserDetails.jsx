@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box } from "@chakra-ui/react";
+// import { Box } from "@chakra-ui/react";
 import BackButton from "./collection/BackButton";
 import { useAuths } from "../utils/useAuthClient.jsx";
 import { Principal } from "@dfinity/principal";
@@ -56,24 +56,24 @@ const UserDetails = () => {
 
   return (
     <SkeletonTheme baseColor="#202020" highlightColor="#444">
-      <div className="w-[90%] overflow-y-scroll pt-10 px-10 pb-8 h-screen no-scrollbar md:w-full lg:w-[90%] lg:pt-20">
+      <div className="w-11/12 overflow-y-scroll pt-10 px-10 pb-8 h-screen no-scrollbar  md:px-28 lg:pt-20">
         {/* Back Button */}
         <div className="flex justify-between text-center">
           <BackButton />
         </div>
 
         {/* User Info */}
-        <Box
+        {/* <Box
           color="white"
           className="flex flex-col items-center justify-center"
-        >
+        > */}
           {/* User Details */}
-          <Box
+          {/* <Box
             w={{ base: "90%", sm: "100%", md: "85%", "2xl": "90%" }}
             mx={{ base: "4%", sm: "8%", md: "7%", lg: "7%", "2xl": "10%" }}
             mt="5%"
             className="bg-[#29292C] mt-[15%] sm:mt-[8%] md:mt-[5%] flex flex-col sm:flex-row w-full p-6"
-          >
+          > */}
             <div className="h-1/2 md:h-full md:w-[30%] lg:w-[1/2] flex items-center justify-center md:mt-[5vh] lg:mt-0 md:mb-[5vh] lg:mb-0">
               <div className="w-[40%] md:w-[60%] flex items-center justify-center">
                 {loading ? (
@@ -135,8 +135,8 @@ const UserDetails = () => {
                 </>
               )}
             </div>
-          </Box>
-        </Box>
+          {/* </Box>
+        </Box> */}
       </div>
     </SkeletonTheme>
   );
