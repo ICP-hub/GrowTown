@@ -70,7 +70,7 @@ function Users() {
   };
 
   return (
-    <div className="w-11/12 overflow-y-scroll pt-10 px-10 pb-8 h-screen no-scrollbar lg:w-11/12 md:pt-20">
+    <div className="w-11/12 overflow-y-scroll pt-10 px-10 pb-8 h-screen no-scrollbar mt-10 md:mt-0 lg:w-11/12 md:pt-20">
       <div className="flex justify-between items-center w-full mb-6 mt-5 lg:px-16 ">
         <div className="">
           <BackButton />
