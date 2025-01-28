@@ -118,18 +118,18 @@ function Users() {
                     .fill("")
                     .map((_, index) => (
                       <tr key={index} className="border-t border-gray-600">
-                        <td className="px-4 py-3 text-center flex items-center gap-2">
-                          <Skeleton circle height={30} width={30} />
-                          <Skeleton height={20} width={150} />
+                        <td className="px-4 py-3 text-center  flex items-center gap-2">
+                          <Skeleton circle height={30} width={30}  baseColor="#202020" highlightColor="#282828"  />
+                          <Skeleton height={20} width={150} baseColor="#202020" highlightColor="#282828"  />
                         </td>
                         <td className="px-4 py-3 text-center">
-                          <Skeleton height={20} width="80%" />
+                          <Skeleton height={20} width="80%" baseColor="#202020" highlightColor="#282828" />
                         </td>
                         <td className="px-4 py-3 text-center">
-                          <Skeleton height={20} width="60%" />
+                          <Skeleton height={20} width="60%" baseColor="#202020" highlightColor="#282828"  />
                         </td>
                         <td className="px-4 py-3 text-center">
-                          <Skeleton height={20} width="40%" />
+                          <Skeleton height={20} baseColor="#202020" highlightColor="#282828" />
                         </td>
                       </tr>
                     ))

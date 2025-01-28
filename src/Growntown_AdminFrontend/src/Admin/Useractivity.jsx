@@ -102,19 +102,19 @@ function Users() {
                     .map((_, index) => (
                       <tr key={index} className="border-b border-gray-700">
                         <td className="p-4 text-center">
-                          <Skeleton height={20} width="80%" />
+                          <Skeleton height={20} width="80%" baseColor="#202020" highlightColor="#282828" />
                         </td>
                         <td className="p-4 text-center">
-                          <Skeleton height={20} width="150px" />
+                          <Skeleton height={20} width="150px" baseColor="#202020" highlightColor="#282828"  />
                         </td>
                         <td className="p-4 text-center">
-                          <Skeleton height={20} width="80%" />
+                          <Skeleton height={20} width="80%" baseColor="#202020" highlightColor="#282828" />
                         </td>
                         <td className="p-4 text-center">
-                          <Skeleton height={20} width="60%" />
+                          <Skeleton height={20} width="60%" baseColor="#202020" highlightColor="#282828"  />
                         </td>
                         <td className="p-4 text-center">
-                          <Skeleton height={20} width="40%" />
+                          <Skeleton height={20} width="40%" baseColor="#202020" highlightColor="#282828"  />
                         </td>
                       </tr>
                     ))
