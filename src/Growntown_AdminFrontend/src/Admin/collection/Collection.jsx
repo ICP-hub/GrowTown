@@ -114,7 +114,7 @@ function Collection() {
     <SkeletonTheme baseColor="#202020" highlightColor="#282828">
       <div className="w-full h-screen overscroll-none overflow-scroll pt-8 pb-8 no-scrollbar px-8 mt-4 ">
         {/* Header Section */}
-        <div className="flex justify-between items-center w-full mb-8 mt-4">
+        <div className="flex justify-between items-center w-full mb-8 mt-4 ml-8">
           <div className="flex items-center gap-4">
             <div className="hidden sm:block">
               <BackButton text="Admin<Collection" />
@@ -144,7 +144,7 @@ function Collection() {
 
       {/* Content Section */}
             {loading ? (
-            <div className="grid w-full gap-8 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 sm:grid-cols-1 md:grid-cols-2 justify-center">
+            <div className="grid w-full gap-8 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 sm:grid-cols-1 md:grid-cols-2 justify-center ml-10">
               {Array(6)
               .fill()
               .map((_, index) => (
@@ -177,7 +177,7 @@ function Collection() {
             )}
 
             {/* Pagination */}
-        <div className="flex justify-center mt-16">
+        <div className="flex justify-center mt-16 ">
           {currentPage > 1 && (
             <button
               onClick={goToPreviousPage}

@@ -12,7 +12,7 @@ const CollectionCard = ({ handleDelete, collectiondata, index }) => {
             state={{ collectiondata }}
         >
             <div
-                className="relative w-[280px] h-[380px] group transform transition-transform duration-300 ease-out hover:-translate-y-2"
+                className="relative w-[240px] max-w-[280px] ml-10 h-[380px] group transform transition-transform duration-300 ease-out hover:-translate-y-2"
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
@@ -22,7 +22,7 @@ const CollectionCard = ({ handleDelete, collectiondata, index }) => {
                 <div className="relative h-full backdrop-blur-sm bg-gradient-to-b from-[#29292C]/95 via-[#1a1a1a]/95 to-black/95 rounded-xl border border-white/10 shadow-lg shadow-black/20 overflow-hidden transition-all duration-300 group-hover:border-[#50B248]/30 group-hover:shadow-[#50B248]/10">
                     <div className="relative h-[220px] w-full overflow-hidden  rounded-lg border border-white/5">
                         <img
-                            className="object-cover p-2 rounded-xl w-full h-full transition-transform duration-500 group-hover:scale-110 rounded-lg"
+                            className="object-cover p-2 w-full h-full transition-transform duration-500 group-hover:scale-110 rounded-lg"
                             src={
                                 JSON.parse(collectiondata[4]).collectionImageURL ||
                                 "default-image.jpg"
