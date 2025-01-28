@@ -101,7 +101,7 @@ function SidebarContent({ onClose, className, setIsOpen }) {
         bg-gradient-to-b from-[#29292C]/95 via-[#1a1a1a]/95 to-black/95
         border-r border-white/10
         shadow-[0_0_25px_rgba(0,0,0,0.3)]
-        w-[310px] h-full fixed 
+        w-[280px] h-full fixed 
         flex flex-col
         ${className}
       `}
