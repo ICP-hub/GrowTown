@@ -57,28 +57,19 @@ export default function SimpleSidebar() {
   }, []);
 
   return (
-    <div className="h-full ">
-
-<div className=" hidden lg:block">
-      {/* Sidebar for large screens */}
-      <SidebarContent
-        onClose={() => setIsOpen(false)}
-        className=""
-      />
-</div>
-      {/* Drawer for mobile */}
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-[#1a1a1a] to-black">
+      <div className="hidden lg:block">
+        <SidebarContent onClose={() => setIsOpen(false)} />
+      </div>
+      
       {isOpen && (
-        <div className="fixed inset-0 z-50 backdrop-blur-sm lg:hidden">
-          <SidebarContent onClose={() => setIsOpen(false)}
-          setIsOpen={setIsOpen} 
-          />
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm lg:hidden">
+          <SidebarContent onClose={() => setIsOpen(false)} setIsOpen={setIsOpen} />
         </div>
       )}
 
-      {/* Mobile Nav */}
       <MobileNav onOpen={() => setIsOpen(true)} />
-      {/* Content container */}
-      <div className="ml-0 lg:ml-60 p-4">{/* Content goes here */}</div>
+      <div className="ml-0 lg:ml-[280px] p-4">{/* Content goes here */}</div>
     </div>
   );
 }
@@ -90,7 +81,7 @@ function SidebarContent({ onClose, className, setIsOpen }) {
   const [Copied, setCopied] = useState(false);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-  const {principal,logout}=useAuths()
+  const {logout}=useAuths()
 
   const logoutHandler = async() => {
     // dispatch(logoutUserAndClear());
@@ -105,26 +96,37 @@ function SidebarContent({ onClose, className, setIsOpen }) {
 
   return (
     <div
-      className={`bg-[#29292C]  text-white  h-full fixed px-2  pr-4 flex flex-col justify-between ${className}`}
+      className={`
+        backdrop-blur-xl
+        bg-gradient-to-b from-[#29292C]/95 via-[#1a1a1a]/95 to-black/95
+        border-r border-white/10
+        shadow-[0_0_25px_rgba(0,0,0,0.3)]
+        w-[310px] h-full fixed 
+        flex flex-col
+        ${className}
+      `}
     >
-       
-      {/* Sidebar Links */}
-      <div
-        className="flex flex-col gap-1 mt-10 lg:mt-24 "
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-      >
-        <h1 onClick={()=>setIsOpen(false) }
-        className="text-white ml-5 mb-5 -mt-5 block lg:hidden "> <IoMdClose size={25}/>
-        </h1>
+      {/* Logo Section */}
+      <div className="pt-6 px-6">
+        <div className="flex items-center justify-between border-b border-white/10 pb-6">
+          <img src="/images/logo.png" alt="Logo" className="h-8" />
+          <button 
+            onClick={() => setIsOpen(false)}
+            className="lg:hidden p-2 rounded-lg hover:bg-white/5 transition-all duration-300"
+          >
+            <IoMdClose size={22} />
+          </button>
+        </div>
+      </div>
 
+      {/* Navigation Links */}
+      <div className="flex-1 flex flex-col gap-1.5 mt-8 px-3">
         {sideBarData.map((link) => (
           <NavItem
             key={link.text}
             icon={link.icon}
             href={link.Link}
             isActive={location.toLowerCase().includes(link.Link.toLowerCase())}
-            hovered={hovered}
             onClose={onClose}
           >
             {link.text}
@@ -132,44 +134,47 @@ function SidebarContent({ onClose, className, setIsOpen }) {
         ))}
       </div>
 
-      {/* User Info */}
-      <div className="flex items-center justify-start px-8 pt-4 mb-9 border-t border-gray-700 gap-x-4">
-        <img
-          className="w-14 h-14 rounded-full object-contain"
-          src="/images/Admin.svg"
-          alt="Admin"
-        />
-        <div className="space-y-2">
-          <div className="flex items-center gap-x-2">
-            <p className="lg:text-xl font-bold">Admin</p>
-            <button
-              onClick={logoutHandler}
-              className="rounded-full h-7 w-7 flex items-center justify-center  hover:bg-red-600"
-            >
-              <MdLogout className="text-white w-5 h-5" />
-            </button>
-          </div>
-          <div className="flex items-center">
-            <input
-              value={
-                principal
-                  ? `${principal.slice(0, 5)}......${principal.slice(-6)}`
-                  : "No User"
-              }
-              readOnly
-              className="bg-transparent w-36 text-white"
+      {/* User Profile Section */}
+      <div className="m-4 p-4 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-md border border-white/10 shadow-lg">
+        <div className="flex items-center gap-3">
+          <div className="relative group">
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-[#50B248] to-[#3D9635] rounded-lg blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
+            <img
+              className="relative w-12 h-12 rounded-lg object-cover border-2 border-[#50B248]/20"
+              src="/images/Admin.svg"
+              alt="Admin"
             />
-            {principal && (
-              <CopyToClipboard text={principal} onCopy={handleCopy}>
-                <button className="ml-3 text-white hover:text-[#50B248]">
-                 { !Copied ?  <MdContentCopy />
-                 :
-                 <FaCheckCircle className="text-[#50B248]" />
-                }
-                   
-                </button>
-              </CopyToClipboard>
-            )}
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center justify-between">
+              <p className="text-[15px] font-medium bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                Admin
+              </p>
+              <button
+                onClick={logoutHandler}
+                className="p-1.5 rounded-lg hover:bg-red-500/10 text-red-400 transition-all duration-300 hover:scale-110"
+              >
+                <MdLogout className="w-[18px] h-[18px]" />
+              </button>
+            </div>
+            
+            <div className="flex items-center mt-1.5 gap-2">
+              <input
+                value={user ? `${user.slice(0, 5)}......${user.slice(-6)}` : "No User"}
+                readOnly
+                className="text-sm bg-transparent text-gray-400 w-[120px] outline-none"
+              />
+              {user && (
+                <CopyToClipboard text={user} onCopy={handleCopy}>
+                  <button className="p-1.5 rounded-md hover:bg-white/5 transition-all duration-300 hover:scale-110">
+                    {!Copied ? 
+                      <MdContentCopy className="w-4 h-4 text-gray-400" /> :
+                      <FaCheckCircle className="w-4 h-4 text-[#50B248]" />
+                    }
+                  </button>
+                </CopyToClipboard>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -187,12 +192,35 @@ function NavItem({ icon, children, href, isActive, onClose }) {
     <Link
       to={href}
       onClick={onClose}
-      className={`flex items-center px-4 py-3 mx-4 my-2 rounded-lg text-white lg:text-xl font-semibold transition-colors duration-200 ${
-        isActive ? "bg-[#50B248] text-red-400" : "hover:bg-gray-700"
-      }`}
+      className={`
+        group flex items-center px-4 py-2.5 rounded-lg
+        text-[14px] font-medium transition-all duration-300
+        ${isActive ? 
+          'bg-gradient-to-r from-[#2c2c2c] to-[#1a1a1a] text-[#50B248] shadow-sm border border-[#50B248]/10' : 
+          'text-gray-400 hover:bg-[#2c2c2c]/40 border border-transparent hover:border-white/5'
+        }
+      `}
     >
-      {icon && <div className="mr-4 text-xl">{React.createElement(icon)}</div>}
-      <span>{children}</span>
+      {icon && (
+        <div className={`
+          mr-3 text-lg transition-all duration-300 
+          ${isActive ? 
+            'text-[#50B248]' : 
+            'text-gray-500 group-hover:text-gray-300'
+          }
+        `}>
+          {React.createElement(icon)}
+        </div>
+      )}
+      <span className={`
+        transition-colors duration-300
+        ${isActive ? 
+          'text-[#50B248]' : 
+          'group-hover:text-gray-300'
+        }
+      `}>
+        {children}
+      </span>
     </Link>
   );
 }
@@ -207,12 +235,12 @@ NavItem.propTypes = {
 
 function MobileNav({ onOpen }) {
   return (
-    <div className="flex items-center px-4 h-16 bg-gray-900 text-white lg:hidden">
+    <div className="flex items-center px-4 h-16 bg-[#29292C]/90 backdrop-blur-md border-b border-white/5 text-white lg:hidden">
       <button
         onClick={onOpen}
-        className="p-2 text-xl rounded-lg hover:bg-gray-600"
+        className="p-2 rounded-lg hover:bg-white/5 transition-colors"
       >
-        <FiMenu />
+        <FiMenu size={22} />
       </button>
     </div>
   );
