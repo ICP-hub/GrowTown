@@ -30,16 +30,16 @@ const AdminModal = () => {
 
     return (
         <div className="rounded-xl text-white bg-[#161618] border shadow-xl border-[#50B248]/30 shadow-[#50B248]/10 transition-all duration-300 ease-in-out transform hover:scale-105">
-            <div className="bg-gradient-to-b from-[#3D9635] to-[#50B248] h-12 w-full rounded-t-lg"></div>
+            <div className="bg-gradient-to-b from-[#3D9635] to-[#50B248] h-14 w-full rounded-t-lg"></div>
             
-            <div className="p-4 px-5 -mt-8">
+            <div className="p-4 px-6 -mt-10">
                 <div className="flex gap-2 items-center">
                     <img
                         className="relative w-10 h-10 rounded-full object-cover border-2 border-[#50B248]/20 transition-all duration-300 ease-in-out hover:scale-110"
                         src="/images/Admin.svg"
                         alt="Admin"
                     />
-                    <h1 className="mt-4 transition-all duration-300 ease-in-out hover:text-[#50B248]"> Admin </h1>
+                    <h1 className="mt-6 transition-all duration-300 ease-in-out hover:text-[#50B248]"> Admin </h1>
                 </div>
                 <div className="mt-1.5">
                     <h1 className="transition-all duration-300 ease-in-out hover:text-[#50B248]">Address:</h1>
@@ -47,7 +47,7 @@ const AdminModal = () => {
                         <input
                             value={principal ? `${principal.slice(0, 5)}......${principal.slice(-6)}` : "No User"}
                             readOnly
-                            className="text-sm bg-transparent hover:text-[#50B248] text-white w-[110px] outline-none transition-all duration-300 ease-in-out"
+                            className="text-sm bg-transparent hover:text-[#50B248] text-white w-[115px] outline-none transition-all duration-300 ease-in-out"
                         />
                         {principal && (
                             <CopyToClipboard text={principal} onCopy={handleCopy}>
