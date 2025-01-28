@@ -135,7 +135,7 @@ function SidebarContent({ onClose, className, setIsOpen }) {
       </div>
 
       {/* User Profile Section */}
-      <div className="m-4 p-4 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-md border border-white/10 shadow-lg">
+      {/* <div className="m-4 p-4 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] backdrop-blur-md border border-white/10 shadow-lg">
         <div className="flex items-center gap-3">
           <div className="relative group">
             <div className="absolute -inset-0.5 bg-gradient-to-r from-[#50B248] to-[#3D9635] rounded-lg blur opacity-20 group-hover:opacity-30 transition duration-500"></div>
@@ -177,7 +177,8 @@ function SidebarContent({ onClose, className, setIsOpen }) {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
+
     </div>
   );
 }
