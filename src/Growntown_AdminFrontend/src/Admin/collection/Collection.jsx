@@ -17,6 +17,8 @@ import CollectionCardSkeleton from "../../Common/CollectionCardSkeleton";
 import { CiSearch } from "react-icons/ci";
 import { GrNext } from "react-icons/gr";
 import { GrPrevious } from "react-icons/gr";
+import { GrNext } from "react-icons/gr";
+import { GrPrevious } from "react-icons/gr";
 
 function Collection() {
   const { backendActor } = useAuths();
@@ -25,6 +27,10 @@ function Collection() {
   const [showDialog, setShowDialog] = useState(false); // Modal state
   const [collectionToDelete, setCollectionToDelete] = useState(null); // Track the collection to delete
   const [searchQuery, setSearchQuery] = useState(""); // Search query state
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8; // Number of items to display per page
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -91,9 +97,25 @@ function Collection() {
   };
 
   // Filtered collections based on search query
+  // Filtered collections based on search query
   const filteredCollections = coll.filter((collectiondata) =>
     collectiondata[2].toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredCollections.length / itemsPerPage);
+  const currentCollections = filteredCollections.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
 
   // Pagination logic
   const totalPages = Math.ceil(filteredCollections.length / itemsPerPage);
@@ -114,7 +136,7 @@ function Collection() {
     <SkeletonTheme baseColor="#202020" highlightColor="#282828">
       <div className="w-full h-screen overscroll-none overflow-scroll pt-8 pb-8 no-scrollbar px-8 mt-4 ">
         {/* Header Section */}
-        <div className="flex justify-between items-center w-full mb-8 mt-4">
+        <div className="flex justify-between items-center w-full mb-8 mt-4 ml-8">
           <div className="flex items-center gap-4">
             <div className="hidden sm:block">
               <BackButton text="Admin<Collection" />
@@ -138,49 +160,60 @@ function Collection() {
               bgColor="white"
               icon={<IoIosAdd size={24} className="text-black" />}
               className="hover:shadow-lg transition-all duration-300"
+          <Link to="/Admin/collection/create">
+            <Buttons
+              buttonName="Create Collection"
+              bgColor="white"
+              icon={<IoIosAdd size={24} className="text-black" />}
+              className="hover:shadow-lg transition-all duration-300"
             />
           </Link>
         </div>
 
-        {/* Content Section */}
-        {loading ? (
-          <div className="grid w-full gap-8 lg:grid-cols-3 sm:grid-cols-1 md:grid-cols-2">
-            {Array(6)
+      {/* Content Section */}
+            {loading ? (
+            <div className="grid w-full gap-8 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 sm:grid-cols-1 md:grid-cols-2 justify-center ml-10">
+              {Array(6)
               .fill()
               .map((_, index) => (
-                <CollectionCardSkeleton key={index} />
+            <CollectionCardSkeleton key={index} />
               ))}
-          </div>
-        ) : (
-          <div className="w-full flex justify-center items-center">
-            {currentCollections.length > 0 ? (
-              <div className="grid w-full gap-10 lg:grid-cols-4 sm:grid-cols-1 md:grid-cols-2">
+            </div>
+            ) : (
+            <div className="w-full flex justify-center items-center">
+              {currentCollections.length > 0 ? (
+              <div className="grid w-full gap-8 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 sm:grid-cols-1 md:grid-cols-2 justify-center">
                 {currentCollections.map((collectiondata, index) => (
+                <div className="col-span-1">
                   <CollectionCard
-                    key={index}
-                    collectiondata={collectiondata}
-                    handleDelete={handleDelete}
-                    index={index}
+                  key={index}
+                  collectiondata={collectiondata}
+                  handleDelete={handleDelete}
+                  index={index}
                   />
+                </div>
                 ))}
               </div>
-            ) : (
+              ) : (
               <div className="flex justify-center items-center w-full h-[50vh]">
-                <p className="text-white text-xl font-medium opacity-80">
-                  No collections available
-                </p>
+            <p className="text-white text-xl font-medium opacity-80">
+              No collections available
+            </p>
               </div>
+              )}
+            </div>
             )}
-          </div>
-        )}
 
-        {/* Pagination */}
-        <div className="flex justify-center mt-16">
+            {/* Pagination */}
+        <div className="flex justify-center mt-16 ">
           {currentPage > 1 && (
             <button
               onClick={goToPreviousPage}
               className="px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded hover:bg-black"
+              onClick={goToPreviousPage}
+              className="px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded hover:bg-black"
             >
+              <GrPrevious/>
               <GrPrevious/>
             </button>
           )}
@@ -196,7 +229,21 @@ function Collection() {
               <GrNext/>
             </button>
           )}
+          )}
+          <span className="mx-4 px-4 transition-all duration-300 py-2 bg-[#50B248] cursor-pointer hover:bg-gray-700 hover:text-white border border-black rounded-lg">
+          {currentPage}
+          </span> 
+         
+          {currentPage < totalPages && (
+            <button
+              onClick={goToNextPage}
+              className="px-4 py-2  bg-gray-800 text-white border border-gray-600 rounded hover:bg-black"
+            >
+              <GrNext/>
+            </button>
+          )}
         </div>
+      </div>
       </div>
     </SkeletonTheme>
   );

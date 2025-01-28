@@ -57,7 +57,7 @@ export default function SimpleSidebar() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-[#1a1a1a] to-black">
+    <div className=" bg-gradient-to-br from-gray-900 via-[#1a1a1a] to-black">
       <div className="hidden lg:block">
         <SidebarContent onClose={() => setIsOpen(false)} />
       </div>
@@ -69,7 +69,7 @@ export default function SimpleSidebar() {
       )}
 
       <MobileNav onOpen={() => setIsOpen(true)} />
-      <div className="ml-0 lg:ml-[280px] p-4">{/* Content goes here */}</div>
+      <div className="ml-0 lg:ml-[280px] ">{/* Content goes here */}</div>
     </div>
   );
 }
@@ -101,7 +101,7 @@ function SidebarContent({ onClose, className, setIsOpen }) {
         bg-gradient-to-b from-[#29292C]/95 via-[#1a1a1a]/95 to-black/95
         border-r border-white/10
         shadow-[0_0_25px_rgba(0,0,0,0.3)]
-        w-[310px] h-full fixed 
+        w-[280px] h-full fixed 
         flex flex-col
         ${className}
       `}
