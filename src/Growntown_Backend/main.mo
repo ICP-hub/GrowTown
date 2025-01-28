@@ -27,6 +27,7 @@ import _Queue "../EXT-V2/motoko/util/Queue";
 import ExtCommon "../EXT-V2/motoko/ext/Common";
 import _owners "../EXT-V2/ext_v2/v2";
 import Pagin "pagin";
+import _JSON "mo:json";
 
 actor Main {
 
@@ -64,12 +65,6 @@ actor Main {
 
   type SubAccount = ExtCore.SubAccount;
 
-
-
-
-
-
-
   public type ListRequest = {
     token : TokenIdentifier;
     from_subaccount : ?SubAccount;
@@ -106,6 +101,12 @@ actor Main {
     };
   };
 
+  type NftTypeMetadata ={
+    nfttype: Text;
+    nft_type_quantity: Nat;
+    nft_type_cost : Nat64;
+  };
+
   type User = {
     uid : Text;
     id : Nat;
@@ -119,6 +120,7 @@ actor Main {
     email : Text;
     telegram : Text;
     profilepic : ?Blob;
+
   };
 
   //LEDGER
@@ -144,8 +146,6 @@ actor Main {
   //type User = ExtCore.User;
   type CommonError = ExtCore.CommonError;
   type MetadataLegacy = ExtCommon.Metadata;
-
-
 
 
  public type SupportedStandard = {
@@ -210,6 +210,9 @@ actor Main {
   //private stable var userDetailsArray: [UserDetails] = [];
   private var userDetailsMap : TrieMap.TrieMap<Principal, UserDetails> = TrieMap.TrieMap<Principal, UserDetails>(Principal.equal, Principal.hash);
 
+  //private stable var Objects Array
+  private stable var _objects_Array: [(Nat, NftTypeMetadata)] = [];
+  private stable var _objectIdCounter: Nat = 0;
   /* -------------------------------------------------------------------------- */
   /*                         SYSTEM FUNCTIONS                                   */
   /* -------------------------------------------------------------------------- */
@@ -567,6 +570,67 @@ actor Main {
   /* -------------------------------------------------------------------------- */
   /*                             NFT related methods                            */
   /* -------------------------------------------------------------------------- */
+
+
+  // public shared func addObject(objMetadata: NftTypeMetadata) : async Text {
+  // let newId = _objectIdCounter; 
+  // _objectIdCounter += 1; 
+  // _objects_Array := Array.append(_objects_Array, [(newId, objMetadata)]); 
+  // return "Object added successfully with ID: " # Nat.toText(newId) # " and Name: " # objMetadata.nfttype;
+  // };
+
+  //add object data
+  public shared func addObject(objMetadata: NftTypeMetadata) : async Text {
+  let costPerUnitInE8s = objMetadata.nft_type_cost * 100000000; 
+  
+  let existingObject = Array.find(_objects_Array, func (entry: (Nat, NftTypeMetadata)) : Bool {
+    return entry.1.nfttype == objMetadata.nfttype and entry.1.nft_type_quantity == objMetadata.nft_type_quantity;
+  });
+  
+  switch (existingObject) {
+    case (?_) {
+      
+      return "Error: Object with name '" # objMetadata.nfttype # "' and value " # Nat.toText(objMetadata.nft_type_quantity) # " already exists.";
+    };
+    case null {
+      let newId = _objectIdCounter; 
+      _objectIdCounter += 1; 
+    
+      let updatedMetadata : NftTypeMetadata = {
+        nfttype = objMetadata.nfttype;
+        nft_type_quantity = objMetadata.nft_type_quantity;
+        nft_type_cost = costPerUnitInE8s;
+      };
+      _objects_Array := Array.append(_objects_Array, [(newId, updatedMetadata)]); 
+      return "Object added successfully with ID: " # Nat.toText(newId) # " and Name: " # objMetadata.nfttype # " with cost per unit (in e8s): " # Nat64.toText(costPerUnitInE8s);
+    };
+  };
+  };
+
+  public shared func removeObject(id: Nat) : async Text {
+  // Find the object by ID using Array.find
+  let existingObject = Array.find(_objects_Array, func (entry: (Nat, NftTypeMetadata)) : Bool {
+    return entry.0 == id;
+  });
+
+  switch (existingObject) {
+    case (?_) {
+      // Object found, filter it out from the array
+      _objects_Array := Array.filter(_objects_Array, func (entry: (Nat, NftTypeMetadata)) : Bool {
+        return entry.0 != id; // Keep entries that don't match the ID
+      });
+      return "Object with ID: " # Nat.toText(id) # " has been successfully removed.";
+    };
+    case null {
+      return "Error: Object with ID: " # Nat.toText(id) # " does not exist.";
+    };
+  };
+  };
+
+  public shared func getObjects() : async [(Nat, NftTypeMetadata)] {
+  return _objects_Array;
+  };
+
 
   // Token will be transfered to this Vault and gives you req details to construct a link out of it, which you can share
   public shared ({ caller = _user }) func getNftTokenId(
