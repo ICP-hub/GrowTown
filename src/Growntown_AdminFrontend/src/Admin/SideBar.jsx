@@ -112,7 +112,7 @@ function SidebarContent({ onClose, className, setIsOpen }) {
           <img src="images/Grow town logo 2.png" alt="Logo" className="h-12" />
           <button 
             onClick={() => setIsOpen(false)}
-            className="lg:hidden p-2 rounded-lg hover:bg-white/5 transition-all duration-300"
+            className="lg:hidden p-2 rounded-lg text-gray-400 hover:bg-white/5 transition-all duration-300"
           >
             <IoMdClose size={22} />
           </button>

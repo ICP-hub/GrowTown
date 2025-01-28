@@ -727,15 +727,15 @@ function CollectionDetails() {
                   <BackButton />
                 </span>
                 <div className="flex justify-end w-full ml-auto gap-x-4 sm:gap-x-6">
-                  <YellowButton methodName={() => toggleTokenModal()}>
+                  {/* <YellowButton methodName={() => toggleTokenModal()}>
                     Add Token
-                  </YellowButton>
+                  </YellowButton> */}
                   <YellowButton methodName={() => toggleModal()}>
                     Add NFT
                   </YellowButton>
-                  <Link to={"/admin/collection/create"}>
+                  {/* <Link to={"/admin/collection/create"}>
                     <YellowButton>Add Collection</YellowButton>
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
 
