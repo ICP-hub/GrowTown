@@ -131,11 +131,11 @@ shared(msg) actor class EXTAsset() = this {
     body: Blob;
     token: ?HttpStreamingCallbackToken;
   };
-  let NOT_FOUND : HttpResponse = {status_code = 404; headers = []; body = Blob.fromArray([]); streaming_strategy = null};
-  let BAD_REQUEST : HttpResponse = {status_code = 400; headers = []; body = Blob.fromArray([]); streaming_strategy = null};
+  let _NOT_FOUND : HttpResponse = {status_code = 404; headers = []; body = Blob.fromArray([]); streaming_strategy = null};
+  let _BAD_REQUEST : HttpResponse = {status_code = 400; headers = []; body = Blob.fromArray([]); streaming_strategy = null};
 
   public query func http_request(request : HttpRequest) : async HttpResponse {
-    let path = Iter.toArray(Text.tokens(request.url, #text("/")));
+    let _path = Iter.toArray(Text.tokens(request.url, #text("/")));
     switch(_getParam(request.url, "index")) {
       case (?assetIdText) {
         let assetId = _textToNat32(assetIdText);

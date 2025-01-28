@@ -4,13 +4,13 @@
 import AID "../util/AccountIdentifier";
 import Array "mo:base/Array";
 import Blob "mo:base/Blob";
-import CRC32 "../util/CRC32";
+import _CRC32 "../util/CRC32";
 import Encoding "mo:encoding/Binary";
 import Hash "mo:base/Hash";
-import Hex "../util/Hex";
+import _Hex "../util/Hex";
 import Nat "mo:base/Nat";
 import Nat32 "mo:base/Nat32";
-import Nat64 "mo:base/Int32";
+import _Nat64 "mo:base/Int32";
 import Nat8 "mo:base/Nat8";
 import Principal "mo:base/Principal";
 import PrincipalEXT "../util/Principal";
@@ -151,7 +151,7 @@ module ExtCore = {
         accum + Nat32.fromNat(Nat8.toNat(u8)) << ((index-1) * 8);
       });
     };
-    private func nat32tobytes(n : Nat32) : [Nat8] {
+    private func _nat32tobytes(n : Nat32) : [Nat8] {
       if (n < 256) {
         return [1, Nat8.fromNat(Nat32.toNat(n))];
       } else if (n < 65536) {
@@ -190,7 +190,7 @@ module ExtCore = {
     };
     public func toPrincipal(user : User) : ?Principal {
       switch(user) {
-        case (#address address) null;
+        case (#address _address) null;
         case (#principal principal) ?principal;
       };
     };
