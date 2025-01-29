@@ -19,6 +19,7 @@ import Useractivity from "./Useractivity";
 import Allorder from "./Allorder";
 import AllorderDetails from "./AllorderDetails";
 import UnauthorizedPage from "./collection/UnauthorizedPage";
+import NftTypeSetting from "./NftTypeSettings/NftTypeSetting.jsx";
 
 function Admin() {
   const [isOpen, setIsOpen] = useState(false);
@@ -127,6 +128,7 @@ function Admin() {
             <Route path="/activity" element={<Useractivity />} />
             <Route path="/activity/allorder/" element={<Allorder />} />
             <Route path="/activity/allorder/:id" element={<AllorderDetails />} />
+            <Route path="/NftTypeSetting" element={<NftTypeSetting />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </main>

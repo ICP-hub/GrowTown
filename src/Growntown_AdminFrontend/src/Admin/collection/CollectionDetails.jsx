@@ -1049,7 +1049,7 @@ function CollectionDetails() {
               {modal && (
                 <div className="fixed inset-0 z-50">
                   <div className="fixed inset-0 bg-[rgba(37,37,37,0.84)] backdrop-blur-lg">
-                    <div className="flex items-center justify-center min-h-screen p-4">
+                    <div className="flex items-center justify-center h-screen p-4">
                       <Modal
                         toggleModal={toggleModal}
                         getAddedNftDetails={getAddedNftDetails}

@@ -5,8 +5,10 @@ import { MdContentCopy } from 'react-icons/md';
 import { FaCheckCircle } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import { IoMdLogOut } from "react-icons/io";
+import { IoMdSettings } from "react-icons/io";
+import { Link } from 'react-router-dom';
 
-const AdminModal = () => {
+const AdminModal = ({setToggleNftType}) => {
     const { principal,fetchBalance, logout } = useAuths();
     const [Copied, setCopied] = useState(false);
     
@@ -30,7 +32,7 @@ const AdminModal = () => {
 
     return (
         <div className="rounded-xl text-white bg-[#161618] border shadow-xl border-[#50B248]/30 shadow-[#50B248]/10 transition-all duration-300 ease-in-out transform hover:scale-105">
-            <div className="bg-gradient-to-b from-[#3D9635] to-[#50B248] h-8 w-full rounded-t-lg"></div>
+            <div className="bg-gradient-to-b from-[#3D9635] to-[#50B248] h-14 w-full rounded-t-lg"></div>
             
             <div className="p-4 px-6 -mt-10">
                 <div className="flex gap-2 items-center">
@@ -39,15 +41,15 @@ const AdminModal = () => {
                         src="/images/Admin.svg"
                         alt="Admin"
                     />
-                    <h1 className="mt-6 transition-all duration-300 ease-in-out hover:text-[#50B248]"> Admin </h1>
+                    <h1 className="mt-6 transition-all duration-300 ease-in-out "> Admin </h1>
                 </div>
                 <div className="mt-1.5">
-                    <h1 className="transition-all duration-300 ease-in-out hover:text-[#50B248]">Address:</h1>
+                    <h1 className="transition-all duration-300 ease-in-out ">Address:</h1>
                     <div className="flex items-center justify-between">
                         <input
                             value={principal ? `${principal.slice(0, 5)}......${principal.slice(-6)}` : "No User"}
                             readOnly
-                            className="text-sm bg-transparent hover:text-[#50B248] text-white w-[115px] outline-none transition-all duration-300 ease-in-out"
+                            className="text-sm bg-transparent  text-white w-[115px] outline-none transition-all duration-300 ease-in-out"
                         />
                         {principal && (
                             <CopyToClipboard text={principal} onCopy={handleCopy}>
@@ -62,9 +64,18 @@ const AdminModal = () => {
                     </div>
                 </div>
 
-                <div className="mt-2 text-sm transition-all duration-300 ease-in-out hover:text-[#50B248]">
+                <div className="mt-1 text-sm transition-all duration-300 ease-in-out ">
                     Balance: 0.004
                 </div>
+
+                {/*  TYPE SETTINGS*/}
+                 <Link to="/Admin/NftTypeSetting">
+                  <div className="mt-4 cursor-pointer hover:text-[#50B248] gap-x-1  flex items-center text-sm transition-all duration-300 ease-in-out ">
+                  <IoMdSettings/>
+                     <h1>NFT Settings</h1>
+                </div>
+                </Link>
+
 
                 <div className='flex gap-x-1 mt-5 pt-2 border-t border-gray-700 items-center hover:text-red-500 cursor-pointer' onClick={handleLogout}>
                     <IoMdLogOut/>

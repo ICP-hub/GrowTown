@@ -10,8 +10,10 @@ const PreviewCard = ({ colName, colImage, maxLimit, typeColor, description }) =>
   }, [colImage]);
 
   return (
-    <div className={`relative w-full p-3 text-white flex flex-col   gap-y-4 rounded-xl  border border-${typeColor.toLowerCase()}-500 ]`}
-    >
+    <div
+    className="relative w-full p-3 text-white flex flex-col gap-y-4 rounded-xl border"
+    style={{ borderColor: `${typeColor.toLowerCase()}` }}
+  >
       {/* Image */}
        
           <img
