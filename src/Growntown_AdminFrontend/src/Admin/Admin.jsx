@@ -74,18 +74,18 @@ function Admin() {
   }
 
   return (
-    <div className="h-screen w-full grid grid-cols-[250px_1fr]">
+    <div className="min-h-screen w-full bg-[#0D0D0D] flex flex-col lg:grid lg:grid-cols-[auto_1fr]">
       {/* Sidebar */}
-      <aside className="bg-gradient-to-b from-gray-900 via-[#1a1a1a] to-black shadow-lg p-4">
+      <aside className="fixed lg:sticky top-0 left-0 h-full z-40">
         <SideBar isOpen={isOpen} toggleSidebar={toggleSidebar} />
       </aside>
 
       {/* Main Content Section */}
-      <div className="flex flex-col w-full">
-        {/* Top Navbar with Search and Profile */}
-        <nav className="flex items-center justify-between  text-white px-6 py-3 shadow-md">
+      <div className="flex-1 flex flex-col min-h-screen w-full">
+        {/* Top Navbar */}
+        <nav className="sticky top-0 z-30 flex items-center justify-between bg-[#1a1a1a]/90 backdrop-blur-md text-white px-4 sm:px-6 py-3 border-b border-white/10">
           {/* Search Bar */}
-          <div className="relative w-full max-w-2xl">
+          <div className="relative hidden sm:block w-full max-w-2xl">
             <input
               type="text"
               placeholder="Search..."
@@ -95,40 +95,46 @@ function Admin() {
               className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
               viewBox="0 0 24 24"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.2-5.2M15 10a5 5 0 10-10 0 5 5 0 0010 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-5.2-5.2M15 10a5 5 0 10-10 0 5 5 0 0010 0z" />
             </svg>
           </div>
 
           {/* Profile Button */}
-          <button className="ml-4" onClick={() => setToggleProfile(!toggleProfile)}>
-            <img className="w-10 h-10 rounded-full border border-gray-500" src="/images/Admin.svg" alt="Admin" />
+          <button 
+            className="ml-auto" 
+            onClick={() => setToggleProfile(!toggleProfile)}
+          >
+            <img className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-gray-500" src="/images/Admin.svg" alt="Admin" />
           </button>
 
-          {toggleProfile && 
-          <div className="absolute right-5 z-50 top-[3.75rem]">
-            <AdminModal />
-            </div>}
+          {/* Profile Dropdown */}
+          {toggleProfile && (
+            <div className="absolute right-4 top-full mt-2 z-50">
+              <AdminModal />
+            </div>
+          )}
         </nav>
 
-        {/* Dashboard Content */}
-        <main className="flex-1 w-full p-6">
-          <Routes>
-            <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
-            <Route path="/dashboard" element={<DashBoard />} />
-            <Route path="/collection" element={<Collection />} />
-            <Route path="/collection/create" element={<CreateCollection />} />
-            <Route path="/collection/collectionDetails/:id" element={<CollectionDetails />} />
-            <Route path="/collection/collectionDetails/:collectionId/nft/:nftId" element={<NftDetails />} />
-            <Route path="/users/" element={<Users />} />
-            <Route path="/users/:id" element={<UserDetails />} />
-            <Route path="/activity" element={<Useractivity />} />
-            <Route path="/activity/allorder/" element={<Allorder />} />
-            <Route path="/activity/allorder/:id" element={<AllorderDetails />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
+        {/* Main Content Area */}
+        <main className="flex-1 p-4 sm:p-6">
+          <div className="w-full max-w-[1800px] mx-auto bg-[#0D0D0D] rounded-2xl">
+            <Routes>
+              <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
+              <Route path="/dashboard" element={<DashBoard />} />
+              <Route path="/collection" element={<Collection />} />
+              <Route path="/collection/create" element={<CreateCollection />} />
+              <Route path="/collection/collectionDetails/:id" element={<CollectionDetails />} />
+              <Route path="/collection/collectionDetails/:collectionId/nft/:nftId" element={<NftDetails />} />
+              <Route path="/users/" element={<Users />} />
+              <Route path="/users/:id" element={<UserDetails />} />
+              <Route path="/activity" element={<Useractivity />} />
+              <Route path="/activity/allorder/" element={<Allorder />} />
+              <Route path="/activity/allorder/:id" element={<AllorderDetails />} />
+              <Route path="*" element={<PageNotFound />} />
+            </Routes>
+          </div>
         </main>
       </div>
     </div>
