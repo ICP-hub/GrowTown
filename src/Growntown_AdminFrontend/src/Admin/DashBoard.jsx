@@ -65,7 +65,7 @@ function DashBoard() {
 
   return (
     <SkeletonTheme baseColor="#151515" highlightColor="#222222">
-      <div className="bg-[#0D0D0D] min-h-full text-white mx-auto text-center w-full px-4 sm:px-8 md:px-16 pt-10 rounded-2xl">
+      <div className="h-full text-white mx-auto text-center w-full px-4 sm:px-8 md:px-16 pt-10 rounded-2xl">
         {loading ? (
           <div className="grid justify-center grid-cols-1 gap-6 sm:gap-8 mx-auto md:grid-cols-2 lg:grid-cols-3 max-w-screen-xl font-Quicksand sm:font-bold md:text-lg">
             <div className="h-40 sm:h-48 rounded-xl">

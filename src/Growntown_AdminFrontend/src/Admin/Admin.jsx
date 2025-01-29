@@ -74,14 +74,14 @@ function Admin() {
   }
 
   return (
-    <div className="h-screen w-full grid grid-cols-[250px_1fr]">
+    <div className="h-screen w-full  grid grid-cols-[250px_1fr]">
       {/* Sidebar */}
       <aside className="bg-gradient-to-b from-gray-900 via-[#1a1a1a] to-black shadow-lg p-4">
         <SideBar isOpen={isOpen} toggleSidebar={toggleSidebar} />
       </aside>
 
       {/* Main Content Section */}
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col  w-full">
         {/* Top Navbar with Search and Profile */}
         <nav className="flex items-center justify-between  text-white px-6 py-3 shadow-md">
           {/* Search Bar */}
@@ -108,13 +108,14 @@ function Admin() {
           </button>
 
           {toggleProfile && 
-          <div className="absolute right-5 z-50 top-[3.75rem]">
+          <div className="absolute bg-red-600 right-5 z-50 top-[3.75rem]">
             <AdminModal />
             </div>}
         </nav>
 
         {/* Dashboard Content */}
-        <main className="flex-1 w-full p-6">
+        <main className="flex-1  w-full p-6">
+         <div className="w-[97%] bg-[#0D0D0D] h-[97%] rounded-2xl m-auto">
           <Routes>
             <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
             <Route path="/dashboard" element={<DashBoard />} />
@@ -129,6 +130,7 @@ function Admin() {
             <Route path="/activity/allorder/:id" element={<AllorderDetails />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
+         </div>
         </main>
       </div>
     </div>
