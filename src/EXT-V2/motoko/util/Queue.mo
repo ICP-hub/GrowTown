@@ -32,7 +32,7 @@ module {
         };
         case null {
           switch (q.0) {
-            case (?(h, t)) {
+            case (?(_h, _t)) {
                 let swapped = ( List.nil<T>(), List.reverse<T>(q.0) );
                 return next<T>(swapped);
             };

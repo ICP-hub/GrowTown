@@ -5,7 +5,7 @@ import Time "mo:base/Time";
 import Blob "mo:base/Blob";
 import Nat32 "mo:base/Nat32";
 import Array "mo:base/Array";
-import Debug "mo:base/Debug";
+import _Debug "mo:base/Debug";
 
 module ExtEvent = {
     type Time = Time.Time;

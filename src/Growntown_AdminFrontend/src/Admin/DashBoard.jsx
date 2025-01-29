@@ -1,13 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { useAuths } from "../utils/useAuthClient.jsx";
-import { setUser } from "../redux/authSlice.js";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { SkeletonTheme } from "react-loading-skeleton";
-import { canisterId } from "../../../declarations/Growntown_Backend/index.js";
-import { Principal } from "@dfinity/principal";
 
 function DashBoard() {
   const { backendActor } = useAuths();
@@ -23,10 +19,6 @@ function DashBoard() {
       navigate("/");
     } else {
       const fetching = async () => {
-        // await getTotalNFT();
-        // await getTotalUser();
-        // await getallcollection();
-        // setloading(false);
         setloading(true);
         await Promise.all([getTotalNFT(), getTotalUser(), getallcollection()]);
         setloading(false);
@@ -40,11 +32,9 @@ function DashBoard() {
     if (backendActor) {
       try {
         const result = await backendActor?.getTotalNFTs();
-        const value = Number(result);
-        setnfts(value);
-        console.log("total nft", result);
+        setnfts(Number(result));
       } catch (error) {
-        console.error("Error fetching collections:", error);
+        console.error("Error fetching NFTs:", error);
       }
     }
   };
@@ -54,11 +44,9 @@ function DashBoard() {
     if (backendActor) {
       try {
         const result = await backendActor?.getTotalUsers();
-        const value = Number(result);
-        setUser(value);
-        console.log("total user", result);
+        setUser(Number(result));
       } catch (error) {
-        console.error("Error fetching collections:", error);
+        console.error("Error fetching users:", error);
       }
     }
   };
@@ -68,9 +56,7 @@ function DashBoard() {
     if (backendActor) {
       try {
         const result = await backendActor?.totalcollections();
-        const value = Number(result);
-        setcollections(value);
-        console.log("total collection", result);
+        setcollections(Number(result));
       } catch (error) {
         console.error("Error fetching collections:", error);
       }
@@ -78,33 +64,33 @@ function DashBoard() {
   };
 
   return (
-    <SkeletonTheme baseColor="#202020" highlightColor="#282828">
-      <div className="bg-contain text-white mx-auto text-center w-[90%] h-full px-6 sm:px-12 md:px-24 pt-5 sm:pt-6 md:pt-16 lg:pt-28">
+    <SkeletonTheme baseColor="#151515" highlightColor="#222222">
+      <div className="h-full text-white mx-auto text-center w-full px-4 sm:px-8 md:px-16 pt-10 rounded-2xl">
         {loading ? (
-          <div className="grid justify-center grid-cols-1 gap-8 mx-auto lg:text-2xl sm:grid-cols-4 max-w-screen-2xl font-Quicksand sm:font-bold md:text-xl sm:text-lg">
-            <div className="col-span-2 h-32 2xl:h-52">
+          <div className="grid justify-center grid-cols-1 gap-6 sm:gap-8 mx-auto md:grid-cols-2 lg:grid-cols-3 max-w-screen-xl font-Quicksand sm:font-bold md:text-lg">
+            <div className="h-40 sm:h-48 rounded-xl">
               <Skeleton height="100%" />
             </div>
-            <div className="col-span-2 h-32 2xl:h-52">
+            <div className="h-40 sm:h-48 rounded-xl">
               <Skeleton height="100%" />
             </div>
-            <div className="col-span-2 sm:col-start-2 sm:col-end-4 h-32 2xl:h-52">
+            <div className="h-40 sm:h-48 rounded-xl">
               <Skeleton height="100%" />
             </div>
           </div>
         ) : (
-          <div className="grid justify-center grid-cols-1 gap-8 mx-auto lg:text-2xl sm:grid-cols-4 max-w-screen-2xl font-Quicksand sm:font-bold md:text-xl sm:text-lg">
-            <div className="bg-[#29292C] px-6 py-4 col-span-2 h-32 2xl:h-52 flex flex-col justify-center rounded-md">
-              <h3>Total Collections</h3>
-              <p className="font-ironman">{collections}</p>
+          <div className="grid justify-center grid-cols-1 gap-6 sm:gap-8 mx-auto md:grid-cols-2 lg:grid-cols-3 max-w-screen-xl font-Quicksand sm:font-bold md:text-lg">
+            <div className="bg-gradient-to-r from-[#1C1C1E] to-[#29292C] px-6 py-6 h-40 sm:h-48 flex flex-col justify-center rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-300">Total Collections</h3>
+              <p className="font-ironman text-3xl sm:text-4xl lg:text-5xl text-white">{collections}</p>
             </div>
-            <div className="bg-[#29292C] px-6 py-4 col-span-2 h-32 2xl:h-52 flex flex-col justify-center rounded-md">
-              <h3>Total NFTs</h3>
-              <p className="font-ironman">{nfts}</p>
+            <div className="bg-gradient-to-r from-[#1A1A1D] to-[#25252B] px-6 py-6 h-40 sm:h-48 flex flex-col justify-center rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-300">Total NFTs</h3>
+              <p className="font-ironman text-3xl sm:text-4xl lg:text-5xl text-white">{nfts}</p>
             </div>
-            <div className="bg-[#29292C] px-6 py-4 col-span-2 sm:col-start-2 sm:col-end-4 h-32 2xl:h-52 flex flex-col justify-center rounded-md">
-              <h3>Total Users</h3>
-              <p className="font-ironman">{user}</p>
+            <div className="bg-gradient-to-r from-[#18181B] to-[#2C2C31] px-6 py-6 h-40 sm:h-48 flex flex-col justify-center rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300">
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-300">Total Users</h3>
+              <p className="font-ironman text-3xl sm:text-4xl lg:text-5xl text-white">{user}</p>
             </div>
           </div>
         )}

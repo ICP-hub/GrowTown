@@ -1,38 +1,30 @@
 import React, { useEffect, useState } from "react";
-import YellowButton from "../../components/button/YellowButton";
 import { Link } from "react-router-dom";
-import BackButton from "./BackButton";
 import { useAuths } from "../../utils/useAuthClient.jsx";
+import { Principal } from "@dfinity/principal";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { SkeletonTheme } from "react-loading-skeleton";
-import { FaTrashAlt } from "react-icons/fa";
-import { IoClose } from "react-icons/io5";
-import { BiErrorCircle } from "react-icons/bi"; // Warning icon
-import { Principal } from "@dfinity/principal";
-import Buttons from "../../Common/Buttons";
+import { GrNext, GrPrevious } from "react-icons/gr";
 import { IoIosAdd } from "react-icons/io";
 import CollectionCard from "./CollectionCard";
 import CollectionCardSkeleton from "../../Common/CollectionCardSkeleton";
-import { CiSearch } from "react-icons/ci";
+import Buttons from "../../Common/Buttons";
 
 function Collection() {
   const { backendActor } = useAuths();
-  const [coll, setColl] = useState([]); // Initialize as an empty array
+  const [coll, setColl] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showDialog, setShowDialog] = useState(false); // Modal state
-  const [collectionToDelete, setCollectionToDelete] = useState(null); // Track the collection to delete
-  const [searchQuery, setSearchQuery] = useState(""); // Search query state
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
   const getCollection = async () => {
     setLoading(true);
     if (backendActor) {
       try {
         const result = await backendActor?.getAllCollections();
-
         const tempArray = [];
         if (result && Array.isArray(result)) {
-          console.log("resultCollection=>", result);
           result.forEach((item) => {
             if (item && item.length > 1) {
               item[1].forEach((value) => {
@@ -42,172 +34,101 @@ function Collection() {
               });
             }
           });
-
-          console.log(tempArray);
           setColl(tempArray);
         }
       } catch (error) {
         console.error("Error fetching collections:", error);
       } finally {
-        setLoading(false); // Make sure to stop loading state
+        setLoading(false);
       }
     }
   };
 
   useEffect(() => {
-    const fetchCollection = async () => {
-      await getCollection();
-      setLoading(false);
-    };
-
-    fetchCollection();
+    getCollection();
   }, [backendActor]);
 
-  const handleDelete = (collectionId) => {
-    setCollectionToDelete(collectionId);
-    setShowDialog(true); // Open the modal
+  const totalPages = Math.ceil(coll.length / itemsPerPage);
+  const currentCollections = coll.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
-  const cancelDelete = () => {
-    setCollectionToDelete(null);
-    setShowDialog(false); // Close the modal
+  const goToNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
-
-  const confirmDelete = async () => {
-    setShowDialog(false);
-    setLoading(true);
-    const principalString = Principal.fromUint8Array(collectionToDelete._arr);
-    if (backendActor) {
-      try {
-        const result = await backendActor?.removeCollection(principalString);
-        console.log(result);
-      } catch (error) {
-        console.error("Error deleting collection:", error);
-      } finally {
-        setLoading(false);
-        // Close the modal after deletion
-        await getCollection();
-      }
-    }
-  };
-
-  // Filtered collections for search
-  const filteredCollections = coll.filter((collectiondata) =>
-    collectiondata[2].toLowerCase()
-      .includes(searchQuery.toLowerCase())
-  );
 
   return (
     <SkeletonTheme baseColor="#202020" highlightColor="#282828">
-      <div className="w-[90%] h-screen overscroll-none overflow-scroll pt-10 px-10 pb-8 no-scrollbar 2xl:ml-[7%] md:w-full lg:w-[90%] lg:pt-20">
-        {/* Flex container for back button and collection buttons */}
-        <div className="flex justify-between items-center w-full mb-6 mt-5">
-          {/* Back button (hidden on small screens) */}
-          <div className="hidden sm:block">
-            <BackButton />
-          </div>
-          {/* Create collection button */}
-          <div className="flex space-x-4">
-            <Link to="/Admin/collection/create">
-              <Buttons
-                buttonName="Create Collection"
-                bgColor="white"
-                icon={<IoIosAdd size={30} />}
-              />
-            </Link>
-          </div>
-        </div>
-
-        {/* Search Collection */}
-        <div className="flex justify-center items-center w-full mb-6">
-          <div className="relative w-full md:w-[60%] lg:w-[40%]">
-            <input
-              type="text"
-              placeholder="Search collections..."
-              className="w-full px-5 py-3 rounded-xl bg-[#29292C] border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#50B248] transition-all duration-300"
-              onChange={(e) => setSearchQuery(e.target.value)}
+      <div className="w-full h-full overscroll-none pt-8 pb-8 px-4 md:px-8 flex flex-col items-center  rounded-2xl">
+        {/* Header Section */}
+        <div className="flex justify-between items-center w-full max-w-6xl mb-6">
+          <h2 className="text-white text-2xl font-semibold"> Collection</h2>
+          <Link to="/Admin/collection/create">
+            <Buttons
+              buttonName="Create Collection"
+              bgColor="white"
+              icon={<IoIosAdd size={24} className="text-black" />}
+              className="hover:shadow-lg transition-all duration-300"
             />
-            <button
-              className="absolute top-1/2 right-3 transform -translate-y-1/2 p-2 rounded-full bg-[#50B248] text-white hover:bg-[#3D9635] transition-all"
-            >
-              <CiSearch className="w-5 h-5" />
-            </button>
-          </div>
+          </Link>
         </div>
 
-        {/* Loader skeleton when loading */}
-        {loading ? (
-          <div className="grid w-full gap-6 lg:grid-cols-3 sm:grid-cols-1 md:grid-cols-2">
-            {Array(6)
-              .fill()
-              .map((_, index) => (
-                <CollectionCardSkeleton key={index} />
+        {/* Content Section */}
+        <div className="rounded-xl p-6 w-full max-w-6xl shadow-lg ">
+          {loading ? (
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+              {Array(6).fill().map((_, index) => (
+                <div key={index} className="flex items-center justify-center">
+                  <CollectionCardSkeleton />
+                </div>
               ))}
-          </div>
-        ) : (
-          <div className="w-full flex justify-center mt-10 items-center">
-            {/* Grid of collections */}
-            {filteredCollections.length > 0 ? (
-              <div className="grid w-full gap-6 lg:grid-cols-3 sm:grid-cols-1 md:grid-cols-2">
-                {filteredCollections.map((collectiondata, index) => (
-                  <CollectionCard
-                    key={index}
-                    collectiondata={collectiondata}
-                    handleDelete={handleDelete}
-                    index={index}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="flex justify-center items-center w-full h-full">
-                <p className="text-white text-2xl text-center">
-                  No collections available
-                </p>
-              </div>
+            </div>
+          ) : (
+            <div className="w-full flex justify-center items-center">
+              {currentCollections.length > 0 ? (
+                <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                  {currentCollections.map((collectiondata, index) => (
+                    <div className="col-span-1 flex items-center justify-center" key={index}>
+                      <CollectionCard collectiondata={collectiondata} />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex justify-center items-center w-full h-[50vh]">
+                  <p className="text-white text-xl font-medium opacity-80">No collections available</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center mt-12 space-x-4">
+            {currentPage > 1 && (
+              <button
+                onClick={goToPreviousPage}
+                className="w-10 h-10 flex items-center justify-center bg-gray-800 text-white border border-gray-600 rounded-full hover:bg-black transition-all duration-300"
+              >
+                <GrPrevious />
+              </button>
+            )}
+            <span className="w-10 h-10 flex items-center justify-center bg-[#50B248] text-white font-medium rounded-full shadow-lg transition-all duration-300">
+              {currentPage}
+            </span>
+            {currentPage < totalPages && (
+              <button
+                onClick={goToNextPage}
+                className="w-10 h-10 flex items-center justify-center bg-gray-800 text-white border border-gray-600 rounded-full hover:bg-black transition-all duration-300"
+              >
+                <GrNext />
+              </button>
             )}
           </div>
         )}
       </div>
-
-      {/* Confirmation Modal */}
-      {showDialog && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50">
-          <div className="relative bg-[#29292C] p-8 px-10 rounded-md text-center text-white w-full sm:w-[90%] md:w-[500px] shadow-lg">
-            {/* Close Button */}
-            <button
-              className="absolute top-4 right-4 text-white hover:text-gray-400 text-2xl"
-              onClick={cancelDelete}
-            >
-              <IoClose />
-            </button>
-            {/* Warning Icon and Text */}
-            <div className="flex flex-col items-center">
-              <BiErrorCircle className="text-yellow-500 text-6xl mb-4" />
-              <p className="text-lg font-semibold mb-4">
-                Warning! This action cannot be undone.
-              </p>
-              <p className="mb-6">
-                Are you sure you want to delete this collection?
-              </p>
-            </div>
-            {/* Buttons */}
-            <div className="flex justify-between space-x-2">
-              <button
-                className="w-full px-6 py-3 bg-gray-600 rounded-md text-white text-lg hover:bg-gray-700"
-                onClick={cancelDelete}
-              >
-                Cancel
-              </button>
-              <button
-                className="w-full px-6 py-3 bg-[#FCD37B] rounded-md text-black text-lg hover:bg-yellow-500"
-                onClick={confirmDelete}
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </SkeletonTheme>
   );
 }

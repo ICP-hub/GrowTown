@@ -9,6 +9,7 @@ using System;
 using System.Web;
 using System.Collections.Generic;
 
+
 namespace IC.GameKit
 {
     public class DeepLinkPlugin : MonoBehaviour
@@ -17,8 +18,8 @@ namespace IC.GameKit
 
         private void Awake()
         {
-            // Register action for deep link activated.
-            Debug.Log("DeepLinkPlugin Awake: Registering deep link event.");
+#if UNITY_WEBGL
+            Debug.Log("WebGL Build: Registering deep link event.");
             Application.deepLinkActivated += OnDeepLinkActivated;
 
             // Handle deep link if app was opened with one already
@@ -27,6 +28,10 @@ namespace IC.GameKit
                 Debug.Log("App opened via deep link: " + Application.absoluteURL);
                 OnDeepLinkActivated(Application.absoluteURL);
             }
+#elif UNITY_ANDROID || UNITY_IOS
+            Debug.Log("Native App Build: Registering deep link event.");
+            // Handle any platform-specific deep linking logic if required
+#endif
         }
 
         private void Start()
@@ -38,6 +43,15 @@ namespace IC.GameKit
             }
         }
 
+        private bool IsRunningOnMobile()
+        {
+#if UNITY_ANDROID || UNITY_IOS
+            return true;
+#else
+            return false;
+#endif
+        }
+
         public void OpenBrowser()
         {
             if (mTestICPAgent == null || mTestICPAgent.TestIdentity == null)
@@ -46,23 +60,23 @@ namespace IC.GameKit
                 return;
             }
 
-            // Determine appropriate route based on platform
             string route = IsRunningOnMobile() ? "app" : "";
             string sessionKeyHex = ByteUtil.ToHexString(mTestICPAgent.TestIdentity.PublicKey.ToDerEncoding());
             string targetUrl = $"{mTestICPAgent.greetFrontend}{route}?sessionkey={sessionKeyHex}";
 
-            Debug.Log($"Opening URL: {targetUrl}");
+#if UNITY_WEBGL
+            Debug.Log($"Opening URL in WebGL: {targetUrl}");
             Application.OpenURL(targetUrl);
+#elif UNITY_ANDROID || UNITY_IOS
+            Debug.Log($"Opening URL in Native App: {targetUrl}");
+            OpenNativeDeepLink(targetUrl);
+#endif
         }
 
-        // Check if running on Android or iOS
-        private bool IsRunningOnMobile()
+        private void OpenNativeDeepLink(string url)
         {
-#if UNITY_ANDROID || UNITY_IOS
-            return true;
-#else
-            return false;
-#endif
+            Debug.Log($"Native app handling deep link: {url}");
+            Application.OpenURL(url);
         }
 
         public void OnDeepLinkActivated(string url)
@@ -75,20 +89,102 @@ namespace IC.GameKit
 
             Debug.Log($"Deep link activated with URL: {url}");
 
+            ProcessDeepLink(url);
+        }
+
+        private void ProcessDeepLink(string url)
+        {
+            Debug.Log($"Processing deep link URL: {url}");
+
+            // Check for URL fragment and convert to query string
+            if (url.Contains("#"))
+            {
+                string fragment = url.Split('#')[1];
+                url = "?" + fragment;
+                Debug.Log($"Processed URL fragment: {url}");
+            }
+
+            const string kSessionKeyParam = "sessionkey=";
             const string kDelegationParam = "delegation=";
-            int indexOfDelegation = url.IndexOf(kDelegationParam, StringComparison.OrdinalIgnoreCase);
-            if (indexOfDelegation == -1)
+
+            // Extract sessionkey
+            string sessionKey = ExtractParameter(url, kSessionKeyParam);
+            if (string.IsNullOrEmpty(sessionKey))
+            {
+                Debug.LogError("Cannot find sessionkey parameter in the deep link URL.");
+                return;
+            }
+
+            // Extract delegation
+            string delegationString = ExtractParameter(url, kDelegationParam);
+            if (string.IsNullOrEmpty(delegationString))
             {
                 Debug.LogError("Cannot find delegation parameter in the deep link URL.");
                 return;
             }
 
-            string delegationString = HttpUtility.UrlDecode(url.Substring(indexOfDelegation + kDelegationParam.Length));
+            Debug.Log($"Extracted Session Key: {sessionKey}");
             Debug.Log($"Extracted Delegation String: {delegationString}");
-            mTestICPAgent.DelegationIdentity = ConvertJsonToDelegationIdentity(delegationString);
+
+            // Process delegation
+            ProcessDelegation(delegationString);
         }
 
-        internal DelegationIdentity ConvertJsonToDelegationIdentity(string jsonDelegation)
+        // Helper method to extract parameters from the URL
+        private string ExtractParameter(string url, string paramName)
+        {
+            int indexOfParam = url.IndexOf(paramName, StringComparison.OrdinalIgnoreCase);
+            if (indexOfParam == -1) return null;
+
+            string paramValue = HttpUtility.UrlDecode(
+                url.Substring(indexOfParam + paramName.Length).Split('&')[0]
+            );
+            return paramValue;
+        }
+
+        private void ProcessDelegation(string delegationJson)
+        {
+            if (string.IsNullOrEmpty(delegationJson))
+            {
+                Debug.LogError("Delegation JSON is empty.");
+                return;
+            }
+
+            try
+            {
+                DelegationIdentity delegationIdentity = ConvertJsonToDelegationIdentity(delegationJson);
+                if (delegationIdentity != null)
+                {
+                    if (mTestICPAgent != null)
+                    {
+                        mTestICPAgent.DelegationIdentity = delegationIdentity;
+                        Debug.Log("Delegation identity successfully set in TestICPAgent.");
+
+                        // Enable greet button
+                        if (mTestICPAgent.TestIdentity != null)
+                        {
+                            Debug.Log("Enabling buttons...");
+                            GameObject.Find("Button_Greet").GetComponent<Button>().interactable = true;
+                            GameObject.Find("Button_Collection").GetComponent<Button>().interactable = true;
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError("TestICPAgent is null; cannot set delegation identity.");
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Failed to convert delegation JSON into a DelegationIdentity.");
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Error processing delegation JSON: {e.Message}");
+            }
+        }
+
+        private DelegationIdentity ConvertJsonToDelegationIdentity(string jsonDelegation)
         {
             try
             {
@@ -99,29 +195,34 @@ namespace IC.GameKit
                     return null;
                 }
 
-                // Initialize DelegationIdentity.
                 List<SignedDelegation> delegations = new List<SignedDelegation>();
                 foreach (var signedDelegationModel in delegationChainModel.delegations)
                 {
                     var pubKey = SubjectPublicKeyInfo.FromDerEncoding(ByteUtil.FromHexString(signedDelegationModel.delegation.pubkey));
-                    var expiration = ICTimestamp.FromNanoSeconds(Convert.ToUInt64(signedDelegationModel.delegation.expiration, 16));
-                    var delegation = new Delegation(pubKey, expiration);
 
+                    ulong expirationValue = Convert.ToUInt64(signedDelegationModel.delegation.expiration, 16);
+                    var expiration = ICTimestamp.FromNanoSeconds(expirationValue);
+
+                    var expirationDateTime = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddTicks((long)(expiration.NanoSeconds / 100));
+
+                    if (expirationDateTime < DateTime.UtcNow)
+                    {
+                        Debug.LogError("Delegation has expired.");
+                        return null;
+                    }
+
+                    var delegation = new Delegation(pubKey, expiration);
                     var signature = ByteUtil.FromHexString(signedDelegationModel.signature);
-                    var signedDelegation = new SignedDelegation(delegation, signature);
-                    delegations.Add(signedDelegation);
+                    delegations.Add(new SignedDelegation(delegation, signature));
                 }
 
                 var chainPublicKey = SubjectPublicKeyInfo.FromDerEncoding(ByteUtil.FromHexString(delegationChainModel.publicKey));
                 var delegationChain = new DelegationChain(chainPublicKey, delegations);
-                var delegationIdentity = new DelegationIdentity(mTestICPAgent.TestIdentity, delegationChain);
-
-                Debug.Log("Delegation identity successfully created.");
-                return delegationIdentity;
+                return new DelegationIdentity(mTestICPAgent.TestIdentity, delegationChain);
             }
             catch (Exception e)
             {
-                Debug.LogError($"Error processing delegation JSON: {e.Message}");
+                Debug.LogError($"Error converting JSON to DelegationIdentity: {e.Message}");
                 return null;
             }
         }

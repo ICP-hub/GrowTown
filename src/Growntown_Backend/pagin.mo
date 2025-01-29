@@ -23,8 +23,8 @@
 
 import List "mo:base/List";
 import Iter "mo:base/Iter";
-import Array "mo:base/Array";
-import Principal "mo:base/Principal";
+import _Array "mo:base/Array";
+import _Principal "mo:base/Principal";
 
 // module {
 //     public func paginate<V>(array : [V], chunkSize : Nat) : [[V]] {

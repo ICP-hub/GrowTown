@@ -11,20 +11,19 @@ const NativeAppLogin = () => {
   const [greeting, setGreeting] = useState("");
   const [loading, setLoading] = useState(false);
 
-  console.log('actor:', actor);
-  console.log('delegationChain:', delegationChain);
-  console.log('greeting:', greeting);
-  console.log('appPublicKey:', appPublicKey);
+  console.log("actor:", actor);
+  console.log("delegationChain:", delegationChain);
+  console.log("greeting:", greeting);
+  console.log("appPublicKey:", appPublicKey);
 
   // Function to convert hex string to Uint8Array
   const hexToBytes = (hex) => {
-    return Uint8Array.from(hex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+    return Uint8Array.from(hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
   };
 
   // Extract the session key from URL on component mount
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    console.log('urlParams',urlParams)
     const publicKeyString = urlParams.get("sessionkey");
 
     if (publicKeyString) {
@@ -63,9 +62,8 @@ const NativeAppLogin = () => {
         await agent.fetchRootKey();
       }
 
-      // Fetch canister ID from environment variable
       const canisterId = process.env.CANISTER_ID_GROWNTOWN_BACKEND;
-      console.log('Canister ID:', canisterId);
+      console.log("Canister ID:", canisterId);
 
       if (!canisterId) {
         throw new Error("Canister ID is undefined. Ensure it's set in the environment variables.");
@@ -83,23 +81,16 @@ const NativeAppLogin = () => {
         );
 
         setDelegationChain(middleToApp);
+
+        // Automatically handle authorization logic here
+        const url = `internetidentity://authorize?delegation=${encodeURIComponent(
+          JSON.stringify(middleToApp.toJSON())
+        )}`;
+        window.open(url, "_self");
       }
     } catch (error) {
       console.error("Login failed:", error);
     }
-  };
-
-  // Handle authorization using delegation chain
-  const handleAuthorize = () => {
-    if (!delegationChain) {
-      console.error("Invalid delegation chain.");
-      return;
-    }
-
-    const url = `internetidentity://authorize?delegation=${encodeURIComponent(
-      JSON.stringify(delegationChain.toJSON())
-    )}`;
-    window.open(url, "_self");
   };
 
   // Handle greeting interaction
@@ -121,13 +112,6 @@ const NativeAppLogin = () => {
       <div className="flex flex-col">
         <button className="text-white bg-black mb-4" onClick={handleLogin}>
           Login
-        </button>
-        <button
-          className="text-white bg-black mb-4"
-          onClick={handleAuthorize}
-          disabled={!delegationChain}
-        >
-          Authorize
         </button>
         <button className="text-white bg-black" onClick={handleGreet} disabled={loading}>
           {loading ? "Loading..." : "Greet"}
