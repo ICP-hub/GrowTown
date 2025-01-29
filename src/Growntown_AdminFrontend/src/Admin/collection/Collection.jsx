@@ -76,7 +76,7 @@ function Collection() {
         </div>
 
         {/* Content Section */}
-        <div className="rounded-xl p-6 w-full max-w-6xl shadow-lg">
+        <div className="rounded-xl p-6 w-full max-w-6xl shadow-lg ">
           {loading ? (
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {Array(6).fill().map((_, index) => (

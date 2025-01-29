@@ -67,7 +67,7 @@ function Users() {
   };
 
   return (
-    <div className="w-full px-4 md:px-10  min-h-screen mx-auto pt-4 bg-[#121212] text-white flex flex-col items-center rounded-2xl">
+    <div className="rounded-xl p-6  w-full max-w-6xl shadow-lg bg-[#0D0D0D]  mx-3 m-auto  h-full pt-4  text-white flex flex-col items-center ">
       <h2 className="text-2xl font-semibold text-white mb-4 text-start">Users</h2>
       <div className="w-full flex flex-col items-center">
         {/* Search Box */}

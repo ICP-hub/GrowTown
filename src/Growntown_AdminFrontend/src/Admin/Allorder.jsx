@@ -70,7 +70,7 @@ function Allorder() {
 
   return (
 
-    <div className="w-[90%] overflow-y-scroll pt-10 px-10 pb-8 h-screen no-scrollbar md:w-full lg:w-[90%] lg:pt-20">
+    <div className="rounded-xl p-6 w-full max-w-6xl shadow-lg m-auto  bg-[#0D0D0D] overflow-y-scroll px-10 pb-8 h-full no-scrollbar ">
       <div className="flex flex-col items-center justify-center text-white">
         {/* Table */}
         <div className="w-[90%] md:w-[85%] mx-auto mt-10 ">
