@@ -692,7 +692,7 @@ function CollectionDetails() {
         <div
           onClick={onClickFilterContainer}
 
-          className="w-[90%] overflow-y-scroll pt-10 px-10 pb-8 h-screen no-scrollbar no-scroll 2xl:ml-[7%] md:w-full lg:w-[90%] lg:pt-20"
+          className="w-[90%] overflow-y-scroll pt-10 sm:px-10 pb-8 h-screen no-scrollbar no-scroll 2xl:ml-[7%] md:w-full  mx-auto"
 
         >
           {loading ? (
@@ -1051,7 +1051,7 @@ function CollectionDetails() {
               {modal && (
                 <div className="fixed inset-0 z-50">
                   <div className="fixed inset-0 bg-[rgba(37,37,37,0.84)] backdrop-blur-lg">
-                    <div className="flex items-center justify-center min-h-screen p-4">
+                    <div className="flex items-center justify-center h-screen p-4">
                       <Modal
                         toggleModal={toggleModal}
                         getAddedNftDetails={getAddedNftDetails}
@@ -1063,13 +1063,13 @@ function CollectionDetails() {
               )}
 
               {isDisplayFiltersPopup && (
-                <div className="fixed inset-0 z-50 sm:hidden">
-                  <div className="fixed inset-0 bg-[rgba(49,49,49,0.8)]">
+                <div className="fixed  inset-0 z-50 sm:hidden">
+                  <div className="fixed -top-20 inset-0 bg-[rgba(49,49,49,0.8)]">
                     <div className="flex items-end sm:items-center justify-center min-h-screen">
                       <div className="w-full m-4 max-w-lg bg-[#111] rounded-t-xl sm:rounded-xl p-4 sm:p-6">
                         <div className="flex items-center justify-end">
                           <button
-                            className="text-[#FCD378] bottom-1 z-10"
+                            className="text-[#FCD378] bottom-1 mb-1 z-10"
                             onClick={() => updateFiltersDisplayStatus(false)}
                           >
                             <RxCross2 size={20} />

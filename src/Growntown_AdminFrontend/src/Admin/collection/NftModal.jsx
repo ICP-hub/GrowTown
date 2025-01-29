@@ -7,6 +7,7 @@ import imageCompression from "browser-image-compression";
 import { v4 as uuidv4 } from "uuid";
 import { Growtown_assethandler } from "../../../../declarations/Growtown_assethandler";
 import Buttons from "../../Common/Buttons";
+import { useAuths } from "../../utils/useAuthClient";
 
 const Modal = (props) => {
   const {
@@ -16,19 +17,46 @@ const Modal = (props) => {
     type,
     toggleModal,
   } = props;
-  
+
+  const { backendActor } = useAuths();
+  const [fetchedNftType, setfetchedNftType] = useState();
+
+  const [nftPrice, setPrice] = useState(0);
+  const [nftQuantity, setNftQuantity] = useState('');
+  const [Type, setType] = useState(null);
+  const [Quantity, setQuantity] = useState(null);
+
+  const FetchPrice=async()=>{
+      const res= await backendActor?.findCost(Type,Number(Quantity))
+      console.log('price',res);
+      setPrice(Number(res))
+  }
+  useEffect(()=>{
+
+    if(Type && Quantity){
+        FetchPrice();
+    }
+     
+  },[Type,Quantity])
+
+  {/* fetching nft type*/ }
+  const fetchNftType = async () => {
+    const response = await backendActor.getObjectsAsPairs();
+    setfetchedNftType(response)
+    console.log('nft Type', response);
+  }
+  useEffect(() => {
+    fetchNftType();
+  }, [])
+
+
   const [nftName, setNftName] = useState(
     type === "edit" ? cardDetails.nftName : ""
   );
   const [nftType, setNftType] = useState(
     type === "edit" ? cardDetails.nftType : "Common"
   );
-  const [nftQuantity, setNftQuantity] = useState(
-    type === "edit" ? cardDetails.nftQuantity : ""
-  );
-  const [nftPrice, setPrice] = useState(
-    type === "edit" ? cardDetails.nftPrice : ""
-  );
+
   const [nftDescription, setNftDescription] = useState(
     type === "edit" ? cardDetails.nftDescription : ""
   );
@@ -41,9 +69,6 @@ const Modal = (props) => {
   );
   const [arstistname, setartistName] = useState(
     type === "edit" ? cardDetails.arstistname : ""
-  );
-  const [newtype, setnewtype] = useState(
-    type === "edit" ? cardDetails.newtype : "Quest"
   );
   const [nftSeason, setnftSeason] = useState(
     type === "edit" ? cardDetails.nftSeason : "Golden Age"
@@ -86,13 +111,12 @@ const Modal = (props) => {
       nftName &&
       nftType &&
       nftQuantity &&
-      nftPrice != 0 &&
+      nftPrice &&
       nftDescription &&
       nftImage &&
       // nftImageURL &&
       nftcolor &&
       // arstistname &&
-      newtype &&
       nftSeason &&
       nftFullImage &&
       imageurl1 &&
@@ -109,7 +133,6 @@ const Modal = (props) => {
         nftDescription,
         nftcolor,
         arstistname,
-        newtype,
         nftSeason,
         nftFullImage,
         nftFullImageSD,
@@ -141,7 +164,6 @@ const Modal = (props) => {
       // nftImageURL &&
       nftcolor &&
       // arstistname &&
-      newtype &&
       nftSeason &&
       nftFullImage &&
       imageurl1 &&
@@ -158,7 +180,6 @@ const Modal = (props) => {
         nftDescription,
         nftcolor,
         arstistname,
-        newtype,
         nftSeason,
         nftFullImage,
         nftFullImageSD,
@@ -268,7 +289,7 @@ const Modal = (props) => {
           </label>
         </div>
 
-        <div className="sm:mt-1 flex flex-col sm:flex-row gap-2 sm:gap-4 md:flex-row md:gap-4 w-full md:h-[60px] mb-0">
+        <div className="sm:mt-1 flex flex-col sm:flex-row gap-2 sm:gap-4 md:flex-row md:gap-4 w-full  mb-0">
           <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF]  sm:gap-2 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             NFT Rarity
             <select
@@ -301,7 +322,7 @@ const Modal = (props) => {
           </label>
 
           <label className=" mt-2 sm:mt-0 w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px] ">
-            Artist Name (Optional)
+             Creator (Optional)
             <input
               value={arstistname}
               onChange={(e) => {
@@ -319,58 +340,60 @@ const Modal = (props) => {
               }}
               type="text"
               placeholder=""
-              className="pl-4 rounded-md h-[40px] border  p-2 bg-transparent text-[16px] text-[#8a8686]"
+              className="pl-4 rounded-md h-[38px] border  p-2 bg-transparent text-[16px] text-[#8a8686]"
             />
           </label>
         </div>
 
-        <div className="sm:mt-3 flex flex-col sm:flex-row sm:gap-4 md:flex-row md:gap-4 w-full  sm:h-[60px] mb-0">
-          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
+        <div className="sm:mt-1  flex flex-col sm:flex-row sm:gap-4 md:flex-row md:gap-4 w-full  mb-0">
+          {/* NFT Type Selection */}
+          <label className="w-full sm:w-1/2 flex flex-col text-white gap-2 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             NFT Type
             <select
-              className=" h-[38px] border  bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
-              value={newtype}
-              onChange={(e) => setnewtype(e.target.value)}
+              className="h-[38px] text-sm border bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
+              value={Type}
+              onChange={(e) => {
+                  setType(e.target.value);
+              
+              }}
             >
-              <option value="Quest" className="text-[16px] text-[#8a8686]">
-                Quest
-              </option>
-              <option value="Char" className="text-[16px] text-[#8a8686]">
-                Char
-              </option>
-              <option value="Item" className="text-[16px] text-[#8a8686]">
-                Item
-              </option>
-              <option value="Asset" className="text-[16px] text-[#8a8686]">
-                Booster
-              </option>
+              <option value="">Select NFT Type</option>
+              {fetchedNftType?.nfttype?.map((val, ind) => (
+                <option key={ind} value={val} className="text-[16px] text-[#8a8686]">
+                  {val}
+                </option>
+              ))}
             </select>
           </label>
 
-          <label className="mt-4 sm:mt-0 w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] sm:text-[16px] lg:text-[18px]leading-[25px]">
-            Quantity:
-            <input
-              value={nftQuantity}
+          {/* NFT Type Quantity Selection */}
+          <label className=" mt-5 sm:mt-0 w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px] ">
+            NFT Type Quantity
+            <select
+              className="h-[38px] text-sm border bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
+              value={Quantity}
               onChange={(e) => {
-                const value = e.target.value;
-                // Check if value is a positive integer (natural number)
-                if (/^[1-9][0-9]*$/.test(value)) {
-                  setNftQuantity(value);
-                } else {
-                  toast.error("Enter a valid natural number greater than 0");
-                  setNftQuantity("");
-                }
+                  setQuantity(e.target.value);
               }}
-              type="number"
-              min="1"
-              pattern="[1-9][0-9]*"
-              placeholder=""
-              className="pl-4 rounded-md h-[38px] p-2 border  bg-transparent text-[16px] text-[#8a8686]"
-            />
+            >
+              <option value="">Select NFT Type Quantity</option>
+              {fetchedNftType?.nft_type_quantity?.map((val, ind) => (
+                <option key={ind} value={Number(val)} className="text-[16px] text-[#8a8686]">
+                  {Number(val)}
+                </option>
+              ))}
+            </select>
           </label>
         </div>
 
-        <div className="mt-3">
+          {/* price calculation*/}
+
+        <div className="text-white">
+          Price : {nftPrice}
+        </div>
+
+
+        <div className="mt-1">
           <label className="w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             Head Image
             {type === "add" || hideImageUpload ? (
@@ -397,7 +420,7 @@ const Modal = (props) => {
           </label>
         </div>
 
-        <div className="mt-2">
+        <div className="mt-1">
           <label className="w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             Full Image
             {type === "add" || hideImageUpload ? (
@@ -457,8 +480,8 @@ const Modal = (props) => {
           </label>
         </div>
 
-        <div className="mt-1">
-          <label className="w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
+        <div className="mt-1 ">
+          <label  className="w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             Full HD Image (Optional)
             {type === "add" || hideImageUpload ? (
               <ImageUploader
@@ -490,33 +513,37 @@ const Modal = (props) => {
           </label>
         </div>
 
-        <div className="mt-1 flex flex-col sm:flex-row sm:gap-4 md:flex-row md:gap-4 w-full h-[120px] md:h-[60px] mb-0">
-          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2  text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
-            NFT Season:
-            <select
-              className=" h-[38px] border  bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
-              value={nftSeason}
-              onChange={(e) => setnftSeason(e.target.value)}
-            >
-              <option
-                value="Origins/Stone Age"
-                className="text-[16px] text-[#8a8686]"
-              >
-                Origins/Stone Age
-              </option>
-              <option value="Golden Age" className="text-[16px] text-[#8a8686]">
-                Golden Age
-              </option>
-              <option value="Silver Age" className="text-[16px] text-[#8a8686]">
-                Silver Age
-              </option>
-              <option value="Bronze Age" className="text-[16px] text-[#8a8686]">
-                Bronze Age
-              </option>
-            </select>
+
+        <div className="mt-1 flex flex-col sm:flex-row sm:gap-4 md:flex-row md:gap-4 w-full  mb-0">
+          <label className=" sm:mt-0 w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
+            Quantity:
+            <input
+              value={nftQuantity}
+              onChange={(e) => {
+                let value = e.target.value.trim().replace(/^0+/, ""); // Remove leading zeros
+
+                if (!type) {
+                  toast.error("Please select NFT type");
+                  return;
+                }
+
+                // Ensure the value is a valid natural number
+                if (/^[1-9]\d*$/.test(value)) {
+                  setNftQuantity(value);
+                } else {
+                  toast.error("Enter a valid natural number greater than 0");
+                  setNftQuantity(""); // Reset on invalid input
+                }
+              }}
+              type="number"
+              min="1"
+              inputMode="numeric"
+              placeholder="Enter Quantity"
+              className="pl-4 rounded-md h-[38px] p-2 border bg-transparent text-[16px] text-[#8a8686]"
+            />
           </label>
 
-          <label className="w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
+          <label className=" mt-5 sm:mt-0 w-full sm:w-1/2 flex flex-col text-[#FFFFFF] gap-2 md:gap-2 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px] ">
             Border Color:
             <select
               className=" h-[38px] border  bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
@@ -535,10 +562,11 @@ const Modal = (props) => {
             </select>
           </label>
         </div>
+         
 
-        <div className="mt-4">
+        {/* <div className="mt-1">
           <label className="mt-[20px] w-[100%] h-[60px] md:h-[86px] text-[#FFFFFF] gap-2 md:gap-4  text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
-            Price (in ICP)
+            Price (in GRC)
             <input
               value={nftPrice}
               onChange={(e) => {
@@ -555,8 +583,8 @@ const Modal = (props) => {
               className="pl-4 w-[100%] mt-2  h-[38px] border  bg-transparent rounded-md text-[16px] text-[#8a8686]"
             />
           </label>
-        </div>
-
+        </div> */}
+        
         <div className="mt-1">
           <label className="w-[100%] text-[#FFFFFF] gap-2 md:gap-4 text-[14px] sm:text-[16px] lg:text-[18px] leading-[25px]">
             NFT's Description
@@ -580,20 +608,20 @@ const Modal = (props) => {
         <div className="flex justify-center mt-2 md:mt-3">
           {type === "add" && (
             <div className="flex  justify-center gap-[10%] items-center">
-            <div onClick={() => toggleModal()}>
-              <Buttons bgColor="black" hover={{textColor:'text-red-600', scale:'scale-110'}} textColor="white" buttonName={"Cancel"} />
-            </div>
-            <div onClick={() => onClickAddButton()}>
-            <Buttons bgColor="white" hover={{textColor:'text-green-600', scale:'scale-110'}} textColor="black" buttonName={"Add"} />
-            </div>
+              <div onClick={() => toggleModal()}>
+                <Buttons bgColor="black" hover={{ textColor: 'text-red-600', scale: 'scale-110' }} textColor="white" buttonName={"Cancel"} />
+              </div>
+              <div onClick={() => onClickAddButton()}>
+                <Buttons bgColor="white" hover={{ textColor: 'text-green-600', scale: 'scale-110' }} textColor="black" buttonName={"Add"} />
+              </div>
 
             </div>
           )}
           {type === "edit" && (
             <div>
-            <div methodName={() => onClickSaveButton()}>
-              Save
-            </div>
+              <div methodName={() => onClickSaveButton()}>
+                Save
+              </div>
             </div>
           )}
           {/* <button

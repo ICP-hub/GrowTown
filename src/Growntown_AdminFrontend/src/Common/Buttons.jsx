@@ -2,7 +2,7 @@ import React from 'react'
 
 const Buttons = ({ buttonName, hover, bgColor, textColor, icon }) => {
   return (
-    <div className={`flex cursor-pointer flex-col relative  w-[150px]  md:w-44 xl:w-56 2xl:60`} >
+    <div className={`flex cursor-pointer flex-col relative  w-[140px]  md:w-44 xl:w-56 2xl:60`} >
       <div
         className="mr-[1px] px-4 py-3 rounded-l-lg font-medium text-center"
         style={{

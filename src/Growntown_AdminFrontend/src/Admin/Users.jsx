@@ -54,7 +54,7 @@ function Users() {
     if (currentpage === 1) {
       toast.error("You are on the first page");
     }
-    currentpage -= 1;
+    setcurrentpage(currentpage - 1);
     await getallDUser();
   };
 
@@ -62,7 +62,7 @@ function Users() {
     if (currentpage > totalpage) {
       toast.error("You are on the last page");
     }
-    currentpage += 1;
+    setcurrentpage(currentpage + 1);
     await getallDUser();
   };
 
