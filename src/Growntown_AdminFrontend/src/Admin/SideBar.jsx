@@ -32,7 +32,8 @@ export default function SimpleSidebar() {
   }, []);
 
   return (
-    <div className="relative font-sans">
+    
+    <div className="relative font-sans z-50">
       {/* ✅ Only one menu button - Opens sidebar */}
       {!isOpen && (
         <button
