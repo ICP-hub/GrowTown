@@ -85,8 +85,8 @@ const NftDetails = () => {
 
   return (
     <SkeletonTheme baseColor="#202020" highlightColor="#282828">
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-[#1a1a1a] to-black pt-8 px-4">
-        <div className="2xl:mt-[5vh] w-full sm:w-[95%] md:w-[90%] lg:w-[85%] xl:w-[80%] mx-auto relative">
+      <div className="">
+        <div className="w-[96%] mx-auto relative">
         {/* Top Corner Button */}
         {/* <div className="absolute top-4 right-4">
           <button

@@ -66,7 +66,7 @@ function Users() {
   };
 
   return (
-    <div className="w-full px-4 md:px-10 min-h-screen mx-auto pt-4 bg-[#121212] text-white flex flex-col items-center rounded-2xl">
+    <div className="w-full mx-2 h-full  px-10 text-white flex flex-col items-center rounded-xl">
       <div className="flex justify-between items-center w-full mb-6 mt-5">
         <BackButton />
         <div className="flex space-x-4">
