@@ -61,7 +61,7 @@ function Collection() {
 
   return (
     <SkeletonTheme baseColor="#202020" highlightColor="#282828">
-      <div className="w-full h-screen overscroll-none pt-8 pb-8 px-4 md:px-8 flex flex-col items-center bg-[#0D0D0D] rounded-2xl">
+      <div className="w-full h-full overscroll-none pt-8 pb-8 px-4 md:px-8 flex flex-col items-center  rounded-2xl">
         {/* Header Section */}
         <div className="flex justify-between items-center w-full max-w-6xl mb-6">
           <h2 className="text-white text-2xl font-semibold"> Collection</h2>
@@ -76,7 +76,7 @@ function Collection() {
         </div>
 
         {/* Content Section */}
-        <div className="rounded-xl p-6 w-full max-w-6xl shadow-lg">
+        <div className="rounded-xl p-6 w-full max-w-6xl shadow-lg ">
           {loading ? (
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {Array(6).fill().map((_, index) => (
