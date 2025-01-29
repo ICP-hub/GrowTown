@@ -598,6 +598,7 @@ export const useAuthClient = () => {
     logout: handleLogout,
     fetchBalance,
     signerId,
+    balance
   };
 };
 

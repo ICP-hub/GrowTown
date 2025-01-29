@@ -9,16 +9,17 @@ import { IoMdSettings } from "react-icons/io";
 import { Link } from 'react-router-dom';
 
 const AdminModal = ({setToggleNftType}) => {
-    const { principal,fetchBalance, logout } = useAuths();
+    const { principal,balance, logout } = useAuths();
     const [Copied, setCopied] = useState(false);
+    console.log('balance',balance)
     
-    const fetchBal=async()=>{
-       console.log('balance', await fetchBalance())
-    } 
+    // const fetchBal=async()=>{
+    //    console.log('balance', await fetchBalance())
+    // } 
 
-    useEffect(()=>{
-        fetchBal();
-    },[fetchBalance])
+    // useEffect(()=>{
+    //     fetchBal();
+    // },[fetchBalance])
 
     const handleLogout=async()=>{
         await logout();
@@ -65,7 +66,7 @@ const AdminModal = ({setToggleNftType}) => {
                 </div>
 
                 <div className="mt-1 text-sm transition-all duration-300 ease-in-out ">
-                    Balance: 0.004
+                   Balance: {balance}
                 </div>
 
                 {/*  TYPE SETTINGS*/}

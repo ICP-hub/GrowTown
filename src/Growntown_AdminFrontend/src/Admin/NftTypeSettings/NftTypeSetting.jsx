@@ -78,7 +78,7 @@ const NftTypeSetting = () => {
 
   return (
     <SkeletonTheme baseColor="#202020" highlightColor="#444">
-      <div className="w-[90%] overflow-y-scroll pt-10 md:px-10 pb-8 h-screen no-scrollbar bg-gradient-to-b from-[#29292C]/95 via-[#1a1a1a]/95 to-black/95">
+      <div className="w-[90%] mx-auto overflow-y-scroll pt-10 md:px-10 pb-8 h-screen no-scrollbar bg-gradient-to-b from-[#29292C]/95 via-[#1a1a1a]/95 to-black/95">
         <div className="w-full">
           <div className="flex items-center">
             <BackButton />
@@ -133,7 +133,7 @@ const NftTypeSetting = () => {
                 <div className="flex mt-10 justify-center gap-5 items-center">
                   <button onClick={onCancelButton} disabled={loading}>
                     <Buttons
-                      bgColor="black"
+                      bgColor="#242426"
                       hover={{ textColor: "text-red-600", scale: "scale-110" }}
                       textColor="white"
                       buttonName="Cancel"
