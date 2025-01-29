@@ -5,7 +5,7 @@ import Nat64 "mo:base/Nat64";
 import Iter "mo:base/Iter";
 
 import Blob "mo:base/Blob";
-import Array "mo:base/Array";
+import _Array "mo:base/Array";
 import HttpTypes "HttpTypes";
 
 import Memory "mo:base/ExperimentalStableMemory";
@@ -40,15 +40,15 @@ actor {
         _thumbs := [];
     };
 
-    public shared(msg) func uploadImg(imgId : ImgId, image : Blob) {
+    public shared(_msg) func uploadImg(imgId : ImgId, image : Blob) {
         storeBlobImg(imgId, image);
     };
 
-    public shared(msg) func uploadThumbnail(imgId : ImgId, thumbnail : Blob) {
+    public shared(_msg) func uploadThumbnail(imgId : ImgId, thumbnail : Blob) {
         thumbs.put(imgId, thumbnail);
     };
 
-    public query({ caller }) func getPic(id : ImgId): async Blob {
+    public query({ caller =_ }) func getPic(id : ImgId): async Blob {
         var pic = loadBlobImg(id);
         switch(pic) {
             case (null) {
@@ -60,7 +60,7 @@ actor {
         };
    };
 
-    public query({ caller }) func getThumbnail(id : ImgId): async Blob {
+    public query({ caller = _ }) func getThumbnail(id : ImgId): async Blob {
         var pic = thumbs.get(id);
         switch(pic) {
             case (null) {
@@ -76,7 +76,7 @@ actor {
         var size : Nat = Nat32.toNat(Nat32.fromIntWrap(value.size()));
         // Each page is 64KiB (65536 bytes)
         var growBy : Nat = size / 65536 + 1;
-        let a = Memory.grow(Nat64.fromNat(growBy));
+        let _a = Memory.grow(Nat64.fromNat(growBy));
         Memory.storeBlob(_currentMemoryOffset, value);
         imgOffset.put(imgId, _currentMemoryOffset);
         imgSize.put(imgId, size);

@@ -22,17 +22,6 @@ function App() {
         <Route path="/app" element={<NativeAppLogin />}></Route>
         <Route path="/" element={<WebglLogin />} />
         <Route path="*" element={<PageNotFound />} />
-{/* 
-  
-          <Route
-            path="/collection/:collectionName"
-            element={<CollectionDetails />}
-          />
-          <Route path="/Nft/:Nftname" element={<NftDetails />} />
-          
-    
-          <Route path="/unauth/*" element={<UnauthorizedPage />} />
-          <Route path="/unauth" element={<UnauthorizedPage />} /> */}
           
         </Routes>
       </Suspense>

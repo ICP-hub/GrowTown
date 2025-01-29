@@ -20,7 +20,7 @@ import React from "react";
 
 export function AppBinder() {
   // Define signers and canister ID
-const signers = [NFIDW, Plug];
+const signers = [NFIDW, Plug,InternetIdentity];
 const canisterID = process.env.CANISTER_ID_GROWNTOWN_BACKEND;
 const signerClientOptions = {
   targets: [canisterID],
@@ -36,7 +36,10 @@ const signerClientOptions = {
 
 
   return (
-    <BrowserRouter>
+    <BrowserRouter future={{
+      v7_startTransition: true, 
+      v7_relativeSplatPath:true
+    }}>
     <IdentityKitProvider
     onConnectSuccess={(res) => {
       console.log("logged in successfully", res);

@@ -21,8 +21,7 @@ import { useNavigate } from "react-router-dom";
 import TokenModal from "./TokenModal";
 import { GrNext } from "react-icons/gr";
 import { GrPrevious } from "react-icons/gr";
-import { GrNext } from "react-icons/gr";
-import { GrPrevious } from "react-icons/gr";
+
 
 const cardTypeList = [
   {
