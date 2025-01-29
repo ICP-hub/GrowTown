@@ -22,6 +22,7 @@ import TokenModal from "./TokenModal";
 import { GrNext } from "react-icons/gr";
 import { GrPrevious } from "react-icons/gr";
 
+
 const cardTypeList = [
   {
     cardId: "ALL",
@@ -690,7 +691,9 @@ function CollectionDetails() {
       <SkeletonTheme baseColor="#202020" highlightColor="#282828">
         <div
           onClick={onClickFilterContainer}
-          className="w-full min-h-screen px-4 rounded-xl p-6 bg-[#0D0D0D] max-w-6xl shadow-lg  ml-4 overflow-x-hidden "
+
+          className="w-[90%] overflow-y-scroll pt-10 px-10 pb-8 h-screen no-scrollbar no-scroll 2xl:ml-[7%] md:w-full lg:w-[90%] lg:pt-20"
+
         >
           {loading ? (
             <div>
