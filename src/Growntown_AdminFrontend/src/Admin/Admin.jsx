@@ -99,7 +99,7 @@ function Admin() {
       {/* Main Content Section */}
       <div className="flex-1 flex flex-col min-h-screen w-full">
         {/* Top Navbar */}
-        <nav className="sticky top-0 z-30 flex items-center justify-between bg-[#1a1a1a]/90 backdrop-blur-md text-white px-4 sm:px-6 py-3 border-b border-white/10">
+        <nav className="sticky top-0 z-30 flex items-center justify-between bg-[#1a1a1a]/90 backdrop-blur-md text-white px-4 sm:px-6 py-3 ">
           {/* Search Bar */}
           <div className="relative hidden sm:block sm:w-[50%] md:w-[50%] lg:w-full max-w-2xl mx-auto">
             <input
@@ -135,8 +135,8 @@ function Admin() {
         </nav>
 
         {/* Main Content Area */}
-        <main className="flex-1 p-4 sm:p-6">
-          <div className="w-full max-w-[1800px] mx-auto bg-[#0D0D0D] rounded-2xl">
+        <main className="flex-1 p-4 sm:p-6 bg-[#1a1a1a]/90">
+          <div className="w-full max-w-[1800px] mx-auto bg-[#0D0D0D] rounded-2xl h-full">
             <Routes>
               <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
               <Route path="/dashboard" element={<DashBoard />} />

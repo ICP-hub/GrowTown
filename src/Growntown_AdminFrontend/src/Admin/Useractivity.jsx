@@ -79,7 +79,7 @@ function Users() {
       </div>
 
       <div className="flex flex-col justify-center text-white w-full mx-auto mt-10">
-        <div className="overflow-x-auto border border-[#50B248]">
+        <div className="overflow-x-auto border border-[#50B248] rounded-2xl">
           <table className="table-auto w-full text-left">
             <thead className="bg-[#50B248] whitespace-nowrap">
               <tr>
@@ -134,15 +134,15 @@ function Users() {
 
         <div className="mt-10 flex justify-center items-center gap-4">
           {currentpage > 1 && (
-            <button className="px-4 py-2 bg-gray-900 text-white border border-gray-500 rounded-md hover:bg-black" onClick={leftfunction}>
+            <button className="px-4 py-2 bg-gray-900 text-white border border-gray-500 rounded-full hover:bg-black" onClick={leftfunction}>
               &lt;
             </button>
           )}
-          <button className="px-4 py-2 bg-[#50B248] text-black border border-black rounded-md">
+          <button className="px-4 py-2 bg-[#50B248] text-black border border-black rounded-full">
             {currentpage}
           </button>
           {currentpage < totalpage && (
-            <button className="px-4 py-2 bg-gray-900 text-white border border-gray-500 rounded-md hover:bg-black" onClick={rightfunction}>
+            <button className="px-4 py-2 bg-gray-900 text-white border border-gray-500 rounded-full hover:bg-black" onClick={rightfunction}>
               &gt;
             </button>
           )}

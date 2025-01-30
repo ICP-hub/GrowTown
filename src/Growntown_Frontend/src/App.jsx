@@ -1,28 +1,21 @@
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NativeAppLogin from "./components/NativeAppLogin";
-import WebglLogin from "./components/WebglLogin";
 import PageNotFound from "./components/PageNotFound";
+import { AppBinder } from "./AppBinder";
 
-// Introduce a manual delay for testing
-const simulateNetworkDelay = (ms) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
-
-// Lazy load the FullpageLoader with a simulated delay
-const FullpageLoader = lazy(() =>
-  simulateNetworkDelay(2000).then(() => import("./components/Loader/FullpageLoader"))
-);
+// Lazy load the FullpageLoader correctly
+const FullpageLoader = lazy(() => import("./components/Loader/FullpageLoader"));
 
 function App() {
   return (
     <div>
-      <Suspense fallback={<FullpageLoader />}>
+      {/* Display FullpageLoader while components are loading */}
+      <Suspense fallback={<div>Loading...</div>}>
         <Routes>
-        <Route path="/app" element={<NativeAppLogin />}></Route>
-        <Route path="/" element={<WebglLogin />} />
-        <Route path="*" element={<PageNotFound />} />
-          
+          <Route path="/app" element={<NativeAppLogin />} />
+          <Route path="/" element={<AppBinder />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Suspense>
     </div>
