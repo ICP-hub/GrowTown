@@ -19,6 +19,7 @@ import Useractivity from "./Useractivity";
 import Allorder from "./Allorder";
 import AllorderDetails from "./AllorderDetails";
 import UnauthorizedPage from "./collection/UnauthorizedPage";
+import NftTypeSetting from "./NftTypeSettings/NftTypeSetting.jsx";
 
 function Admin() {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,6 +35,21 @@ function Admin() {
       checkingAdminId();
     }
   }, [backendActor, isAuthenticated]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const profileDropdown = document.getElementById('profile-dropdown');
+      const profileButton = document.getElementById('profile-button');
+      
+      if (toggleProfile && profileDropdown && !profileDropdown.contains(event.target) && 
+          profileButton && !profileButton.contains(event.target)) {
+        setToggleProfile(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [toggleProfile]);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -83,9 +99,9 @@ function Admin() {
       {/* Main Content Section */}
       <div className="flex-1 flex flex-col min-h-screen w-full">
         {/* Top Navbar */}
-        <nav className="sticky top-0 z-30 flex items-center justify-between bg-[#1a1a1a]/90 backdrop-blur-md text-white px-4 sm:px-6 py-3 border-b border-white/10">
+        <nav className="sticky top-0 z-30 flex items-center justify-between bg-[#1a1a1a]/90 backdrop-blur-md text-white px-4 sm:px-6 py-3 ">
           {/* Search Bar */}
-          <div className="relative hidden sm:block w-full max-w-2xl">
+          <div className="relative hidden sm:block sm:w-[50%] md:w-[50%] lg:w-full max-w-2xl mx-auto">
             <input
               type="text"
               placeholder="Search..."
@@ -103,6 +119,7 @@ function Admin() {
 
           {/* Profile Button */}
           <button 
+            id="profile-button"
             className="ml-auto" 
             onClick={() => setToggleProfile(!toggleProfile)}
           >
@@ -111,15 +128,15 @@ function Admin() {
 
           {/* Profile Dropdown */}
           {toggleProfile && (
-            <div className="absolute right-4 top-full mt-2 z-50">
+            <div id="profile-dropdown" className="absolute right-4 top-full mt-2 z-50">
               <AdminModal />
             </div>
           )}
         </nav>
 
         {/* Main Content Area */}
-        <main className="flex-1 p-4 sm:p-6">
-          <div className="w-full max-w-[1800px] mx-auto bg-[#0D0D0D] rounded-2xl">
+        <main className="flex-1 p-4 sm:p-6 bg-[#1a1a1a]/90">
+          <div className="w-full max-w-[1800px] mx-auto bg-[#0D0D0D] rounded-2xl h-full">
             <Routes>
               <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
               <Route path="/dashboard" element={<DashBoard />} />
@@ -132,6 +149,7 @@ function Admin() {
               <Route path="/activity" element={<Useractivity />} />
               <Route path="/activity/allorder/" element={<Allorder />} />
               <Route path="/activity/allorder/:id" element={<AllorderDetails />} />
+            <Route path="/NftTypeSetting" element={<NftTypeSetting />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </div>

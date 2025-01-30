@@ -73,7 +73,8 @@
     "swiper": "^11.1.12",
     "util": "^0.12.5",
     "uuid": "^10.0.0",
-    "vm-browserify": "^1.1.2"
+    "vm-browserify": "^1.1.2",
+    "xhr2": "^0.2.1"
   },
   "devDependencies": {
     "buffer": "^6.0.3",

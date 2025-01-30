@@ -12,7 +12,6 @@ function Users() {
   const [loading, setLoading] = useState(false);
   const [alluser, setalluser] = useState([]);
   const [currentpage, setcurrentpage] = useState(1);
-
   const [totalpage, settotalpage] = useState();
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -24,7 +23,6 @@ function Users() {
           setalluser([]);
         } else {
           setalluser(result.ok.data);
-          setcurrentpage(Number(result.ok.current_page));
           settotalpage(Number(result.ok.total_pages));
         }
       } catch (error) {
@@ -34,13 +32,9 @@ function Users() {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      await getallDUser();
-      setLoading(false);
-    };
-    fetchData();
-  }, []);
+    setLoading(true);
+    getallDUser().then(() => setLoading(false));
+  }, [currentpage]);
 
   const filteredUsers = alluser.filter((user) =>
     user[3].toLowerCase().includes(searchTerm.toLowerCase())
@@ -50,27 +44,30 @@ function Users() {
     setSearchTerm("");
   };
 
-  const leftfunction = async () => {
-    if (currentpage === 1) {
+  const leftfunction =async () => {
+    if (currentpage > 1) {
+      setcurrentpage((prev) => prev - 1);
+    } else {
       toast.error("You are on the first page");
     }
-    currentpage -= 1;
+    setcurrentpage(currentpage - 1);
     await getallDUser();
   };
 
-  const rightfunction = async () => {
-    if (currentpage > totalpage) {
+  const rightfunction =async () => {
+    if (currentpage < totalpage) {
+      setcurrentpage((prev) => prev + 1);
+    } else {
       toast.error("You are on the last page");
     }
-    currentpage += 1;
+    setcurrentpage(currentpage + 1);
     await getallDUser();
   };
 
   return (
-    <div className="rounded-xl p-6  w-full max-w-6xl shadow-lg  mx-3 m-auto  h-full pt-4  text-white flex flex-col items-center ">
+    <div className="rounded-xl p-6 w-full max-w-6xl shadow-lg mx-3 m-auto h-full pt-4 text-white flex flex-col items-center">
       <h2 className="text-2xl font-semibold text-white mb-4 text-start">Users</h2>
       <div className="w-full flex flex-col items-center">
-        {/* Search Box */}
         <div className="flex items-center w-full mb-4">
           <input
             type="text"
@@ -87,10 +84,9 @@ function Users() {
           </button>
         </div>
 
-        {/* Table */}
-        <div className="mt-5 w-full">
-          <div className="overflow-x-auto">
-            <table className="w-full border border-[#50B248] text-left">
+        <div className="flex flex-col justify-center text-white w-full mx-auto mt-5">
+        <div className="overflow-x-auto border border-[#50B248] rounded-2xl">
+            <table className="w-full border text-left">
               <thead className="bg-[#50B248]">
                 <tr className="text-center">
                   <th className="px-4 py-3 text-black w-1/4">Name</th>
@@ -99,28 +95,25 @@ function Users() {
                   <th className="px-4 py-3 text-black w-1/4">Details</th>
                 </tr>
               </thead>
-
               <tbody>
                 {loading ? (
-                  Array(5)
-                    .fill("")
-                    .map((_, index) => (
-                      <tr key={index} className="border-t border-gray-600">
-                        <td className="px-4 py-3 text-center  flex items-center gap-2">
-                          <Skeleton circle height={30} width={30}  baseColor="#202020" highlightColor="#282828"  />
-                          <Skeleton height={20} width={150} baseColor="#202020" highlightColor="#282828"  />
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <Skeleton height={20} width="80%" baseColor="#202020" highlightColor="#282828" />
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <Skeleton height={20} width="60%" baseColor="#202020" highlightColor="#282828"  />
-                        </td>
-                        <td className="px-4 py-3 text-center">
-                          <Skeleton height={20} baseColor="#202020" highlightColor="#282828" />
-                        </td>
-                      </tr>
-                    ))
+                  Array(5).fill("").map((_, index) => (
+                    <tr key={index} className="border-t border-gray-600">
+                      <td className="px-4 py-3 text-center flex items-center gap-2">
+                        <Skeleton circle height={30} width={30} baseColor="#202020" highlightColor="#282828" />
+                        <Skeleton height={20} width={150} baseColor="#202020" highlightColor="#282828" />
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <Skeleton height={20} width="80%" baseColor="#202020" highlightColor="#282828" />
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <Skeleton height={20} width="60%" baseColor="#202020" highlightColor="#282828" />
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <Skeleton height={20} baseColor="#202020" highlightColor="#282828" />
+                      </td>
+                    </tr>
+                  ))
                 ) : filteredUsers.length === 0 ? (
                   <tr>
                     <td colSpan={4} className="px-4 py-3 text-center text-gray-400">
@@ -133,32 +126,18 @@ function Users() {
                     const principal = userPrincipalArray
                       ? Principal.fromUint8Array(userPrincipalArray._arr).toText()
                       : null;
-
                     return (
-                      <tr
-                        key={index}
-                        className={`bg-[#29292C]  hover:bg-gray-800 whitespace-nowrap text-white`}
-                      >
+                      <tr key={index} className={`bg-[#29292C] hover:bg-gray-800 whitespace-nowrap text-white`}>
                         <td className="px-4 py-3 text-center">
-                          <img
-                            src="/image/admin.png"
-                            alt=""
-                            className="w-8 h-8 rounded-full mr-4 inline-block"
-                          />
+                          <img src="/image/admin.png" alt="" className="w-8 h-8 rounded-full mr-4 inline-block" />
                           {user[3]}
                         </td>
                         <td className="px-4 py-3 text-center">{user[4]}</td>
                         <td className="px-4 py-3 text-center">
-                          {principal
-                            ? `${principal.slice(0, 5)}...${principal.slice(principal.length - 6)}`
-                            : "No ID available"}
+                          {principal ? `${principal.slice(0, 5)}...${principal.slice(principal.length - 6)}` : "No ID available"}
                         </td>
                         <td className="px-4 py-3 text-center">
-                          <Link
-                            to={`/Admin/users/${principal}`}
-                            state={{ user }}
-                            className="inline-block px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded hover:bg-yellow-400 hover:text-black"
-                          >
+                          <Link to={`/Admin/users/${principal}`} state={{ user }} className="inline-block px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded hover:bg-yellow-400 hover:text-black">
                             View
                           </Link>
                         </td>
@@ -167,30 +146,16 @@ function Users() {
                   })
                 )}
               </tbody>
-
             </table>
           </div>
 
-          {/* Pagination */}
           <div className="flex justify-center mt-5">
             {currentpage > 1 && (
-              <button
-                onClick={leftfunction}
-                className="px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded hover:bg-black"
-              >
-                &lt;
-              </button>
+              <button onClick={leftfunction} className="px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded-full hover:bg-black">&lt;</button>
             )}
-            <span className="mx-4 px-4 py-2 bg-[#50B248] cursor-pointer hover:bg-gray-700 hover:text-white border border-black rounded-lg">
-              {currentpage}
-            </span>
+            <span className="mx-4 px-4 py-2 bg-[#50B248] cursor-pointer border border-black rounded-full">{currentpage}</span>
             {currentpage < totalpage && (
-              <button
-                onClick={rightfunction}
-                className="px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded hover:bg-black"
-              >
-                &gt;
-              </button>
+              <button onClick={rightfunction} className="px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded-full hover:bg-black">&gt;</button>
             )}
           </div>
         </div>

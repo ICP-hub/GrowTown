@@ -80,9 +80,9 @@ const HeroComp = () => {
 
           <div data-aos='fade-down' className=' mt-[50%]  sm:mt-0' data-aos-delay='1000'>
             <div className=' mx-auto w-[60%]  sm:w-auto  mb-10 -mt-2 '>
-            <h1 className='  text-4xl lg:text-4xl xl:text-5xl mr-6 text-center text-[#4B2519] font-IRONMAN font-bold'
+            {/* <h1 className='  text-4xl lg:text-4xl xl:text-5xl mr-6 text-center text-[#4B2519] font-IRONMAN font-bold'
            >COMING SOON!
-           </h1>
+           </h1> */}
             </div>
            
             <div className='flex mx-auto w-[60%] sm:w-auto flex-col sm:flex-row justify-center sm:gap-[5%] gap-5 mt-[15%] sm:mt-0 text-white'>
