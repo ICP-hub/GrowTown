@@ -135,7 +135,7 @@ actor Main {
     created_at_time : ?Time;
   };
 
-  let ExternalService_ICPLedger = actor "bkyz2-fmaaa-aaaaa-qaaaq-cai" : actor {
+  let ExternalService_ICPLedger = actor "bw4dl-smaaa-aaaaa-qaacq-cai" : actor {
     send_dfx : shared SendArgs -> async Nat64;
     account_balance_dfx : shared query AccountBalanceArgs -> async ICPTs;
   };
@@ -907,11 +907,40 @@ actor Main {
   };
 
   //function to get details of a particular nft
+  // public shared func getSingleNonFungibleTokens(
+  //   _collectionCanisterId : Principal,
+  //   _tokenId : TokenIndex,
+  //   user : AccountIdentifier // Add user parameter to check ownership
+  // ) : async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64, Bool)] {
+
+  //   // Define the actor interface for the other canister
+  //   let collectionCanisterActor = actor (Principal.toText(_collectionCanisterId)) : actor {
+  //     getSingleNonFungibleTokenData : (TokenIndex) -> async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64)];
+  //   };
+
+  //   // Make the inter-canister call to fetch the token data (including price)
+  //   let tokenData = await collectionCanisterActor.getSingleNonFungibleTokenData(_tokenId);
+
+  //   var isOwned : Bool = false; // Ownership flag
+
+  //   // Check if tokenData contains elements
+  //   if (tokenData.size() > 0) {
+  //     let (tokenIndex, nftOwner, metadata, price) = tokenData[0]; // Access the first tuple in the array
+  //     isOwned := (nftOwner == user); // Set ownership flag if the user is the owner
+
+  //     // Return token data along with the ownership status
+  //     return [(tokenIndex, nftOwner, metadata, price, isOwned)];
+  //   } else {
+  //     // Handle the case where no data is returned
+  //     return [];
+  //   };
+  // };
+
   public shared func getSingleNonFungibleTokens(
     _collectionCanisterId : Principal,
     _tokenId : TokenIndex,
-    user : AccountIdentifier // Add user parameter to check ownership
-  ) : async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64, Bool)] {
+    user : AccountIdentifier
+  ) : async [(TokenIndex, TokenIdentifier, AccountIdentifier, Metadata, ?Nat64, Bool)] {
 
     // Define the actor interface for the other canister
     let collectionCanisterActor = actor (Principal.toText(_collectionCanisterId)) : actor {
@@ -928,8 +957,11 @@ actor Main {
       let (tokenIndex, nftOwner, metadata, price) = tokenData[0]; // Access the first tuple in the array
       isOwned := (nftOwner == user); // Set ownership flag if the user is the owner
 
-      // Return token data along with the ownership status
-      return [(tokenIndex, nftOwner, metadata, price, isOwned)];
+      // Retrieve the TokenIdentifier
+      let _tokenIdentifier = await getNftTokenId(_collectionCanisterId, tokenIndex);
+
+      // Return token data along with the ownership status and TokenIdentifier
+      return [(tokenIndex, _tokenIdentifier, nftOwner, metadata, price, isOwned)];
     } else {
       // Handle the case where no data is returned
       return [];
