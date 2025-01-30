@@ -64,16 +64,18 @@ function Users() {
     setcurrentpage((prev) => prev + 1);
     await gettransactions();
   };
-
+    
   return (
     <div className="w-full mx-2 h-full  px-10 text-white flex flex-col items-center rounded-xl">
       <div className="flex justify-between items-center w-full mb-6 mt-5">
         <BackButton />
-        <div className="flex space-x-4">
-          <Link to="/Admin/activity/allorder">
-            <Buttons buttonName="All Orders" bgColor="white" textColor="black" />
-          </Link>
-        </div>
+        {/* all order button is not needed
+          <div className="flex space-x-4">
+            <Link to="/Admin/activity/allorder">
+              <Buttons buttonName="All Orders" bgColor="white" textColor="black" />
+            </Link>
+          </div>
+          */}
       </div>
 
       <div className="flex flex-col justify-center text-white w-full mx-auto mt-10">

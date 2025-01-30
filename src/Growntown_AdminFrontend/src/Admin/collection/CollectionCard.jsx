@@ -12,7 +12,7 @@ const CollectionCard = ({ handleDelete, collectiondata, index }) => {
             state={{ collectiondata }}
         >
             <div
-                className="relative  w-[280px] max-w-[280px] ml-10 h-[380px] group transform transition-transform duration-300 ease-out hover:-translate-y-2"
+                className="relative  w-[240px] max-w-[280px] ml-10 h-[380px] group transform transition-transform duration-300 ease-out hover:-translate-y-2"
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >

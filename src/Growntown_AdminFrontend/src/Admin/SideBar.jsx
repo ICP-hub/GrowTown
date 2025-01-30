@@ -9,6 +9,7 @@ import { IoMdClose } from "react-icons/io";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { useAuths } from '../utils/useAuthClient';
 
 const sideBarData = [
   { text: "Dashboard", icon: MdOutlineDashboard, Link: "/admin/dashboard" },
@@ -85,7 +86,11 @@ export default function SimpleSidebar() {
 
 function SidebarContent({ onClose }) {
   const location = useLocation().pathname;
-  const dispatch = useDispatch();
+  const { logout } = useAuths();
+
+  const handleLogout = async () => {
+    await logout();
+  };
 
   return (
     <div className="flex flex-col h-full p-5 text-white relative">
@@ -124,7 +129,7 @@ function SidebarContent({ onClose }) {
 
       {/* Logout Button */}
       <button
-        onClick={() => dispatch(logoutUserAndClear())}
+        onClick={handleLogout}
         className="mt-auto flex items-center gap-2 text-red-400 p-3 
                  hover:bg-red-600/20 rounded-md transition-all text-base md:text-lg lg:text-base"
       >
