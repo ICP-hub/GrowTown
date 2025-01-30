@@ -692,7 +692,7 @@ function CollectionDetails() {
         <div
           onClick={onClickFilterContainer}
 
-          className="w-[90%] overflow-y-scroll pt-10 sm:px-10 pb-8 h-screen no-scrollbar no-scroll 2xl:ml-[7%] md:w-full  mx-auto"
+          className="w-[90%] overflow-y-scroll pt-10 sm:px-10 pb-8 h-screen no-scrollbar no-scroll md:w-full  mx-auto"
 
         >
           {loading ? (
