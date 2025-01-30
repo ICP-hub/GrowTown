@@ -572,8 +572,34 @@ actor Main {
   /* -------------------------------------------------------------------------- */
 
   //add object data
+  // public shared func addObject(objMetadata: NftTypeMetadata) : async Text {
+  // let costPerUnitInE8s = objMetadata.nft_type_cost * 100000000; 
+  
+  // let existingObject = Array.find(_objects_Array, func (entry: (Nat, NftTypeMetadata)) : Bool {
+  //   return entry.1.nfttype == objMetadata.nfttype and entry.1.nft_type_quantity == objMetadata.nft_type_quantity;
+  // });
+  
+  // switch (existingObject) {
+  //   case (?_) {
+      
+  //     return "Error: Object with name '" # objMetadata.nfttype # "' and value " # Nat.toText(objMetadata.nft_type_quantity) # " already exists.";
+  //   };
+  //   case null {
+  //     let newId = _objectIdCounter; 
+  //     _objectIdCounter += 1; 
+    
+  //     let updatedMetadata : NftTypeMetadata = {
+  //       nfttype = objMetadata.nfttype;
+  //       nft_type_quantity = objMetadata.nft_type_quantity;
+  //       nft_type_cost = costPerUnitInE8s;
+  //     };
+  //     _objects_Array := Array.append(_objects_Array, [(newId, updatedMetadata)]); 
+  //     return "Object added successfully with ID: " # Nat.toText(newId) # " and Name: " # objMetadata.nfttype # " with cost per unit (in e8s): " # Nat64.toText(costPerUnitInE8s);
+  //   };
+  // };
+  // };
   public shared func addObject(objMetadata: NftTypeMetadata) : async Text {
-  let costPerUnitInE8s = objMetadata.nft_type_cost * 100000000; 
+  let costPerUnit = objMetadata.nft_type_cost; 
   
   let existingObject = Array.find(_objects_Array, func (entry: (Nat, NftTypeMetadata)) : Bool {
     return entry.1.nfttype == objMetadata.nfttype and entry.1.nft_type_quantity == objMetadata.nft_type_quantity;
@@ -581,7 +607,6 @@ actor Main {
   
   switch (existingObject) {
     case (?_) {
-      
       return "Error: Object with name '" # objMetadata.nfttype # "' and value " # Nat.toText(objMetadata.nft_type_quantity) # " already exists.";
     };
     case null {
@@ -591,10 +616,10 @@ actor Main {
       let updatedMetadata : NftTypeMetadata = {
         nfttype = objMetadata.nfttype;
         nft_type_quantity = objMetadata.nft_type_quantity;
-        nft_type_cost = costPerUnitInE8s;
+        nft_type_cost = costPerUnit;
       };
       _objects_Array := Array.append(_objects_Array, [(newId, updatedMetadata)]); 
-      return "Object added successfully with ID: " # Nat.toText(newId) # " and Name: " # objMetadata.nfttype # " with cost per unit (in e8s): " # Nat64.toText(costPerUnitInE8s);
+      return "Object added successfully with ID: " # Nat.toText(newId) # " and Name: " # objMetadata.nfttype # " with cost : " # Nat64.toText(costPerUnit);
     };
   };
   };
