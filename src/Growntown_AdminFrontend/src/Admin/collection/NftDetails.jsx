@@ -18,6 +18,9 @@ const NftDetails = () => {
   const [loading, setLoading] = useState(true); // To handle loading state
   const [tokenid, settokenid] = useState();
   const [singletokendata, setsingletokendata] = useState();
+  // testing data
+  const [fetchedNftType, setFetchedNftType] = useState([]);
+
   const nftdata = location.state?.list;
   const { collectiondata } = location.state || {};
   console.log(nftdata); //
@@ -29,24 +32,49 @@ const NftDetails = () => {
   const tokenindex = nftdata?.[0];
   const userid = nftdata?.[1];
 
-  // price calculation 
-  const formatNFTPrice = (nftdata) => {
-    try {
-      const rawPrice = nftdata;
+  
 
-      if (!rawPrice) return "Not Listed";
-      return (Number(rawPrice) / 100000000).toFixed(2);
-    } catch (error) {
-      console.error("Error formatting price:", error);
-      return "Not Listed";
-    }
-  };
+  
+    // const fetchNftType = async () => {
+    //   try {
+    //     const response = await backendActor.getObjects();
+    //     setFetchedNftType(response);
+    //     console.log( response.nfttype);
+    //     console.log( response.nft_type_quantity);
+    //     alert(response.nfttype)
 
-  const price = formatNFTPrice(nftdata);
+    //     console.log('fetched nft types',response)
+    //   } catch (error) {
+    //     console.error("Error fetching NFT types:", error);
+    //   }
+    // };
 
-  // Add token identifier extraction
-  const tokenIdentifier = nftdata?.[2]?.nonfungible?.tokenid || "Not Available";
-  console.log("Token Identifier:", tokenIdentifier);
+    // useEffect(() => {
+    //   fetchNftType();
+    // }, []);
+
+  // Update price calculation
+//   function formatNFTPrice(nftdata) {
+//     // Price data ko safely access karna
+//     const rawPrice = nftdata;
+    
+//     // Agar price nahi hai to early return
+//     if (!rawPrice) {
+//         return "Not Listed";
+//     }
+
+//     // Price ko string mein convert karna
+//     const priceString = rawPrice.toString();
+    
+//     // String ko number mein convert karke 10^8 se divide karna
+//     const formattedPrice = (Number(priceString) / 100000000).toFixed(2);
+    
+//     return formattedPrice;
+// }
+
+  const price = (parseFloat(nftdata)/100000000).toFixed(8);
+  console.log(price);
+
 
   const metadataJson = nftdata[2]?.nonfungible?.metadata?.[0]?.json;
   const metadata = metadataJson ? JSON.parse(metadataJson) : null;
@@ -104,10 +132,12 @@ const NftDetails = () => {
     );
   }
 
-  const owner = singletokendata?.[0]?.[1];
+  const owner = nftdata?.[1] || "Unknown"; // Changed from singletokendata to nftdata
+  const tokenIdentifier = singletokendata?.[0]?.[1] || "Unknown"; // Using the previous owner data as token identifier
   const isOwned = singletokendata?.[0]?.[4];
   const [copiedOwner, setCopiedOwner] = useState(false);
   const [copiedNftId, setCopiedNftId] = useState(false);
+  const [copiedTokenId, setCopiedTokenId] = useState(false);
 
   const handleCopy = (type) => {
     if (type === 'owner') {
@@ -116,6 +146,9 @@ const NftDetails = () => {
     } else if (type === 'nftId') {
       setCopiedNftId(true);
       setTimeout(() => setCopiedNftId(false), 2000);
+    } else if (type === 'tokenId') {
+      setCopiedTokenId(true);
+      setTimeout(() => setCopiedTokenId(false), 2000);
     }
     toast.success("Copied!");
   };
@@ -249,7 +282,7 @@ const NftDetails = () => {
                       <p className="text-sm text-gray-400 mb-1">Owner</p>
                       <div className="flex items-center justify-between">
                         <p className="text-base text-white font-mono truncate max-w-[80%]">
-                          {owner || "Unknown"}
+                          {owner}
                         </p>
                         {owner && (
                           <CopyToClipboard text={owner} onCopy={() => handleCopy('owner')}>
@@ -264,26 +297,41 @@ const NftDetails = () => {
                       </div>
                     </div>
                     <div className="p-3 bg-white/5 rounded-xl w-full">
-                      <p className="text-sm text-gray-400 mb-1">NFT ID/Canister ID</p>
-                      <div className="flex items-center justify-between">
-                        <div className="flex flex-col w-[80%]">
-                          <p className="text-base text-yellow-500 font-mono truncate">
+                      <p className="text-sm text-gray-400 mb-1">Canister Id/NFT Id</p>
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center justify-between">
+                          <p className="text-base text-yellow-500 font-mono truncate max-w-[80%]">
                             {nftId || "Unknown"}
                           </p>
-                          <p className="text-sm text-gray-400 font-mono truncate mt-1">
-                            Token ID: {tokenIdentifier}
-                          </p>
+                          {nftId && (
+                            <CopyToClipboard text={nftId} onCopy={() => handleCopy('nftId')}>
+                              <button className="ml-2 p-1 rounded-md hover:bg-white/5">
+                                {!copiedNftId ? 
+                                  <MdContentCopy className="w-4 h-4 text-gray-400" /> :
+                                  <FaCheckCircle className="w-4 h-4 text-[#50B248]" />
+                                }
+                              </button>
+                            </CopyToClipboard>
+                          )}
                         </div>
-                        {nftId && (
-                          <CopyToClipboard text={nftId} onCopy={() => handleCopy('nftId')}>
-                            <button className="ml-2 p-1 rounded-md hover:bg-white/5">
-                              {!copiedNftId ? 
-                                <MdContentCopy className="w-4 h-4 text-gray-400" /> :
-                                <FaCheckCircle className="w-4 h-4 text-[#50B248]" />
-                              }
-                            </button>
-                          </CopyToClipboard>
-                        )}
+                        <div className="mt-1">
+                          <p className="text-sm text-gray-400">NFT ID:</p>
+                          <div className="flex items-center justify-between">
+                            <p className="text-base text-yellow-500 font-mono truncate max-w-[80%]">
+                              {tokenIdentifier}
+                            </p>
+                            {tokenIdentifier && (
+                              <CopyToClipboard text={tokenIdentifier} onCopy={() => handleCopy('tokenId')}>
+                                <button className="ml-2 p-1 rounded-md hover:bg-white/5">
+                                  {!copiedTokenId ? 
+                                    <MdContentCopy className="w-4 h-4 text-gray-400" /> :
+                                    <FaCheckCircle className="w-4 h-4 text-[#50B248]" />
+                                  }
+                                </button>
+                              </CopyToClipboard>
+                            )}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
