@@ -78,9 +78,9 @@ function Collection() {
         {/* Content Section */}
         <div className="rounded-xl w-full max-w-6xl shadow-lg ">
           {loading ? (
-            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
               {Array(6).fill().map((_, index) => (
-                <div key={index} className="flex items-center justify-center">
+                    <div className="col-span-1 flex items-center justify-center" key={index}>
                   <CollectionCardSkeleton />
                 </div>
               ))}
