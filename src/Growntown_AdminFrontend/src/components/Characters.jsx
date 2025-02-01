@@ -22,7 +22,7 @@ const Characters = () => {
 
 
         {/*  Title */}
-        <div className='relative mb-8'>
+        <div className='relative   mb-8'>
           <img
             src="images/beeAnimation.gif"
             className="  w-64 absolute -top-32 -right-36"
@@ -40,7 +40,7 @@ const Characters = () => {
             className=" h-[320px] object-cover relative left-10 lg:left-0  md:h-[550px] xl:h-[650px]" src="images/femaleFarmer.png" alt="Female Farmer" />
 
           {/* Wooden Board */}
-          <div className="absolute ">
+          <div className="absolute mt-8 sm:mt-0 ">
             <div className='relative'>
               <h1 className='absolute top-10 lg:top-20 text-2xl lg:text-3xl left-[50%] transform -translate-x-1/2 font-bold text-[#FFF3C5]'>Tom</h1>
               <img src="images/woodenBoard.png" alt="Wooden Board" className="  h-[180px] lg:h-[300px]" />
@@ -65,7 +65,7 @@ const Characters = () => {
 
           {/* Male Character */}
           <img
-            className="  h-[320px] object-cover relative lmd:left-10 md:left-0  md:h-[550px] xl:h-[650px]" src="images/maleFarmer.png" alt="Male Farmer"
+            className="  h-[320px] object-cover relative lmd:left-10 md:left-0  md:h-[550px] xl:h-[650px]" src="images/Pose1.png" alt="Male Farmer"
             data-aos='fade-up'
           />
         </div>

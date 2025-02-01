@@ -16,7 +16,7 @@ const HeroComp = () => {
 
 
   return (
-    <div id='heroPage' className='bg-[#50d2fe] h-screen w-screen overflow-hidden'>
+    <div id='heroPage' className='bg-[#00A6C0] h-screen w-screen overflow-hidden'>
       {/* Hero Content Wrapper */}
       
       <div className='flex justify-between items-center h-full'>

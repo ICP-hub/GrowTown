@@ -39,7 +39,7 @@ const AdminModal = ({setToggleNftType}) => {
                 <div className="flex gap-2 items-center">
                     <img
                         className="relative w-10 h-10 rounded-full object-cover border-2 border-[#50B248]/20 transition-all duration-300 ease-in-out hover:scale-110"
-                        src="/images/Admin.svg"
+                        src="/images/Admin.png"
                         alt="Admin"
                     />
                     <h1 className="mt-6 transition-all duration-300 ease-in-out "> Admin </h1>

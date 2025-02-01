@@ -225,7 +225,7 @@ function Admin() {
             className="ml-auto" 
             onClick={() => setToggleProfile(!toggleProfile)}
           >
-            <img className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-gray-500" src="/images/Admin.svg" alt="Admin" />
+            <img className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-gray-500" src="/images/Admin.png" alt="Admin" />
           </button>
 
           {/* Profile Dropdown */}
