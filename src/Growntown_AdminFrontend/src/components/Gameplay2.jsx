@@ -70,9 +70,9 @@ const Gameplay2 = () => {
                 <div className=' mt-28 sm:mt-20 md:mt-8 lg:-mt-28 xl:-mt-48  absolute  w-40 lg:h-auto lg:w-auto '>
                     <img src='images/tree.png' className=' ' />
                     <div className='flex -ml-8 -mt-28'>
-                        <img src='images/grass  2.png' className='' />
-                        <img src='images/grass 3.png' className='-ml-12 mt-10' />
-                        <img src='images/grass  5.png' className='-ml-12 mt-16' />
+                        <img src='images/grass  2.png' className='  w-20 h-20 sm:w-auto sm:h-auto mt-10' />
+                        <img src='images/grass 3.png' className='-ml-12 w-20 h-20 sm:w-auto sm:h-auto mt-10' />
+                        <img src='images/grass  5.png' className='-ml-12 mt-16   w-20 h-20 sm:w-auto sm:h-auto '  />
                     </div>
 
                 </div>
@@ -91,9 +91,9 @@ const Gameplay2 = () => {
                                 placeholder="Enter Email Address"
                                 className="bg-transparent w-full h-full px-4 text-white placeholder-white outline-none rounded-l-lg"
                             />
-                            <div className=" h-full md:w-[35%] lg:w-[45%] relative rounded-r-lg flex items-center justify-center cursor-pointer hover:shadow-md hover:scale-95 transition duration-300">
-                                <h1 className="text-white text-lg font-bold absolute my-auto"> SUBSCRIBE </h1>
-                                <img src='images/ButtonCustom.png' className='h-full my-auto mt-1  object-cover' />
+                            <div className=" h-full md:w-[35%] lg:w-[40%] relative rounded-r-lg flex items-center justify-center cursor-pointer hover:shadow-md hover:scale-95 transition duration-300">
+                                <h1 className="text-white text-lg lg:text-xl -mt-2 font-bold absolute my-auto"> SUBSCRIBE </h1>
+                                <img src='images/ButtonCustom.png' className='h-full my-auto w-full mt-[1px]   object-cover' />
 
                             </div>
                         </div>
@@ -101,6 +101,12 @@ const Gameplay2 = () => {
                     </div>
 
                 </div>
+
+                {/* <div className='absolute flex'>
+                    <img src='images/grass  6.png' />
+                    <img src='images/grass  7.png' className='-ml-20'/>
+                    <img src='images/grass  8.png' className='-ml-16'/>
+                </div> */}
                   
                   {/* man laying on haystack*/}
                  <div

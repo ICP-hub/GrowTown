@@ -16,7 +16,7 @@ const ConnectBtn = ({ onClick }) => {
             className="w-[120px] md:w-[150px] lg:w-[190px] h-[25px] lg:h-[32px] 
           dxl:h-[35px] text-[10px] md:text-[15px] dlg:text-[19px] font-[400] items-center justify-center  rounded-full  bg-gradient-to-r from-[#f09787]  to-[#CACCF5]"
         >
-            <div className=" relative w-full h-full  rounded-full flex items-center justify-center ">
+            <div className=" relative w-full h-full hover:scale-105 transition-all duration-300  rounded-full flex items-center justify-center ">
             <h1 className="text-white sm:text-lg font-bold absolute my-auto"> Connect Wallet </h1>
             <img src='images/ButtonCustom.png' className='h-full w-full   rounded-full  object-cover' />
 

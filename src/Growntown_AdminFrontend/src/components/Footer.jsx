@@ -10,7 +10,7 @@ const Footer = () => {
                 <img src="images/GrowTownLogo .png" alt="logo" className=" w-20 sm:w-auto absolute left-[50%] transform -translate-x-1/2 my-auto" />
                 
                      {/* Social Links */}
-               <div className="flex justify-end items-center gap-5  h-12 sm:h-16 mx-auto w-auto ">
+               <div className="flex justify-end items-center gap-5  h-12 sm:h-16 mx-auto w-auto lg:mr-4 ">
                         {socialImg.map((img, index) => (
                             <img
                                 key={index}
