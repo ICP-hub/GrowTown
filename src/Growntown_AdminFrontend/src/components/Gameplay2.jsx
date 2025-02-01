@@ -70,9 +70,9 @@ const Gameplay2 = () => {
                 <div className=' mt-28 sm:mt-20 md:mt-8 lg:-mt-28 xl:-mt-48  absolute  w-40 lg:h-auto lg:w-auto '>
                     <img src='images/tree.png' className=' ' />
                     <div className='flex -ml-8 -mt-28'>
-                        <img src='images/grass  2.png' className='' />
-                        <img src='images/grass 3.png' className='-ml-12 mt-10' />
-                        <img src='images/grass  5.png' className='-ml-12 mt-16' />
+                        <img src='images/grass  2.png' className='  w-20 h-20 sm:w-auto sm:h-auto mt-10' />
+                        <img src='images/grass 3.png' className='-ml-12 w-20 h-20 sm:w-auto sm:h-auto mt-10' />
+                        <img src='images/grass  5.png' className='-ml-12 mt-16   w-20 h-20 sm:w-auto sm:h-auto '  />
                     </div>
 
                 </div>

@@ -3,7 +3,7 @@ import React from 'react'
 const Gameplay = () => {
     return (
 
-        <div id='Gameplay' className="bg-[#50d2fe] min-h-screen relative  w-full ">
+        <div  className="bg-[#50d2fe] min-h-screen relative  w-full ">
             <div className='relative h-full w-full '>
                 {/* Background Image */}
                 <div className='absolute w-full'>
@@ -19,9 +19,9 @@ const Gameplay = () => {
                 </div>
 
 
-                <div className=" absolute w-full text-3xl top-[280px] sm:top-[380px]   md:text-4xl lg:text-5xl xl:text-6xl mb-2 lg:mb-8 text-center   text-[#FFF3C5] font-bold lg:mr-28">
+                <div id='Gameplay' className=" absolute w-full text-3xl top-[280px] sm:top-[380px]   md:text-4xl lg:text-5xl xl:text-6xl mb-2 lg:mb-8 text-center   text-[#FFF3C5] font-bold lg:mr-28">
 
-                    <h1 className='w-[50%] relative z-10 mx-auto text-center'> Grow Town: Cultivate, Protect, Thrive.  </h1>
+                    <h1  className='w-[50%] relative z-10 mx-auto text-center'> Grow Town: Cultivate, Protect, Thrive.  </h1>
 
                     {/* hen animation*/}
                     <div className='absolute flex left-0 md:left-[16%] top-10 '>
@@ -40,7 +40,7 @@ const Gameplay = () => {
                     </div>
                 </div>
 
-                <div className='absolute z-10 top-[450px] sm:top-[550px] xl:top-[650px] w-full '
+                <div  className='absolute z-10 top-[450px] sm:top-[550px] xl:top-[650px] w-full '
                     data-aos='fade-up'
                 >
 
