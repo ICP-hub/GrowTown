@@ -91,7 +91,7 @@ const Gameplay2 = () => {
                                 placeholder="Enter Email Address"
                                 className="bg-transparent w-full h-full px-4 text-white placeholder-white outline-none rounded-l-lg"
                             />
-                            <div className=" h-full md:w-[35%] relative rounded-r-lg flex items-center justify-center cursor-pointer hover:shadow-md hover:scale-95 transition duration-300">
+                            <div className=" h-full md:w-[35%] lg:w-[45%] relative rounded-r-lg flex items-center justify-center cursor-pointer hover:shadow-md hover:scale-95 transition duration-300">
                                 <h1 className="text-white text-lg font-bold absolute my-auto"> SUBSCRIBE </h1>
                                 <img src='images/ButtonCustom.png' className='h-full my-auto mt-1  object-cover' />
 
@@ -110,7 +110,7 @@ const Gameplay2 = () => {
                  <img src='images/Pose4.png' className='absolute sm:w-40 sm:mt-10 md:mt-28 w-32 md:w-56  lg:w-auto'/>
                   <img src='images/haystack 2.png' className=' w-36 sm:w-48 md:w-64 lg:w-auto'/>
 
-                 <img src='images/pumpkin02.png ' className=' absolute mt-28 lg:w-36 right-0' />
+                 <img src='images/pumpkin02.png ' className=' absolute mt-20 lg:w-36 right-0' />
                  </div>
             </div>
         </div>

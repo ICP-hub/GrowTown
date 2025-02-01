@@ -4,7 +4,7 @@ import { VideoURL } from './Utills/VideoURLs'
 
 export const VideoComp = () => {
   return (
-    <div className='bg-[#50d2fe] flex justify-center items-center h-screen w-full overflow-hidden'>
+    <div className='bg-[#00A6C0] flex justify-center items-center h-screen w-full overflow-hidden'>
        
        
       <a href=" # " target="_blank" >  {/* Video url */}
