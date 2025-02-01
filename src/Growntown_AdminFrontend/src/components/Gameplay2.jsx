@@ -101,6 +101,12 @@ const Gameplay2 = () => {
                     </div>
 
                 </div>
+
+                {/* <div className='absolute flex'>
+                    <img src='images/grass  6.png' />
+                    <img src='images/grass  7.png' className='-ml-20'/>
+                    <img src='images/grass  8.png' className='-ml-16'/>
+                </div> */}
                   
                   {/* man laying on haystack*/}
                  <div
