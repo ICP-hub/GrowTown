@@ -20,6 +20,8 @@ import Allorder from "./Allorder";
 import AllorderDetails from "./AllorderDetails";
 import UnauthorizedPage from "./collection/UnauthorizedPage";
 import NftTypeSetting from "./NftTypeSettings/NftTypeSetting.jsx";
+import { useSearch } from "../context/SearchContext";
+import SearchResults from "./SearchResults.jsx";
 
 function Admin() {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,6 +29,8 @@ function Admin() {
   const [loading, setLoading] = useState(true);
   const { backendActor, principal, isAuthenticated } = useAuths();
   const navigate = useNavigate();
+  const [searchVisible, setSearchVisible] = useState(false);
+  const { handleSearch, searchResults, setSearchResults } = useSearch();
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -35,6 +39,11 @@ function Admin() {
       checkingAdminId();
     }
   }, [backendActor, isAuthenticated]);
+
+  useEffect(() =>{
+    const Collection = backendActor?.getAllCollections();
+    console.log(Collection);
+  },[])
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -50,6 +59,18 @@ function Admin() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [toggleProfile]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const searchContainer = document.getElementById('search-container');
+      if (searchVisible && searchContainer && !searchContainer.contains(event.target)) {
+        setSearchVisible(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [searchVisible]);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -78,6 +99,77 @@ function Admin() {
     }
   };
 
+  const fetchAndProcessCollections = async () => {
+    try {
+      const collections = await backendActor?.getAllCollections();
+      console.log("Raw collections data:", collections);
+      return collections || [];
+    } catch (error) {
+      console.error("Error fetching collections:", error);
+      return [];
+    }
+  };
+
+  const handleSearchInput = async (e) => {
+    const query = e.target.value.trim();
+    
+    if (!query) {
+      setSearchResults([]);
+      setSearchVisible(false);
+      return;
+    }
+
+    try {
+      const collections = await fetchAndProcessCollections();
+      const filteredResults = [];
+      
+      // Process collections and NFTs
+      collections.forEach(item => {
+        if (!item || !Array.isArray(item) || item.length < 2) return;
+        
+        item[1].forEach(collection => {
+          if (!collection || !Array.isArray(collection) || collection.length < 3) return;
+          
+          const searchLower = query.toLowerCase();
+          const collNameMatch = collection[2]?.toLowerCase().includes(searchLower);
+          
+          // Process NFTs with more complete data
+          const matchingNfts = [];
+          if (Array.isArray(collection[1])) {
+            collection[1].forEach(nft => {
+              if (Array.isArray(nft) && nft[2]?.toLowerCase().includes(searchLower)) {
+                matchingNfts.push({
+                  id: nft[0],
+                  name: nft[2],
+                  metadata: nft[4],
+                  collectionId: collection[0]
+                });
+              }
+            });
+          }
+
+          if (collNameMatch || matchingNfts.length > 0) {
+            filteredResults.push({
+              id: collection[0],
+              name: collection[2],
+              type: 'collection',
+              nfts: matchingNfts,
+              collectionData: collection
+            });
+          }
+        });
+      });
+
+      setSearchResults(filteredResults);
+      setSearchVisible(filteredResults.length > 0);
+      
+    } catch (error) {
+      console.error("Error processing search:", error);
+      setSearchResults([]);
+      setSearchVisible(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -101,11 +193,12 @@ function Admin() {
         {/* Top Navbar */}
         <nav className="sticky top-0 z-30 flex items-center justify-between bg-[#1a1a1a]/90 backdrop-blur-md text-white px-4 sm:px-6 py-3 ">
           {/* Search Bar */}
-          <div className="relative hidden sm:block sm:w-[50%] md:w-[50%] lg:w-full max-w-2xl mx-auto">
+          <div className="relative hidden sm:block sm:w-[50%] md:w-[50%] lg:w-full max-w-2xl mx-auto" id="search-container">
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="Search collections and NFTs..."
               className="w-full p-2 pl-10 rounded-lg bg-[#2b2b2b] text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all"
+              onChange={handleSearchInput}
             />
             <svg
               className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
@@ -115,6 +208,15 @@ function Admin() {
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-5.2-5.2M15 10a5 5 0 10-10 0 5 5 0 0010 0z" />
             </svg>
+            {/* Position search results directly below search input */}
+            {searchVisible && (
+              <div className="absolute left-0 right-0 mt-1 z-50">
+                <SearchResults 
+                  results={searchResults} 
+                  onClose={() => setSearchVisible(false)}
+                />
+              </div>
+            )}
           </div>
 
           {/* Profile Button */}
