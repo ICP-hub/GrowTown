@@ -25,8 +25,12 @@ const Gameplay = () => {
                       
                        {/* hen animation*/}
                     <div className='absolute flex left-0 md:left-[16%] top-10 '>
-                        <img src='images/henAnim.png' className='w-24 sm:w-28 md:w-auto'/>
-                        <img src='images/henAnim.png ' className='-ml-16 mt-6 sm:mt-10  w-20 sm:w-24 md:w-auto'/>
+                        <img src='images/henGif.gif' className='w-24 h-24 sm:w-28 sm:h-28 '
+                                style={{
+                                    transform: 'scaleX(-1)',
+                                  }}
+                        />
+                        <img src='images/henGif.gif ' className='-ml-14 mt-6 sm:mt-10  w-20 h-20 sm:w-24 sm:h-24'            />
                     </div> 
                    {/* vegetable boxes*/}
                    <div className='absolute flex right-2 md:right-[16%] top-10'>
@@ -37,7 +41,7 @@ const Gameplay = () => {
                         </div>
 
                 <div className='absolute z-10 top-[450px] sm:top-[550px]  w-full ' 
-                data-aos='fade-up' data-aos-delay='500'
+                data-aos='fade-up' 
                 >
                         
                     <div className=' absolute ml-4 xl:ml-0 w-[55%] xl:w-[35%]  z-20 top-0  md:top-16 xl:top-24 xl:left-[50%] transform xl:-translate-x-1/2'

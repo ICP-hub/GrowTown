@@ -91,9 +91,9 @@ const Gameplay2 = () => {
                                 placeholder="Enter Email Address"
                                 className="bg-transparent w-full h-full px-4 text-white placeholder-white outline-none rounded-l-lg"
                             />
-                            <div className=" h-full md:w-[35%] lg:w-[45%] relative rounded-r-lg flex items-center justify-center cursor-pointer hover:shadow-md hover:scale-95 transition duration-300">
-                                <h1 className="text-white text-lg font-bold absolute my-auto"> SUBSCRIBE </h1>
-                                <img src='images/ButtonCustom.png' className='h-full my-auto mt-1  object-cover' />
+                            <div className=" h-full md:w-[35%] lg:w-[40%] relative rounded-r-lg flex items-center justify-center cursor-pointer hover:shadow-md hover:scale-95 transition duration-300">
+                                <h1 className="text-white text-lg lg:text-xl -mt-2 font-bold absolute my-auto"> SUBSCRIBE </h1>
+                                <img src='images/ButtonCustom.png' className='h-full my-auto w-full mt-[1px]   object-cover' />
 
                             </div>
                         </div>
