@@ -156,7 +156,7 @@ const NftDetails = () => {
   return (
     <SkeletonTheme baseColor="#202020" highlightColor="#282828">
       <div className="">
-        <div className="w-[96%] mx-auto relative">
+        <div className="w-[96%] pt-8  mx-auto relative">
         {/* Top Corner Button */}
         {/* <div className="absolute top-4 right-4">
           <button
@@ -168,7 +168,7 @@ const NftDetails = () => {
         </div> */}
 
           {/* Back Button */}
-          <div className="flex items-center justify-start w-full mb-6">
+          <div className="flex items-center  justify-start w-full mb-6">
             <div className="hidden sm:block">
               {loading ? (
                 <Skeleton width={1210} height={35} />

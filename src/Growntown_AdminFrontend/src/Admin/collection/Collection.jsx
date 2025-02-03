@@ -71,6 +71,8 @@ function Collection() {
     return isMatch(searchableItem);
   });
 
+  console.log('filteredCollections',filteredCollections)
+
   const goToPreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
