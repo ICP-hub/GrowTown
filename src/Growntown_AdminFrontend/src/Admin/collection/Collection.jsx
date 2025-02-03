@@ -10,6 +10,7 @@ import { IoIosAdd } from "react-icons/io";
 import CollectionCard from "./CollectionCard";
 import CollectionCardSkeleton from "../../Common/CollectionCardSkeleton";
 import Buttons from "../../Common/Buttons";
+import { useSearch } from '../../context/SearchContext';
 
 function Collection() {
   const { backendActor } = useAuths();
@@ -17,6 +18,7 @@ function Collection() {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
+  const { isMatch } = useSearch();
 
   const getCollection = async () => {
     setLoading(true);
@@ -51,6 +53,24 @@ function Collection() {
   const totalPages = Math.ceil(coll.length / itemsPerPage);
   const currentCollections = coll.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
+  // Update the filteredCollections logic:
+  const filteredCollections = currentCollections.filter(collection => {
+    // Create a structured object that matches our search context expectations
+    const searchableItem = {
+      collectionName: collection[2],
+      [2]: {
+        nonfungible: {
+          name: collection[2],
+          description: '',
+          metadata: [{
+            json: collection[4]
+          }]
+        }
+      }
+    };
+    return isMatch(searchableItem);
+  });
+
   const goToPreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
@@ -78,18 +98,18 @@ function Collection() {
         {/* Content Section */}
         <div className="rounded-xl w-full max-w-6xl shadow-lg ">
           {loading ? (
-            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
               {Array(6).fill().map((_, index) => (
-                <div key={index} className="flex items-center justify-center">
+                    <div className="col-span-1 flex items-center justify-center" key={index}>
                   <CollectionCardSkeleton />
                 </div>
               ))}
             </div>
           ) : (
             <div className="w-full flex items-center">
-              {currentCollections.length > 0 ? (
+              {filteredCollections.length > 0 ? (
                 <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">
-                  {currentCollections.map((collectiondata, index) => (
+                  {filteredCollections.map((collectiondata, index) => (
                     <div className="col-span-1 flex items-center justify-center" key={index}>
                       <CollectionCard collectiondata={collectiondata} />
                     </div>

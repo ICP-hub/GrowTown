@@ -625,7 +625,7 @@ const CreateCollection = () => {
 
   return (
     <SkeletonTheme baseColor="#202020" highlightColor="#444">
-      <div className="w-[90%] overflow-y-scroll pt-10 md:px-10 pb-8 h-screen no-scrollbar  no-scroll 2xl:ml-[4%] md:w-full  lg:pt-20 bg-gradient-to-b from-[#29292C]/95 via-[#1a1a1a]/95 to-black/95">
+      <div className="w-[90%] overflow-y-scroll pt-10 md:px-10 pb-8 h-screen no-scrollbar  no-scroll 2xl:ml-[4%] md:w-full  lg:pt-20 ">
         {/* <Createcollectionloader done={done} total={total} /> */}
         {loading ? (
           <Createcollectionloader done={done} total={totalnft} />

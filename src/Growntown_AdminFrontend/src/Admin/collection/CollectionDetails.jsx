@@ -125,6 +125,32 @@ function CollectionDetails() {
     };
   }, [loading]);
 
+  useEffect(() => {
+    // Clear previous state if flag is set
+    if (location.state?.clearPrevious) {
+      const newState = {
+        ...location.state,
+        clearPrevious: false
+      };
+      navigate(location.pathname, { state: newState, replace: true });
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    // Reset NFT list when collection changes or when resetNFTs flag is true
+    if (location.state?.resetNFTs) {
+      setnftList([]);
+      // Remove the reset flag from state
+      const newState = {
+        ...location.state,
+        resetNFTs: undefined
+      };
+      navigate(location.pathname, { state: newState, replace: true });
+      // Fetch new NFTs
+      fetchNFTs();
+    }
+  }, [location.state?.collectiondata, location.state?.resetNFTs]);
+
   const navigate = useNavigate();
 
   const toggleModal = () => {
@@ -211,6 +237,8 @@ function CollectionDetails() {
   const fetchNFTs = async () => {
     setLoading(true);
     try {
+      // Clear existing NFTs first
+      setnftList([]);
       await getAllCollectionNFT(principal, currentpage);
     } catch (error) {
       console.error("Error fetching NFTs:", error);

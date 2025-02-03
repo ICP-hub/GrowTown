@@ -17,12 +17,12 @@ const CollectionCardSkeleton = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
           {/* Centered plus button skeleton */}
-          <div className="absolute left-1/2 -translate-x-1/2 bottom-0 p-3 rounded-full bg-[#50B248] text-white shadow-lg transform opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out hover:bg-[#3D9635] hover:scale-110">
+          <div className="absolute left-1/2 -translate-x-1/2 bottom-0 p-3 rounded-full text-white shadow-lg transform opacity-0 transition-all duration-300 ease-out hover:scale-110">
             <Skeleton circle width={40} height={40} />
           </div>
 
           {/* Delete button skeleton */}
-          <div className="absolute top-3 right-3 p-2 rounded-full bg-black/30 backdrop-blur-sm border border-white/10 opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-red-500/20 hover:border-red-500/30">
+          <div className="absolute top-3 right-3 p-2 rounded-full backdrop-blur-sm border border-white/10 opacity-0  transition-all duration-300  hover:border-red-500/30">
             <Skeleton circle width={32} height={32} />
           </div>
         </div>

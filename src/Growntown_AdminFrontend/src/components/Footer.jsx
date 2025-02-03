@@ -7,16 +7,16 @@ const Footer = () => {
             <div className="bg-transparent text-white px-6 h-full py-4 shadow-md">
 
 
-                <img src="images/GrowTownLogo .png" alt="logo" className=" absolute left-[50%] transform -translate-x-1/2 my-auto" />
+                <img src="images/GrowTownLogo .png" alt="logo" className=" w-20 sm:w-auto absolute left-[50%] transform -translate-x-1/2 my-auto" />
                 
                      {/* Social Links */}
-               <div className="flex justify-end items-center gap-5  h-12 sm:h-16 mx-auto w-auto ">
+               <div className="flex justify-end items-center gap-5  h-12 sm:h-16 mx-auto w-auto lg:mr-4 ">
                         {socialImg.map((img, index) => (
                             <img
                                 key={index}
                                 src={`images/${img}`}
                                 alt="social icon"
-                                className="h-7 w-7 hover:opacity-80 cursor-pointer"
+                                className=" h-5 w-5 sm:h-7 sm:w-7 hover:opacity-80 cursor-pointer"
                             />
                         ))}
                         </div>

@@ -49,7 +49,7 @@ const NftTypeSetting = () => {
       const response = await backendActor?.addObject(nftTypeDetails);
       console.log("Adding NFT Type Details response:", response);
       toast.success("NFT Type added successfully!");
-      setFetching(true);
+      setFetching(!isFetching);
 
       setNftTypeDetails({ nfttype: "", nft_type_quantity: "", nft_type_cost: "" });
     } catch (error) {
@@ -78,14 +78,14 @@ const NftTypeSetting = () => {
 
   return (
     <SkeletonTheme baseColor="#202020" highlightColor="#444">
-      <div className="w-[90%] mx-auto overflow-y-scroll pt-10 md:px-10 pb-8 h-screen no-scrollbar bg-gradient-to-b from-[#29292C]/95 via-[#1a1a1a]/95 to-black/95">
+      <div className="w-[90%] mx-auto overflow-y-scroll pt-10 md:px-10 pb-8 h-screen no-scrollbar ">
         <div className="w-full">
           <div className="flex items-center">
             <BackButton />
             <h1 className="text-2xl lg:text-3xl ml-2 lg:ml-5 text-white">Type Settings</h1>
           </div>
 
-          <div className="grid grid-cols-12 gap-4">
+          <div className="grid grid-cols-12 gap-6">
             <div className="hidden xl:block my-8 mr-4 xl:h-[50%] rounded-xl col-span-4">
               <RemoveNftsType
                 isFetching={isFetching}

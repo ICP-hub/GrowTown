@@ -17,7 +17,7 @@ const PreviewCard = ({ colName, colImage, maxLimit, typeColor, description }) =>
       {/* Image */}
        
           <img
-            className="object-cover rounded-xl w-full   hover:scale-105 transition-transform duration-300 ease-in-out"
+            className="object-cover rounded-xl w-full h-48   hover:scale-105 transition-transform duration-300 ease-in-out"
             src={imgUrl || 'images/questionMark.jpg'}
             alt="Collection"
           />

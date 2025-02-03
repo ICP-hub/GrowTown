@@ -6,6 +6,7 @@ import UnauthorizedPage from "./Admin/collection/UnauthorizedPage";
 import LandingPage from "./pages/LandingPage";
 import CollectionDetails from "./Admin/collection/CollectionDetails";
 import NftDetails from "./Admin/collection/NftDetails";
+import { SearchProvider } from './context/SearchContext';
 
 // Introduce a manual delay for testing
 const simulateNetworkDelay = (ms) => {
@@ -19,27 +20,29 @@ const FullpageLoader = lazy(() =>
 
 function App() {
   return (
-    <div>
-      <Suspense fallback={<FullpageLoader />}>
-        <Routes>
-        <Route path="/" element={<LandingPage />}></Route>
-        <Route path="/admin/*" element={<Admin />} />
-        <Route path="*" element={<PageNotFound />} />
+    <SearchProvider>
+      <div>
+        <Suspense fallback={<FullpageLoader />}>
+          <Routes>
+            <Route path="/" element={<LandingPage />}></Route>
+            <Route path="/admin/*" element={<Admin />} />
+            <Route path="*" element={<PageNotFound />} />
 
-  
-          <Route
-            path="/collection/:collectionName"
-            element={<CollectionDetails />}
-          />
-          <Route path="/Nft/:Nftname" element={<NftDetails />} />
-          
-    
-          <Route path="/unauth/*" element={<UnauthorizedPage />} />
-          <Route path="/unauth" element={<UnauthorizedPage />} />
-          
-        </Routes>
-      </Suspense>
-    </div>
+
+            <Route
+              path="/collection/:collectionName"
+              element={<CollectionDetails />}
+            />
+            <Route path="/Nft/:Nftname" element={<NftDetails />} />
+
+
+            <Route path="/unauth/*" element={<UnauthorizedPage />} />
+            <Route path="/unauth" element={<UnauthorizedPage />} />
+            
+          </Routes>
+        </Suspense>
+      </div>
+    </SearchProvider>
   );
 }
 
