@@ -1066,28 +1066,70 @@ actor Main {
     return nftNames;
   };
 
-  public shared func getCollectionAndNFTNames() : async [(Text, [(Text, [Text])])] {
-    var result : [(Text, [(Text, [Text])])] = [];
+  // public shared func getCollectionAndNFTNames() : async [(Text, [(Text, [Text])])] {
+  //   var result : [(Text, [(Text, [Text])])] = [];
 
-    // Iterate through all entries in usersCollectionMap
+  //   // Iterate through all entries in usersCollectionMap
+  //   for ((userPrincipal, collections) in usersCollectionMap.entries()) {
+  //     var collectionNFTs : [(Text, [Text])] = [];
+
+  //     // Iterate through each collection the user has
+  //     for ((time, collectionCanisterId) in collections.vals()) {
+  //       try {
+  //         // First get collection details
+  //         let collectionCanisterActor = actor (Principal.toText(collectionCanisterId)) : actor {
+  //           getCollectionDetails : () -> async (Text, Text, Text);
+  //           getAllNonFungibleTokenData : () -> async [(TokenIndex, AccountIdentifier, Types.Metadata)];
+  //         };
+
+  //         // Get collection name from metadata
+  //         let (collectionName, _, _) = await collectionCanisterActor.getCollectionDetails();
+
+  //         var nftNames : [Text] = [];
+
+  //         // Get all NFTs for this collection
+  //         let nfts = await collectionCanisterActor.getAllNonFungibleTokenData();
+  //         for ((_, _, metadata) in nfts.vals()) {
+  //           let nftName = switch (metadata) {
+  //             case (#nonfungible { name }) name;
+  //             case (_) "Unknown NFT";
+  //           };
+  //           nftNames := Array.append<Text>(nftNames, [nftName]);
+  //         };
+
+  //         // Add collection with its NFTs to the list
+  //         collectionNFTs := Array.append<(Text, [Text])>(collectionNFTs, [(collectionName, nftNames)]);
+
+  //       } catch (_e) {
+  //         Debug.print("Error fetching data for canister: " # Principal.toText(collectionCanisterId));
+  //         collectionNFTs := Array.append<(Text, [Text])>(collectionNFTs, [("Unknown Collection", [])]);
+  //       };
+  //     };
+
+  //     // Add this user's collections and their NFTs to the result
+  //     result := Array.append(result, [(Principal.toText(userPrincipal), collectionNFTs)]);
+  //   };
+
+  //   return result;
+  // };
+
+  public shared func getCollectionAndNFTNames() : async [(Text, [(Time.Time, Principal, [(Text, [Text])])])] {
+    var result : [(Text, [(Time.Time, Principal, [(Text, [Text])])])] = [];
+
     for ((userPrincipal, collections) in usersCollectionMap.entries()) {
-      var collectionNFTs : [(Text, [Text])] = [];
+      var collectionNFTs : [(Time.Time, Principal, [(Text, [Text])])] = [];
 
-      // Iterate through each collection the user has
       for ((time, collectionCanisterId) in collections.vals()) {
         try {
-          // First get collection details
           let collectionCanisterActor = actor (Principal.toText(collectionCanisterId)) : actor {
             getCollectionDetails : () -> async (Text, Text, Text);
             getAllNonFungibleTokenData : () -> async [(TokenIndex, AccountIdentifier, Types.Metadata)];
           };
 
-          // Get collection name from metadata
           let (collectionName, _, _) = await collectionCanisterActor.getCollectionDetails();
 
           var nftNames : [Text] = [];
 
-          // Get all NFTs for this collection
           let nfts = await collectionCanisterActor.getAllNonFungibleTokenData();
           for ((_, _, metadata) in nfts.vals()) {
             let nftName = switch (metadata) {
@@ -1097,21 +1139,26 @@ actor Main {
             nftNames := Array.append<Text>(nftNames, [nftName]);
           };
 
-          // Add collection with its NFTs to the list
-          collectionNFTs := Array.append<(Text, [Text])>(collectionNFTs, [(collectionName, nftNames)]);
+          collectionNFTs := Array.append<(Time.Time, Principal, [(Text, [Text])])>(
+            collectionNFTs,
+            [(time, collectionCanisterId, [(collectionName, nftNames)])],
+          );
 
         } catch (_e) {
           Debug.print("Error fetching data for canister: " # Principal.toText(collectionCanisterId));
-          collectionNFTs := Array.append<(Text, [Text])>(collectionNFTs, [("Unknown Collection", [])]);
+          collectionNFTs := Array.append<(Time.Time, Principal, [(Text, [Text])])>(
+            collectionNFTs,
+            [(time, collectionCanisterId, [("Unknown Collection", [])])],
+          );
         };
       };
 
-      // Add this user's collections and their NFTs to the result
       result := Array.append(result, [(Principal.toText(userPrincipal), collectionNFTs)]);
     };
 
     return result;
   };
+
 
   /* -------------------------------------------------------------------------- */
   /*                            User Related Methods                            */
