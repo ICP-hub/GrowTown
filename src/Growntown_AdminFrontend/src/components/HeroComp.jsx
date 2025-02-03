@@ -30,6 +30,7 @@ const HeroComp = () => {
               src='images/cloud02-l.png'
               alt='leftCloud'
               className='w-full'
+              
             />
           </div>
 

@@ -42,7 +42,7 @@ export const VideoComp = () => {
           className="absolute z-10 w-full h-full object-contain"
           // data-aos="fade-up"
            draggable='false'
-              lazy='loading'
+              loading="lazy"
         />
 
         {/* Video Background Inside the Frame */}
@@ -66,7 +66,7 @@ export const VideoComp = () => {
                 alt="Play Button"
                 className="w-10 md:w-24"
                  draggable='false'
-              lazy='loading'
+              loading="lazy"
               />
             </div>
           ) : (
