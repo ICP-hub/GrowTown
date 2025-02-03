@@ -72,7 +72,7 @@ const NftDetails = () => {
 //     return formattedPrice;
 // }
 
-  const price = (parseFloat(nftdata)/100000000).toFixed(8);
+  const price =  Number(nftdata[3]) / 100000000;
   console.log(price);
 
 
