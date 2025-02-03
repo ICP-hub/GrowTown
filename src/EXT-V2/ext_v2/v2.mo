@@ -403,12 +403,11 @@ actor class EXTNFT(init_owner : Principal) = this {
   };
 
   public shared (_msg) func heartbeat_myself() : async () {
-      try {
-        await heartbeat_paymentSettlements();
-        await heartbeat_disbursements();
-      }catch _e {};
+    try {
+      await heartbeat_paymentSettlements();
+      await heartbeat_disbursements();
+    } catch _e {};
   };
-
 
   public shared (_msg) func heartbeat_assetCanisters() : async () {
     if (Cycles.balance() < ASSET_CANISTER_CYCLES_TOPUP) return ();
@@ -490,7 +489,7 @@ actor class EXTNFT(init_owner : Principal) = this {
   };
   public query func ext_assetFits(internal : Bool, size : Nat) : async Bool {
     if (internal) {
-      if ((data_storedChunkSize +size) < MAX_CHUNK_STORAGE) {
+      if ((data_storedChunkSize + size) < MAX_CHUNK_STORAGE) {
         return true;
       } else {
         return false;
@@ -512,7 +511,7 @@ actor class EXTNFT(init_owner : Principal) = this {
       case (?asset) {
         switch (asset.atype) {
           case (#direct existingChunks) {
-            assert ((data_storedChunkSize +size) < MAX_CHUNK_STORAGE);
+            assert ((data_storedChunkSize + size) < MAX_CHUNK_STORAGE);
             let chunkId = data_internalNextChunkId;
             data_internalNextChunkId += 1;
             _chunks.put(chunkId, chunk);
@@ -537,7 +536,7 @@ actor class EXTNFT(init_owner : Principal) = this {
             switch (_assetCanisters.get(Principal.fromText(d.canister))) {
               case (?currentSize) {
                 let acService : EXTAssetService = actor (d.canister);
-                _assetCanisters.put(Principal.fromText(d.canister), currentSize +size);
+                _assetCanisters.put(Principal.fromText(d.canister), currentSize + size);
                 return await acService.streamAsset(d.id, chunk, first);
               };
               case (_) {};
@@ -584,7 +583,7 @@ actor class EXTNFT(init_owner : Principal) = this {
         },
       ),
       func(a : (Principal, Nat)) : Bool {
-        return (a.1 +size) < MAX_CHUNK_STORAGE;
+        return (a.1 + size) < MAX_CHUNK_STORAGE;
       },
     );
   };
@@ -760,7 +759,7 @@ actor class EXTNFT(init_owner : Principal) = this {
                 };
                 //If we are here, that means we need to refund the payment
                 //No listing, refund (to slow)
-                _addDisbursement((0, settlement.payer, settlement.subaccount, (ledgerResponse.e8s -10000)));
+                _addDisbursement((0, settlement.payer, settlement.subaccount, (ledgerResponse.e8s - 10000)));
                 _paymentSettlements.delete(paymentaddress);
                 return #err(#Other("NFT not for sale"));
               };
@@ -778,7 +777,7 @@ actor class EXTNFT(init_owner : Principal) = this {
     _ext_internalMarketplaceListings();
   };
   //also returned count
-   public query func ext_marketplaceListings_2() : async [(TokenIndex, Listing, Metadata,Nat)] {
+  public query func ext_marketplaceListings_2() : async [(TokenIndex, Listing, Metadata, Nat)] {
     _ext_internalMarketplaceListings_2();
   };
   public query func ext_marketplaceTransactions() : async [Transaction] {
@@ -1011,13 +1010,13 @@ actor class EXTNFT(init_owner : Principal) = this {
                     switch (_saleGroups.get(paymentaddress)) {
                       case (?groupId) {
                         if (groupId >= currentSale.groups.size()) {
-                          _addDisbursement((0, settlement.payer, settlement.subaccount, (ledgerResponse.e8s -10000)));
+                          _addDisbursement((0, settlement.payer, settlement.subaccount, (ledgerResponse.e8s - 10000)));
                           _paymentSettlements.delete(paymentaddress);
                           return #err("The sale group is unavailable");
                         };
                         let group = currentSale.groups[groupId];
                         if (_checkSaleLimits(groupId, paymentaddress, quantity, group.limit) == false) {
-                          _addDisbursement((0, settlement.payer, settlement.subaccount, (ledgerResponse.e8s -10000)));
+                          _addDisbursement((0, settlement.payer, settlement.subaccount, (ledgerResponse.e8s - 10000)));
                           _paymentSettlements.delete(paymentaddress);
                           return #err("Exceeded group limits");
                         };
@@ -1028,7 +1027,7 @@ actor class EXTNFT(init_owner : Principal) = this {
                   case (_) {};
                 };
                 if (Nat64.toNat(quantity) > availableTokens()) {
-                  _addDisbursement((0, settlement.payer, settlement.subaccount, (ledgerResponse.e8s -10000)));
+                  _addDisbursement((0, settlement.payer, settlement.subaccount, (ledgerResponse.e8s - 10000)));
                   _paymentSettlements.delete(paymentaddress);
                   return #err("Not enough NFTs - a refund will be sent automatically very soon");
                 } else {
@@ -1490,7 +1489,7 @@ actor class EXTNFT(init_owner : Principal) = this {
         status_code = 200;
         headers = [("Content-Type", asset.ctype), ("cache-control", "public, max-age=15552000")];
         body = payload;
-        streaming_strategy = ? #Callback({
+        streaming_strategy = ?#Callback({
           token = Option.unwrap(token);
           callback = http_request_streaming_callback;
         });
@@ -1621,7 +1620,7 @@ actor class EXTNFT(init_owner : Principal) = this {
   func _getNextSubAccount() : SubAccount {
     var _saOffset = 4294967296;
     data_internalNextSubAccount += 1;
-    return _natToSubAccount(_saOffset +data_internalNextSubAccount);
+    return _natToSubAccount(_saOffset + data_internalNextSubAccount);
   };
   func _addDisbursement(d : (TokenIndex, AccountIdentifier, SubAccount, Nat64)) : () {
     _disbursements := Queue.add(d, _disbursements);
@@ -1787,7 +1786,7 @@ actor class EXTNFT(init_owner : Principal) = this {
       0,
       func(u8, accum) {
         index += 1;
-        accum + Nat32.fromNat(Nat8.toNat(u8)) << ((index -1) * 8);
+        accum + Nat32.fromNat(Nat8.toNat(u8)) << ((index - 1) * 8);
       },
     );
   };
@@ -1840,7 +1839,7 @@ actor class EXTNFT(init_owner : Principal) = this {
       let metadata = Option.unwrap(_extGetTokenMetadata(a.0));
 
       // Only proceed if the token is non-fungible
-      switch(metadata) {
+      switch (metadata) {
         case (#nonfungible(nftData)) {
           let nameExists = Array.find<((TokenIndex, Listing, Metadata))>(
             results,
@@ -1852,8 +1851,8 @@ actor class EXTNFT(init_owner : Principal) = this {
                 case (_) {
                   return false;
                 };
-              }
-            }
+              };
+            },
           );
 
           // If name doesn't exist, append the current listing
@@ -1868,80 +1867,79 @@ actor class EXTNFT(init_owner : Principal) = this {
         };
       };
     };
-    
-    results;
-};
 
-func _ext_internalMarketplaceListings_2() : [(TokenIndex, Listing, Metadata, Nat)] {
+    results;
+  };
+
+  func _ext_internalMarketplaceListings_2() : [(TokenIndex, Listing, Metadata, Nat)] {
     var results : [(TokenIndex, Listing, Metadata, Nat)] = [];
     var nameCounts : HashMap.HashMap<Text, Nat> = HashMap.HashMap<Text, Nat>(
-        0, // Initial size for the HashMap
-        Text.equal, // Comparator for Text types
-        Text.hash   // Hash function for Text types
+      0, // Initial size for the HashMap
+      Text.equal, // Comparator for Text types
+      Text.hash // Hash function for Text types
     );
 
     for (a in _tokenListing.entries()) {
-        // Get the metadata for the current token
-        let metadata = Option.unwrap(_extGetTokenMetadata(a.0));
+      // Get the metadata for the current token
+      let metadata = Option.unwrap(_extGetTokenMetadata(a.0));
 
-        // Only proceed if the token is non-fungible
-        switch(metadata) {
-            case (#nonfungible(nftData)) {
-                // Update count for each NFT name
-                let currentCount = switch (nameCounts.get(nftData.name)) {
-                    case (?count) count + 1;
-                    case null 1;
+      // Only proceed if the token is non-fungible
+      switch (metadata) {
+        case (#nonfungible(nftData)) {
+          // Update count for each NFT name
+          let currentCount = switch (nameCounts.get(nftData.name)) {
+            case (?count) count + 1;
+            case null 1;
+          };
+          nameCounts.put(nftData.name, currentCount);
+
+          // Check if the name already exists in results
+          let nameExists = Array.find<((TokenIndex, Listing, Metadata, Nat))>(
+            results,
+            func(entry) {
+              switch (entry.2) {
+                case (#nonfungible(existingNftData)) {
+                  existingNftData.name == nftData.name;
                 };
-                nameCounts.put(nftData.name, currentCount);
-
-                // Check if the name already exists in results
-                let nameExists = Array.find<((TokenIndex, Listing, Metadata, Nat))>(
-                    results,
-                    func(entry) {
-                        switch (entry.2) {
-                            case (#nonfungible(existingNftData)) {
-                                existingNftData.name == nftData.name
-                            };
-                            case (_) {
-                                false
-                            };
-                        }
-                    }
-                );
-
-                // If name doesn't exist, append the current listing with count
-                if (nameExists == null) {
-                    results := Array.append(results, [(a.0, a.1, metadata, currentCount)]);
+                case (_) {
+                  false;
                 };
+              };
+            },
+          );
 
-            };
-            case (_) {
-                // If it's not non-fungible, append it as usual but with a count of 1
-                results := Array.append(results, [(a.0, a.1, metadata, 1)]);
-            };
+          // If name doesn't exist, append the current listing with count
+          if (nameExists == null) {
+            results := Array.append(results, [(a.0, a.1, metadata, currentCount)]);
+          };
+
         };
+        case (_) {
+          // If it's not non-fungible, append it as usual but with a count of 1
+          results := Array.append(results, [(a.0, a.1, metadata, 1)]);
+        };
+      };
     };
 
     // Update the counts for entries that were found before the name count was finalized
     let updatedResults = Array.map<(TokenIndex, Listing, Metadata, Nat), (TokenIndex, Listing, Metadata, Nat)>(
-        results,
-        func((idx, lst, mtd, _)) {
-            switch(mtd) {
-                case (#nonfungible(nftData)) {
-                    let finalCount = Option.unwrap(nameCounts.get(nftData.name));
-                    (idx, lst, mtd, finalCount)
-                };
-                case (_) {
-                    (idx, lst, mtd, 1)  // Fungibles keep a count of 1
-                };
-            }
-        }
+      results,
+      func((idx, lst, mtd, _)) {
+        switch (mtd) {
+          case (#nonfungible(nftData)) {
+            let finalCount = Option.unwrap(nameCounts.get(nftData.name));
+            (idx, lst, mtd, finalCount);
+          };
+          case (_) {
+            (idx, lst, mtd, 1) // Fungibles keep a count of 1
+          };
+        };
+      },
     );
 
     updatedResults;
-};
+  };
 
-  
   func _ext_internalMetadata(token : TokenIdentifier) : Result.Result<Metadata, CommonError> {
     if (ExtCore.TokenIdentifier.isPrincipal(token, Principal.fromActor(this)) == false) {
       return #err(#InvalidToken(token));
@@ -2315,131 +2313,130 @@ func _ext_internalMarketplaceListings_2() : [(TokenIndex, Listing, Metadata, Nat
 
   public query func getAllNonFungibleTokenData() : async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64)] {
     if (_tokenMetadata.size() == 0) {
-        return [];
+      return [];
     };
 
     let nonFungibleTokenData = Buffer.Buffer<(TokenIndex, AccountIdentifier, Metadata, ?Nat64)>(_tokenMetadata.size());
 
     for ((tokenIndex, metadata) in _tokenMetadata.entries()) {
-        switch (metadata) {
-            case (#nonfungible(nftData)) {
-                // Check if a token with the same name already exists in the buffer
-                let nameExists = Array.find<((TokenIndex, AccountIdentifier, Metadata, ?Nat64))>(
-                    Buffer.toArray(nonFungibleTokenData),
-                    func(entry) {
-                        switch (entry.2) {
-                            case (#nonfungible(existingNftData)) {
-                                return existingNftData.name == nftData.name;
-                            };
-                            case (_) {
-                                return false;
-                            };
-                        }
-                    }
-                );
-
-                // Only add the token if its name is not already in the buffer
-                if (nameExists == null) {
-                    // Fetch the owner of the token
-                    let owner = switch (_registry.get(tokenIndex)) {
-                        case (?owner) owner;
-                        case null AID.fromPrincipal(Principal.fromText("aaaaa-aa"), null);
-                    };
-
-                    // Fetch the price if the token is listed in the marketplace
-                    let listing = _tokenListing.get(tokenIndex);
-                    let price = switch (listing) {
-                        case (?l) ?l.price;
-                        case (_) null;
-                    };
-
-                    // Add token details to the buffer
-                    nonFungibleTokenData.add((tokenIndex, owner, metadata, price));
+      switch (metadata) {
+        case (#nonfungible(nftData)) {
+          // Check if a token with the same name already exists in the buffer
+          let nameExists = Array.find<((TokenIndex, AccountIdentifier, Metadata, ?Nat64))>(
+            Buffer.toArray(nonFungibleTokenData),
+            func(entry) {
+              switch (entry.2) {
+                case (#nonfungible(existingNftData)) {
+                  return existingNftData.name == nftData.name;
                 };
+                case (_) {
+                  return false;
+                };
+              };
+            },
+          );
+
+          // Only add the token if its name is not already in the buffer
+          if (nameExists == null) {
+            // Fetch the owner of the token
+            let owner = switch (_registry.get(tokenIndex)) {
+              case (?owner) owner;
+              case null AID.fromPrincipal(Principal.fromText("aaaaa-aa"), null);
             };
-            case (#fungible(_)) {
-                // Skip fungible tokens
+
+            // Fetch the price if the token is listed in the marketplace
+            let listing = _tokenListing.get(tokenIndex);
+            let price = switch (listing) {
+              case (?l) ?l.price;
+              case (_) null;
             };
+
+            // Add token details to the buffer
+            nonFungibleTokenData.add((tokenIndex, owner, metadata, price));
+          };
         };
+        case (#fungible(_)) {
+          // Skip fungible tokens
+        };
+      };
     };
 
     // Return the buffer array without reversing
     return Buffer.toArray(nonFungibleTokenData);
-};
+  };
 
+  // public query func trygetAllNonFungibleTokenData() : async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64, Nat)] {
+  //     if (_tokenMetadata.size() == 0) {
+  //         return [];
+  //     };
 
-// public query func trygetAllNonFungibleTokenData() : async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64, Nat)] {
-//     if (_tokenMetadata.size() == 0) {
-//         return [];
-//     };
+  //     // Initialize the buffer to store non-fungible token data
+  //     let nonFungibleTokenData = Buffer.Buffer<(TokenIndex, AccountIdentifier, Metadata, ?Nat64, Nat)>(_tokenMetadata.size());
 
-//     // Initialize the buffer to store non-fungible token data
-//     let nonFungibleTokenData = Buffer.Buffer<(TokenIndex, AccountIdentifier, Metadata, ?Nat64, Nat)>(_tokenMetadata.size());
+  //     // Initialize a HashMap to track the counts of NFT names
+  //     let nameCounts = HashMap.HashMap<Text, Nat>(
+  //         0, // Initial size
+  //         Text.equal, // Comparator for Text
+  //         Text.hash // Hash function for Text
+  //     );
 
-//     // Initialize a HashMap to track the counts of NFT names
-//     let nameCounts = HashMap.HashMap<Text, Nat>(
-//         0, // Initial size
-//         Text.equal, // Comparator for Text
-//         Text.hash // Hash function for Text
-//     );
+  //     for ((tokenIndex, metadata) in _tokenMetadata.entries()) {
+  //         switch (metadata) {
+  //             case (#nonfungible(nftData)) {
+  //                 // Update the count for this NFT name
+  //                 let count = switch (nameCounts.get(nftData.name)) {
+  //                     case (?existingCount) existingCount + 1;
+  //                     case null 1;
+  //                 };
+  //                 nameCounts.put(nftData.name, count);
 
-//     for ((tokenIndex, metadata) in _tokenMetadata.entries()) {
-//         switch (metadata) {
-//             case (#nonfungible(nftData)) {
-//                 // Update the count for this NFT name
-//                 let count = switch (nameCounts.get(nftData.name)) {
-//                     case (?existingCount) existingCount + 1;
-//                     case null 1;
-//                 };
-//                 nameCounts.put(nftData.name, count);
+  //                 // Check if a token with the same name already exists in the buffer
+  //                 let nameExists = Array.find<((TokenIndex, AccountIdentifier, Metadata, ?Nat64, Nat))>(
+  //                     Buffer.toArray(nonFungibleTokenData),
+  //                     func(entry) {
+  //                         switch (entry.2) {
+  //                             case (#nonfungible(existingNftData)) {
+  //                                 return existingNftData.name == nftData.name;
+  //                             };
+  //                             case (_) {
+  //                                 return false;
+  //                             };
+  //                         }
+  //                     }
+  //                 );
 
-//                 // Check if a token with the same name already exists in the buffer
-//                 let nameExists = Array.find<((TokenIndex, AccountIdentifier, Metadata, ?Nat64, Nat))>(
-//                     Buffer.toArray(nonFungibleTokenData),
-//                     func(entry) {
-//                         switch (entry.2) {
-//                             case (#nonfungible(existingNftData)) {
-//                                 return existingNftData.name == nftData.name;
-//                             };
-//                             case (_) {
-//                                 return false;
-//                             };
-//                         }
-//                     }
-//                 );
+  //                 // Only add the token if its name is not already in the buffer
+  //                 if (nameExists == null) {
+  //                     // Fetch the owner of the token
+  //                     let owner = switch (_registry.get(tokenIndex)) {
+  //                         case (?owner) owner;
+  //                         case null AID.fromPrincipal(Principal.fromText("aaaaa-aa"), null);
+  //                     };
 
-//                 // Only add the token if its name is not already in the buffer
-//                 if (nameExists == null) {
-//                     // Fetch the owner of the token
-//                     let owner = switch (_registry.get(tokenIndex)) {
-//                         case (?owner) owner;
-//                         case null AID.fromPrincipal(Principal.fromText("aaaaa-aa"), null);
-//                     };
+  //                     // Fetch the price if the token is listed in the marketplace
+  //                     let listing = _tokenListing.get(tokenIndex);
+  //                     let price = switch (listing) {
+  //                         case (?l) ?l.price;
+  //                         case (_) null;
+  //                     };
 
-//                     // Fetch the price if the token is listed in the marketplace
-//                     let listing = _tokenListing.get(tokenIndex);
-//                     let price = switch (listing) {
-//                         case (?l) ?l.price;
-//                         case (_) null;
-//                     };
+  //                     // Add token details and count to the buffer
+  //                     nonFungibleTokenData.add((tokenIndex, owner, metadata, price, count));
+  //                 };
+  //             };
+  //             case (#fungible(_)) {
+  //                 // Skip fungible tokens
+  //             };
+  //         };
+  //     };
 
-//                     // Add token details and count to the buffer
-//                     nonFungibleTokenData.add((tokenIndex, owner, metadata, price, count));
-//                 };
-//             };
-//             case (#fungible(_)) {
-//                 // Skip fungible tokens
-//             };
-//         };
-//     };
+  //     // Return the buffer array as a list
+  //     return Buffer.toArray(nonFungibleTokenData);
+  // };
 
-//     // Return the buffer array as a list
-//     return Buffer.toArray(nonFungibleTokenData);
-// };
-
-public query func try2getAllNonFungibleTokenData() : async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64, Nat)] {
+  public query func try2getAllNonFungibleTokenData() : async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64, Nat)] {
     if (_tokenMetadata.size() == 0) {
-        return [];
+      return [];
     };
 
     // Initialize the buffer to store non-fungible token data
@@ -2447,114 +2444,112 @@ public query func try2getAllNonFungibleTokenData() : async [(TokenIndex, Account
 
     // Initialize a HashMap to track the counts of NFT names and their last occurrence
     let nameCounts = HashMap.HashMap<Text, Nat>(
-        0, // Initial size
-        Text.equal, // Comparator for Text
-        Text.hash // Hash function for Text
+      0, // Initial size
+      Text.equal, // Comparator for Text
+      Text.hash // Hash function for Text
     );
 
     // Initialize a HashMap to track the latest token data for each name
     let latestTokens = HashMap.HashMap<Text, (TokenIndex, AccountIdentifier, Metadata, ?Nat64, Nat)>(
-        0,
-        Text.equal,
-        Text.hash
+      0,
+      Text.equal,
+      Text.hash,
     );
 
     for ((tokenIndex, metadata) in _tokenMetadata.entries()) {
-        switch (metadata) {
-            case (#nonfungible(nftData)) {
-                // Update the count for this NFT name
-                let count = switch (nameCounts.get(nftData.name)) {
-                    case (?existingCount) existingCount + 1;
-                    case null 1;
-                };
-                nameCounts.put(nftData.name, count);
+      switch (metadata) {
+        case (#nonfungible(nftData)) {
+          // Update the count for this NFT name
+          let count = switch (nameCounts.get(nftData.name)) {
+            case (?existingCount) existingCount + 1;
+            case null 1;
+          };
+          nameCounts.put(nftData.name, count);
 
-                // Fetch the owner of the token
-                let owner = switch (_registry.get(tokenIndex)) {
-                    case (?owner) owner;
-                    case null AID.fromPrincipal(Principal.fromText("aaaaa-aa"), null);
-                };
+          // Fetch the owner of the token
+          let owner = switch (_registry.get(tokenIndex)) {
+            case (?owner) owner;
+            case null AID.fromPrincipal(Principal.fromText("aaaaa-aa"), null);
+          };
 
-                // Fetch the price if the token is listed in the marketplace
-                let listing = _tokenListing.get(tokenIndex);
-                let price = switch (listing) {
-                    case (?l) ?l.price;
-                    case (_) null;
-                };
+          // Fetch the price if the token is listed in the marketplace
+          let listing = _tokenListing.get(tokenIndex);
+          let price = switch (listing) {
+            case (?l) ?l.price;
+            case (_) null;
+          };
 
-                // Update the latest token for this name
-                latestTokens.put(nftData.name, (tokenIndex, owner, metadata, price, count));
-            };
-            case (#fungible(_)) {
-                // Skip fungible tokens
-            };
+          // Update the latest token for this name
+          latestTokens.put(nftData.name, (tokenIndex, owner, metadata, price, count));
         };
+        case (#fungible(_)) {
+          // Skip fungible tokens
+        };
+      };
     };
 
     // Add the last occurrence of each NFT to the buffer
     for ((_, tokenData) in latestTokens.entries()) {
-        nonFungibleTokenData.add(tokenData);
+      nonFungibleTokenData.add(tokenData);
     };
 
     // Return the buffer array as a list
     return Buffer.toArray(nonFungibleTokenData);
-};
+  };
 
+  //   public query func getAllNonFungibleTokenData() : async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64)] {
+  //     if (_tokenMetadata.size() == 0) {
+  //         return [];
+  //     };
 
+  //     let nonFungibleTokenData = Buffer.Buffer<(TokenIndex, AccountIdentifier, Metadata, ?Nat64)>(_tokenMetadata.size());
 
-//   public query func getAllNonFungibleTokenData() : async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64)] {
-//     if (_tokenMetadata.size() == 0) {
-//         return [];
-//     };
+  //     for ((tokenIndex, metadata) in _tokenMetadata.entries()) {
+  //         switch (metadata) {
+  //             case (#nonfungible(nftData)) {
+  //                 // Check if a token with the same name already exists in the buffer
+  //                 let nameExists = Array.find<((TokenIndex, AccountIdentifier, Metadata, ?Nat64))>(
+  //                     Buffer.toArray(nonFungibleTokenData),
+  //                     func(entry) {
+  //                         switch (entry.2) {
+  //                             case (#nonfungible(existingNftData)) {
+  //                                 return existingNftData.name == nftData.name;
+  //                             };
+  //                             case (_) {
+  //                                 return false;
+  //                             };
+  //                         }
+  //                     }
+  //                 );
 
-//     let nonFungibleTokenData = Buffer.Buffer<(TokenIndex, AccountIdentifier, Metadata, ?Nat64)>(_tokenMetadata.size());
+  //                 // Only add the token if its name is not already in the buffer
+  //                 if (nameExists == null) {
+  //                     // Fetch the owner of the token
+  //                     let owner = switch (_registry.get(tokenIndex)) {
+  //                         case (?owner) owner;
+  //                         case null AID.fromPrincipal(Principal.fromText("aaaaa-aa"), null);
+  //                     };
 
-//     for ((tokenIndex, metadata) in _tokenMetadata.entries()) {
-//         switch (metadata) {
-//             case (#nonfungible(nftData)) {
-//                 // Check if a token with the same name already exists in the buffer
-//                 let nameExists = Array.find<((TokenIndex, AccountIdentifier, Metadata, ?Nat64))>(
-//                     Buffer.toArray(nonFungibleTokenData),
-//                     func(entry) {
-//                         switch (entry.2) {
-//                             case (#nonfungible(existingNftData)) {
-//                                 return existingNftData.name == nftData.name;
-//                             };
-//                             case (_) {
-//                                 return false;
-//                             };
-//                         }
-//                     }
-//                 );
+  //                     // Fetch the price if the token is listed in the marketplace
+  //                     let listing = _tokenListing.get(tokenIndex);
+  //                     let price = switch (listing) {
+  //                         case (?l) ?l.price;
+  //                         case (_) null;
+  //                     };
 
-//                 // Only add the token if its name is not already in the buffer
-//                 if (nameExists == null) {
-//                     // Fetch the owner of the token
-//                     let owner = switch (_registry.get(tokenIndex)) {
-//                         case (?owner) owner;
-//                         case null AID.fromPrincipal(Principal.fromText("aaaaa-aa"), null);
-//                     };
+  //                     // Add token details to the buffer
+  //                     nonFungibleTokenData.add((tokenIndex, owner, metadata, price));
+  //                 };
+  //             };
+  //             case (#fungible(_)) {
+  //                 // Skip fungible tokens
+  //             };
+  //         };
+  //     };
 
-//                     // Fetch the price if the token is listed in the marketplace
-//                     let listing = _tokenListing.get(tokenIndex);
-//                     let price = switch (listing) {
-//                         case (?l) ?l.price;
-//                         case (_) null;
-//                     };
-
-//                     // Add token details to the buffer
-//                     nonFungibleTokenData.add((tokenIndex, owner, metadata, price));
-//                 };
-//             };
-//             case (#fungible(_)) {
-//                 // Skip fungible tokens
-//             };
-//         };
-//     };
-
-//     // Return the buffer array in reverse order
-//     return Array.reverse(Buffer.toArray(nonFungibleTokenData));
-// };
+  //     // Return the buffer array in reverse order
+  //     return Array.reverse(Buffer.toArray(nonFungibleTokenData));
+  // };
 
   public query func getTokens() : async [(TokenIndex, MetadataLegacy)] {
     Iter.toArray(
@@ -2647,58 +2642,58 @@ public query func try2getAllNonFungibleTokenData() : async [(TokenIndex, Account
   };
 
   //singleNFTData
-  public query func getSingleNonFungibleTokenData(tokenid: TokenIndex) : async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64)] {
+  public query func getSingleNonFungibleTokenData(tokenid : TokenIndex) : async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64)] {
     if (_tokenMetadata.size() == 0) {
-        return [];
+      return [];
     };
 
     let nonFungibleTokenData = Buffer.Buffer<(TokenIndex, AccountIdentifier, Metadata, ?Nat64)>(1);
 
     // Fetch the metadata for the token
     switch (_tokenMetadata.get(tokenid)) {
-        case (?metadata) {
-            switch (metadata) {
-                case (#nonfungible(_)) {
-                    // Fetch the owner of the token
-                    let owner = switch (_registry.get(tokenid)) {
-                        case (?owner) owner;
-                        case (null) AID.fromPrincipal(Principal.fromText("aaaaa-aa"), null);
-                    };
-
-                    // Check if the token is listed in the marketplace and retrieve its price if it is
-                    let listing = _tokenListing.get(tokenid);
-                    let price = switch (listing) {
-                        case (?l) ?l.price;  // If listed, return the price
-                        case (_) null;  // If not listed, return null for price
-                    };
-
-                    // Add the token details (including price) to the buffer
-                    nonFungibleTokenData.add((tokenid, owner, metadata, price));
-                };
-                case (#fungible(_)) {
-                    // Return empty if the token is fungible
-                    return [];
-                };
+      case (?metadata) {
+        switch (metadata) {
+          case (#nonfungible(_)) {
+            // Fetch the owner of the token
+            let owner = switch (_registry.get(tokenid)) {
+              case (?owner) owner;
+              case (null) AID.fromPrincipal(Principal.fromText("aaaaa-aa"), null);
             };
-        };
-        case (null) {
-            // Return empty if no metadata found
+
+            // Check if the token is listed in the marketplace and retrieve its price if it is
+            let listing = _tokenListing.get(tokenid);
+            let price = switch (listing) {
+              case (?l) ?l.price; // If listed, return the price
+              case (_) null; // If not listed, return null for price
+            };
+
+            // Add the token details (including price) to the buffer
+            nonFungibleTokenData.add((tokenid, owner, metadata, price));
+          };
+          case (#fungible(_)) {
+            // Return empty if the token is fungible
             return [];
+          };
         };
+      };
+      case (null) {
+        // Return empty if no metadata found
+        return [];
+      };
     };
 
     // Return the array of token data, owner, metadata, and price (if listed)
     return Buffer.toArray(nonFungibleTokenData);
-};
+  };
 
-//mycollection
-  public query func myCollection(_collectionCanisterId: Principal, user : AccountIdentifier) : async Result.Result<[(TokenIdentifier, Metadata)], CommonError> {
+  //mycollection
+  public query func myCollection(_collectionCanisterId : Principal, user : AccountIdentifier) : async Result.Result<[(TokenIdentifier, Metadata)], CommonError> {
     // Get all tokens owned by the user from the _owners map
     switch (_owners.get(user)) {
       case (?tokens) {
         // Prepare an array to hold all metadata information along with their token identifiers
         var tokenDetails : [(TokenIdentifier, Metadata)] = [];
-        
+
         // Iterate through the tokens owned by the user
         for (token in tokens.vals()) {
           // Fetch metadata for each token
@@ -2714,7 +2709,7 @@ public query func try2getAllNonFungibleTokenData() : async [(TokenIndex, Account
             };
           };
         };
-        
+
         // Return the array of token identifiers and metadata details
         return #ok(tokenDetails);
       };
@@ -2723,7 +2718,50 @@ public query func try2getAllNonFungibleTokenData() : async [(TokenIndex, Account
         return #err(#Other("No tokens owned by this user"));
       };
     };
-};
+  };
 
+  // public shared func burnToken(tokenId : TokenIndex) : async () {
+  //     // Burn address - represented as a series of zeros
+  //     let burnAddress : AccountIdentifier = "0000000000000000000000000000000000000000000000000000000000000001";
+
+  //     // Get current owner of the token
+  //     switch (_registry.get(tokenId)) {
+  //         case (?owner) {
+  //             // Remove token from previous owner's holdings
+  //             _removeFromUserTokens(tokenId, owner);
+
+  //             // Update registry to transfer token to burn address
+  //             _registry.put(tokenId, burnAddress);
+
+  //             // Add token to burn address holdings
+  //             _addToUserTokens(tokenId, burnAddress);
+  //         };
+  //         case (_) {
+  //             // Token does not exist or no previous owner, handle error if necessary
+  //         };
+  //     };
+  // };
+
+  public shared func burnToken(tokenId : TokenIndex) : async Result.Result<(), Text> {
+
+    let burnAddress : AccountIdentifier = "0000000000000000000000000000000000000000000000000000000000000001";
+
+    switch (_registry.get(tokenId)) {
+      case (?owner) {
+
+        _removeFromUserTokens(tokenId, owner);
+
+        _registry.put(tokenId, burnAddress);
+
+        _addToUserTokens(tokenId, burnAddress);
+
+        return #ok();
+      };
+      case (null) {
+
+        return #err("Token does not exist or is already burned.");
+      };
+    };
+  };
 
 };
