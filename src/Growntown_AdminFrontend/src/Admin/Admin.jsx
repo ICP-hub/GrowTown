@@ -34,16 +34,15 @@ function Admin() {
   const { handleSearch, searchResults, setSearchResults } = useSearch();
   const location = useLocation();
   const pathWithoutId = location.pathname.split("/").slice(0, -1).join("/");
-  const universalSearchData = useSelector((state)=>state.universalSearch.universalSearchData)
+  const nftSearchData = useSelector((state)=>state.universalSearch.nftSearchData)
+  const userSearchData = useSelector((state)=>state.universalSearch.userSearchData)
+    
+  console.log('userSearchData',userSearchData)
+  useEffect(()=>{
+    console.log('pathWithoutId=>',location?.pathname)
+    console.log('pathWithoutId=>',pathWithoutId)
 
-  // useEffect(()=>{
-   
-  //   if()
-  //   {
-
-  //     } 
-
-  // },[pathWithoutId,universalSearchData])
+  },[location])
 
 
   useEffect(() => {
@@ -137,12 +136,17 @@ function Admin() {
 
     try {
 
-      if(pathWithoutId === "/Admin/collection/collectionDetails" && universalSearchData ){
-        const filteredNft= universalSearchData?.NFTList.filter((nft)=>nft[0][2].nonfungible.name?.toLowerCase().includes(searchLower))
-        setSearchResults({nfts:{collectiondata:universalSearchData?.collectiondata,NFTList:filteredNft}});
-        setSearchVisible(universalSearchData.NFTList.length > 0);
-        console.log('hello', universalSearchData)
-      }else{
+      if(pathWithoutId === "/Admin/collection/collectionDetails" && nftSearchData ){
+        const filteredNft= nftSearchData?.NFTList.filter((nft)=>nft[0][2].nonfungible.name?.toLowerCase().includes(searchLower))
+        setSearchResults({nfts:{collectiondata:nftSearchData?.collectiondata,NFTList:filteredNft}});
+        setSearchVisible(nftSearchData.NFTList.length > 0);
+        console.log(' =>', nftSearchData)
+      }else if(location?.pathname === "/admin/users" && userSearchData ){
+        const filteredUsers =  userSearchData?.alluser.filter((user) =>user[3].toLowerCase().includes(searchLower));
+        setSearchResults({users:filteredUsers});
+        setSearchVisible(userSearchData.alluser.length > 0);    
+      }
+      else{
       const collections = await fetchAndProcessCollections();
       const filteredResults = [];
       
@@ -207,7 +211,7 @@ function Admin() {
   return (
     <div className="min-h-screen w-full bg-[#0D0D0D] flex flex-col lg:grid lg:grid-cols-[auto_1fr]">
       {/* Sidebar */}
-      <aside className="fixed lg:sticky top-0 left-0 h-full z-40">
+      <aside className="fixed lg:sticky top-0 left-0 h-screen z-40">
         <SideBar isOpen={isOpen} toggleSidebar={toggleSidebar} />
       </aside>
 
@@ -219,7 +223,9 @@ function Admin() {
           <div className="relative hidden sm:block sm:w-[50%] lg:w-full max-w-2xl mx-auto xl:mx-0" id="search-container">
             <input
               type="text"
-              placeholder="Search collections and NFTs..."
+              placeholder={`Search ${pathWithoutId === "/Admin/collection/collectionDetails" ? 'NFT' :
+                location?.pathname === "/admin/users" ? 'User' : 'Collection'
+               }...`}
               className="w-full p-2 pl-10 rounded-lg bg-[#2b2b2b] text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all"
               onChange={handleSearchInput}
             />
@@ -237,6 +243,7 @@ function Admin() {
                 <SearchResults 
                   collections={searchResults?.collections} 
                   nfts={searchResults?.nfts}
+                  users={searchResults?.users}
 
                   onClose={() => setSearchVisible(false)}
                 />

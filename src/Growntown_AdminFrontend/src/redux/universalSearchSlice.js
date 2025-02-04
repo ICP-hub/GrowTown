@@ -1,21 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  universalSearchData: {}
+  nftSearchData: {},
+  userSearchData:{}
 };
 
 const universalSearchSlice = createSlice({
   name: "universalSearch",
   initialState,
   reducers: {
-    addUniversalSearchData: (state, action) => {
-      state.universalSearchData = action.payload; // Update search data
+    addNftSearchData: (state, action) => {
+      state.nftSearchData = action.payload; // Update search data
+    },
+    addUserSearchData: (state, action) => {
+      state.userSearchData = action.payload; // Update search data
     },
   },
 });
 
 // Export actions
-export const { addUniversalSearchData } = universalSearchSlice.actions;
+export const { addNftSearchData,addUserSearchData } = universalSearchSlice.actions;
 
 // Export reducer
 export default universalSearchSlice.reducer;

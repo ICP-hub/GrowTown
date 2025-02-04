@@ -6,6 +6,9 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { useAuths } from "../utils/useAuthClient.jsx";
 import { Principal } from "@dfinity/principal";
 import toast from "react-hot-toast";
+import { addUserSearchData } from "../redux/universalSearchSlice.js";
+import { useDispatch } from "react-redux";
+import BackButton from "./collection/BackButton.jsx";
 
 function Users() {
   const { backendActor } = useAuths();
@@ -14,6 +17,7 @@ function Users() {
   const [currentpage, setcurrentpage] = useState(1);
   const [totalpage, settotalpage] = useState();
   const [searchTerm, setSearchTerm] = useState("");
+  const dispatch=useDispatch()
 
   const getallDUser = async () => {
     if (backendActor) {
@@ -31,18 +35,18 @@ function Users() {
     }
   };
 
+  useEffect(()=>{
+    if(alluser){
+      dispatch(addUserSearchData({alluser}));
+    }
+  },[alluser])
+
   useEffect(() => {
     setLoading(true);
     getallDUser().then(() => setLoading(false));
   }, [currentpage]);
 
-  const filteredUsers = alluser.filter((user) =>
-    user[3].toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
-  const clearSearch = () => {
-    setSearchTerm("");
-  };
 
   const leftfunction =async () => {
     if (currentpage > 1) {
@@ -65,27 +69,13 @@ function Users() {
   };
 
   return (
-    <div className="rounded-xl p-6 w-full max-w-6xl shadow-lg mx-3 m-auto h-full pt-4 text-white flex flex-col items-center">
-      <h2 className="text-2xl font-semibold text-white mb-4 text-start">Users</h2>
-      <div className="w-full flex flex-col items-center">
-        <div className="flex items-center w-full mb-4">
-          <input
-            type="text"
-            placeholder="Search by Name"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full h-10 px-4 text-white bg-[#1E1E1E] border border-[#50B248] rounded-md focus:outline-none placeholder-gray-400"
-          />
-          <button
-            onClick={clearSearch}
-            className="h-10 w-10 ml-2 flex justify-center items-center text-red-500 bg-transparent border border-red-500 rounded-md hover:bg-red-500 hover:text-white"
-          >
-            <IoMdClose size={20} />
-          </button>
-        </div>
+    <div className="w-full mx-2 h-full  px-4 sm:px-8 md:px-16 pt-10 text-white flex flex-col items-center rounded-xl">
+    <div className="flex justify-between items-center w-full ">
+      <BackButton />
+    </div>
 
-        <div className="flex flex-col justify-center text-white w-full mx-auto mt-5">
-        <div className="overflow-x-auto border border-[#50B248] rounded-2xl">
+        <div className="flex flex-col justify-center text-white w-full mx-auto mt-10">
+        <div className="overflow-x-auto border w-full border-[#50B248] rounded-2xl">
             <table className="w-full border text-left">
               <thead className="bg-[#50B248]">
                 <tr className="text-center">
@@ -114,20 +104,20 @@ function Users() {
                       </td>
                     </tr>
                   ))
-                ) : filteredUsers.length === 0 ? (
+                ) : alluser.length === 0 ? (
                   <tr>
                     <td colSpan={4} className="px-4 py-3 text-center text-gray-400">
                       No users found
                     </td>
                   </tr>
                 ) : (
-                  filteredUsers.map((user, index) => {
+                  alluser.map((user, index) => {
                     const userPrincipalArray = user[0];
                     const principal = userPrincipalArray
                       ? Principal.fromUint8Array(userPrincipalArray._arr).toText()
                       : null;
                     return (
-                      <tr key={index} className={`bg-[#29292C] hover:bg-gray-800 whitespace-nowrap text-white`}>
+                      <tr key={index} className={` hover:bg-gray-800 whitespace-nowrap text-white`}>
                         <td className="px-4 py-3 text-center">
                           <img src="/image/admin.png" alt="" className="w-8 h-8 rounded-full mr-4 inline-block" />
                           {user[3]}
@@ -158,7 +148,7 @@ function Users() {
               <button onClick={rightfunction} className="px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded-full hover:bg-black">&gt;</button>
             )}
           </div>
-        </div>
+      
       </div>
     </div>
   );
