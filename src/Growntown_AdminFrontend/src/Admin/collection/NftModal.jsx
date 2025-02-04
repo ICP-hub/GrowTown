@@ -23,21 +23,44 @@ const Modal = (props) => {
 
   const [nftPrice, setPrice] = useState(0);
   const [nftQuantity, setNftQuantity] = useState('');
-  const [Type, setType] = useState(null);
+  const [nftRarity, setNftRarity] = useState(null);
   const [Quantity, setQuantity] = useState(null);
 
+  const [nftName, setNftName] = useState("");
+  const [nftType, setNftType] = useState( "Common");
+
+  const [nftDescription, setNftDescription] = useState("");
+  const [nftImage, setNftImage] = useState("");
+
+  const [nftcolor, setnftcolor] = useState("Golden");
+  const [arstistname, setartistName] = useState("");
+  const [nftSeason, setnftSeason] = useState("Golden Age");
+
+  const [nftFullImage, setNftFullImage] = useState("");
+  const [nftFullImageSD, setNftFullImageSD] = useState("");
+  const [nftImageSD, setNftImageSD] = useState("");
+
+  // const [nftFullImageURL, setNftFullImageURL] = useState("");
+
+  const [hideImageUpload, updateHideImageUploadStatus] = useState(false);
+
+  const [imageurl1, setimageurl1] = useState("");
+  const [imageurl2, setimageurl2] = useState("");
+  const [imageurl3, setimageurl3] = useState("");
+  const [imageurl4, setimageurl4] = useState("");
+
   const FetchPrice=async()=>{
-      const res= await backendActor?.findCost(Type,Number(Quantity))
+      const res= await backendActor?.findCost(nftType,Number(Quantity))
       console.log('price',res);
       setPrice(Number(res))
   }
   useEffect(()=>{
 
-    if(Type && Quantity){
+    if(nftType && Quantity){
         FetchPrice();
     }
      
-  },[Type,Quantity])
+  },[nftType,Quantity])
 
   {/* fetching nft type*/ }
   const fetchNftType = async () => {
@@ -49,57 +72,6 @@ const Modal = (props) => {
     fetchNftType();
   }, [])
 
-
-  const [nftName, setNftName] = useState(
-    type === "edit" ? cardDetails.nftName : ""
-  );
-  const [nftType, setNftType] = useState(
-    type === "edit" ? cardDetails.nftType : "Common"
-  );
-
-  const [nftDescription, setNftDescription] = useState(
-    type === "edit" ? cardDetails.nftDescription : ""
-  );
-  const [nftImage, setNftImage] = useState(
-    type === "edit" ? cardDetails.nftImage : ""
-  );
-
-  const [nftcolor, setnftcolor] = useState(
-    type === "edit" ? cardDetails.nftcolor : "Golden"
-  );
-  const [arstistname, setartistName] = useState(
-    type === "edit" ? cardDetails.arstistname : ""
-  );
-  const [nftSeason, setnftSeason] = useState(
-    type === "edit" ? cardDetails.nftSeason : "Golden Age"
-  );
-
-  const [nftFullImage, setNftFullImage] = useState(
-    type === "edit" ? cardDetails.nftFullImage : ""
-  );
-  const [nftFullImageSD, setNftFullImageSD] = useState(
-    type === "edit" ? cardDetails.nftFullImageSD : ""
-  );
-  const [nftImageSD, setNftImageSD] = useState(
-    type === "edit" ? cardDetails.nftImageSD : ""
-  );
-
-  // const [nftFullImageURL, setNftFullImageURL] = useState("");
-
-  const [hideImageUpload, updateHideImageUploadStatus] = useState(false);
-
-  const [imageurl1, setimageurl1] = useState(
-    type === "edit" ? cardDetails.imageurl1 : ""
-  );
-  const [imageurl2, setimageurl2] = useState(
-    type === "edit" ? cardDetails.imageurl2 : ""
-  );
-  const [imageurl3, setimageurl3] = useState(
-    type === "edit" ? cardDetails.imageurl3 : ""
-  );
-  const [imageurl4, setimageurl4] = useState(
-    type === "edit" ? cardDetails.imageurl4 : ""
-  );
 
   const onClickAddButton = () => {
     // event.preventDefault();
@@ -294,8 +266,8 @@ const Modal = (props) => {
             NFT Rarity
             <select
               className=" h-[38px] border  bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
-              value={nftType}
-              onChange={(e) => setNftType(e.target.value)}
+              value={nftRarity}
+              onChange={(e) => setNftRarity(e.target.value)}
             >
               <option value="Divine" className="text-[16px] text-[#8a8686]">
                 Divine
@@ -351,9 +323,9 @@ const Modal = (props) => {
             NFT Type
             <select
               className="h-[38px] text-sm border bg-transparent text-[16px] p-2 rounded-md text-[#8a8686]"
-              value={Type}
+              value={nftType}
               onChange={(e) => {
-                  setType(e.target.value);
+                  setNftType(e.target.value);
               
               }}
             >

@@ -193,7 +193,7 @@ function Admin() {
         {/* Top Navbar */}
         <nav className="sticky top-0 z-30 flex items-center justify-between bg-[#1a1a1a]/90 backdrop-blur-md text-white px-4 sm:px-6 py-3 ">
           {/* Search Bar */}
-          <div className="relative hidden sm:block sm:w-[50%] md:w-[50%] lg:w-full max-w-2xl mx-auto" id="search-container">
+          <div className="relative hidden sm:block sm:w-[50%] lg:w-full max-w-2xl mx-auto xl:mx-0" id="search-container">
             <input
               type="text"
               placeholder="Search collections and NFTs..."

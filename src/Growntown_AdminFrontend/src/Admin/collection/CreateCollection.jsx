@@ -330,7 +330,7 @@ const CreateCollection = () => {
       //   toast.success("please wait NFT is Minting");
       // }
 
-      console.log(result, "nft mint data");
+      console.log(result, "Collection mint data");
       return result;
       // const es8_price = parseInt(parseFloat(nftPrice) * 100000000);
       // console.log(es8_price, "price");
@@ -364,8 +364,8 @@ const CreateCollection = () => {
       //   toast.error("Error in mintNFT");
       // }
     } catch (error) {
-      console.error("Error minting NFT:", error);
-      toast.error("Error minting NFT");
+      console.error("Error minting Collection:", error);
+      toast.error("Error minting Collection");
       return error; // Return error
     }
   };
@@ -503,7 +503,7 @@ const CreateCollection = () => {
       console.log(hasError, errorShown);
       setcanId(answ);
 
-      toast("NFT Minting, Please Wait! ...", {
+      toast("Collection Minting, Please Wait! ...", {
         icon: "⚠️",
         style: {
           borderRadius: "10px",
@@ -537,7 +537,7 @@ const CreateCollection = () => {
               hasError = true;
               if (!errorShown) {
                 toast.error(
-                  "Error in minting NFT inside final call: " +
+                  "Error in minting Collection inside final call: " +
                   mintResult.message
                 );
                 errorShown = true;
@@ -551,11 +551,11 @@ const CreateCollection = () => {
             hasError = true;
             if (!errorShown) {
               console.error(
-                "Error in minting NFT inside final call: ",
+                "Error in minting Collection inside final call: ",
                 mintError
               );
               toast.error(
-                "Error in minting NFT inside final call: " + mintError.message
+                "Error in minting Collection inside final call: " + mintError.message
               );
               errorShown = true;
             }
@@ -628,7 +628,7 @@ const CreateCollection = () => {
       <div className="w-[90%] overflow-y-scroll pt-10 md:px-10 pb-8 h-screen no-scrollbar  no-scroll 2xl:ml-[4%] md:w-full  lg:pt-20 ">
         {/* <Createcollectionloader done={done} total={total} /> */}
         {loading ? (
-          <Createcollectionloader done={done} total={totalnft} />
+          <Createcollectionloader done={done} total={totalnft} message={' Collection minting'} />
         ) : (
           // <div className="grid w-full gap-6 lg:grid-cols-3 sm:grid-cols-1 md:grid-cols-2">
           //   {Array(6) // Generate skeleton loaders for each collection card

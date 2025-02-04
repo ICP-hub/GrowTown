@@ -11,6 +11,7 @@ const CollectionCard = ({ handleDelete, collectiondata, index }) => {
             key={index}
             state={{ collectiondata }}
         >
+          {  console.log('collectiondata[0]',collectiondata[0]) }
             <div
                 className="relative  w-[240px] max-w-[280px] ml-10 h-[380px] group transform transition-transform duration-300 ease-out hover:-translate-y-2"
                 onMouseEnter={() => setIsHovered(true)}
