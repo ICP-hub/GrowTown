@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuths } from "../utils/useAuthClient.jsx";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -22,6 +22,7 @@ import UnauthorizedPage from "./collection/UnauthorizedPage";
 import NftTypeSetting from "./NftTypeSettings/NftTypeSetting.jsx";
 import { useSearch } from "../context/SearchContext";
 import SearchResults from "./SearchResults.jsx";
+import { useSelector } from "react-redux";
 
 function Admin() {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,6 +32,19 @@ function Admin() {
   const navigate = useNavigate();
   const [searchVisible, setSearchVisible] = useState(false);
   const { handleSearch, searchResults, setSearchResults } = useSearch();
+  const location = useLocation();
+  const pathWithoutId = location.pathname.split("/").slice(0, -1).join("/");
+  const universalSearchData = useSelector((state)=>state.universalSearch.universalSearchData)
+
+  // useEffect(()=>{
+   
+  //   if()
+  //   {
+
+  //     } 
+
+  // },[pathWithoutId,universalSearchData])
+
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -119,7 +133,16 @@ function Admin() {
       return;
     }
 
+    const searchLower  = query.toLowerCase();
+
     try {
+
+      if(pathWithoutId === "/Admin/collection/collectionDetails" && universalSearchData ){
+        const filteredNft= universalSearchData?.NFTList.filter((nft)=>nft[0][2].nonfungible.name?.toLowerCase().includes(searchLower))
+        setSearchResults({nfts:{collectiondata:universalSearchData?.collectiondata,NFTList:filteredNft}});
+        setSearchVisible(universalSearchData.NFTList.length > 0);
+        console.log('hello', universalSearchData)
+      }else{
       const collections = await fetchAndProcessCollections();
       const filteredResults = [];
       
@@ -130,7 +153,6 @@ function Admin() {
         item[1].forEach(collection => {
           if (!collection || !Array.isArray(collection) || collection.length < 3) return;
           
-          const searchLower = query.toLowerCase();
           const collNameMatch = collection[2]?.toLowerCase().includes(searchLower);
           
           // Process NFTs with more complete data
@@ -160,8 +182,9 @@ function Admin() {
         });
       });
 
-      setSearchResults(filteredResults);
+      setSearchResults({collections:filteredResults});
       setSearchVisible(filteredResults.length > 0);
+    }
       
     } catch (error) {
       console.error("Error processing search:", error);
@@ -212,7 +235,9 @@ function Admin() {
             {searchVisible && (
               <div className="absolute left-0 right-0 mt-1 z-50">
                 <SearchResults 
-                  results={searchResults} 
+                  collections={searchResults?.collections} 
+                  nfts={searchResults?.nfts}
+
                   onClose={() => setSearchVisible(false)}
                 />
               </div>

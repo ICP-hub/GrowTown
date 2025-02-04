@@ -21,6 +21,8 @@ import { useNavigate } from "react-router-dom";
 import TokenModal from "./TokenModal";
 import { GrNext } from "react-icons/gr";
 import { GrPrevious } from "react-icons/gr";
+import { addUniversalSearchData } from "../../redux/universalSearchSlice";
+import { useDispatch } from "react-redux";
 
 
 const cardTypeList = [
@@ -103,6 +105,7 @@ function CollectionDetails() {
   const { id } = useParams();
   const location = useLocation();
   const { collectiondata } = location.state || {};
+  const dispatch = useDispatch()
 
   useEffect(() => {
     let loaderTimer;
@@ -713,6 +716,16 @@ function CollectionDetails() {
     // console.log("clicked");
   };
   console.log(collectiondata);
+  
+
+  useEffect(()=>{
+
+    if(collectiondata && filteredList){
+      dispatch(addUniversalSearchData({collectiondata:collectiondata, NFTList:filteredList }));
+    }
+
+  },[collectiondata,filteredList])
+
 
   return (
     <>
