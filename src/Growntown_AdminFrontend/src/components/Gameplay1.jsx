@@ -3,17 +3,18 @@ import React from 'react'
 const Gameplay = () => {
     return (
 
-        <div id='Gameplay' className="bg-[#50d2fe] min-h-screen relative  w-full ">
-            <div className='relative h-full w-full '>
-                {/* Background Image */}
-                <div className='absolute w-full'>
-                    <img src="images/bg01.png" alt="background" className="  w-full -mt-[1px]  object-cover" 
+        <div id='Gameplay' className="bg-[#50d2fe] h-screen relative  w-full ">
+                    {/* Background Image */}
+                    <div className='absolute w-full'>
+                    <img src="images/bg01.png" alt="background" className="  w-full -mt-[1px] h-screen object-cover" 
                      draggable='false'
                      loading="lazy"/>
                     <img src="images/bg02.png" alt="background" className=" w-full h-screen -mt-[1px]  object-cover" 
                      draggable='false'
                      loading="lazy"/>
                 </div>
+            <div className='relative h-full w-full container mx-auto max-w-[2000px]  '>
+        
 
                 {/* well and rocks*/}
                 <div className=' absolute right-0 -top-20 sm:-top-10' >

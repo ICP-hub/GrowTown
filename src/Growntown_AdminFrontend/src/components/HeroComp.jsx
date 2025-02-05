@@ -19,7 +19,7 @@ const HeroComp = () => {
     <div id='heroPage' className='bg-[#00A6C0] h-screen w-full overflow-hidden'>
       {/* Hero Content Wrapper */}
       
-      <div className='flex justify-between items-center h-full'>
+      <div className='flex justify-between container mx-auto max-w-[2000px] items-center h-full'>
         {/* Left Hero Content */}
         <div className='relative'>
           {/* Cloud Animations */}

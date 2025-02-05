@@ -5,11 +5,11 @@ const Characters = () => {
     <div id='Characters'  className="bg-[#50d2fe] relative flex justify-center items-center h-screen w-full overflow-hidden">
   
      {/* Background Image */}
-      <img src="images/bg00.png" alt="background" className="absolute w-full h-screen object-cover"  draggable='false'
+      <img src="images/bg00.png" alt="background" className="absolute w-screen h-screen object-cover"  draggable='false'
               loading="lazy"/>
 
       {/* Content Wrapper */}
-  
+     <div className=' container mx-auto max-w-[2000px] '>
       <div
         className="absolute z-20 w-[60%] flex flex-col items-center "
         style={{
@@ -85,6 +85,7 @@ const Characters = () => {
 
 <img src='images/pumpkin02.png ' className=' absolute z-50 md:w-32 -bottom-16 left-0 sm:left-20 2xl:left-48 ' />
         </div>
+      </div>
       </div>
     </div>
   );
