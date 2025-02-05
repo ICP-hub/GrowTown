@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-const PreviewCard = ({ colName, colImage, maxLimit, typeColor, description }) => {
-  console.log("previewDetails=>", colName, colImage, maxLimit, typeColor, description);
+const PreviewCard = ({ colName, colImage, typeColor, description }) => {
+  console.log("previewDetails=>", colName, colImage, typeColor, description);
   const [imgUrl, setImgUrl] = useState(null);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ const PreviewCard = ({ colName, colImage, maxLimit, typeColor, description }) =>
       {/* Image */}
        
           <img
-            className="object-cover rounded-xl w-full h-48   hover:scale-105 transition-transform duration-300 ease-in-out"
+            className="object-cover rounded-xl w-full h-56   hover:scale-105 transition-transform duration-300 ease-in-out"
             src={imgUrl || 'images/questionMark.jpg'}
             alt="Collection"
           />
@@ -40,22 +40,23 @@ const PreviewCard = ({ colName, colImage, maxLimit, typeColor, description }) =>
         </div> */}
 
         {/* Max Limit */}
-        <div className="flex items-center gap-2">
+        {/* <div className="flex items-center gap-2">
           <p className="text-sm font-medium ">Max Limit:</p>
           <span className="text-lg font-semibold text-[#50B248]">
             {maxLimit || 0}
           </span>
-        </div>
+        </div> */}
 
         {/* Description */}
         <div>
-          <p className="text-sm font-medium  mb-1">Description:</p>
-          <p
-            className="text-sm  border min-h-16 border-[#50B248] p-2  rounded-lg max-h-24 overflow-y-auto hide-scrollbar"
-          >
-            {description || "No description provided."}
-          </p>
-        </div>
+  <p className="text-sm font-medium mb-1">Description:</p>
+  <p
+    className="text-sm border border-[#50B248] min-h-20 p-2 rounded-lg h-auto max-h-24 overflow-y-auto break-words hide-scrollbar"
+  >
+    {description || "No description provided."}
+  </p>
+</div>
+
       </div>
     </div>
   );

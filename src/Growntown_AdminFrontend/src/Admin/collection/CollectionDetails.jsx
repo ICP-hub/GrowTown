@@ -21,6 +21,8 @@ import { useNavigate } from "react-router-dom";
 import TokenModal from "./TokenModal";
 import { GrNext } from "react-icons/gr";
 import { GrPrevious } from "react-icons/gr";
+import { addNftSearchData } from "../../redux/universalSearchSlice";
+import { useDispatch } from "react-redux";
 
 
 const cardTypeList = [
@@ -103,6 +105,7 @@ function CollectionDetails() {
   const { id } = useParams();
   const location = useLocation();
   const { collectiondata } = location.state || {};
+  const dispatch = useDispatch()
 
   useEffect(() => {
     let loaderTimer;
@@ -713,6 +716,16 @@ function CollectionDetails() {
     // console.log("clicked");
   };
   console.log(collectiondata);
+  
+
+  useEffect(()=>{
+
+    if(collectiondata && filteredList){
+      dispatch(addNftSearchData({collectiondata:collectiondata, NFTList:filteredList }));
+    }
+
+  },[collectiondata,filteredList])
+
 
   return (
     <>
@@ -768,7 +781,7 @@ function CollectionDetails() {
               <div className="flex flex-col md:flex-row items-start bg-[#29292c] w-full p-4 sm:p-6 md:p-8 text-white rounded-lg my-4 sm:my-6 md:my-8 gap-4 sm:gap-6 md:gap-8">
                 <div className="w-full sm:w-auto md:w-48 lg:w-64">
                   <img
-                    className="w-full h-48 sm:h-40 md:h-48 rounded-xl object-cover border-2 border-[#FCD378] shadow-lg"
+                    className="w-full h-48 sm:h-40 md:h-48 rounded-xl object-cover border-2 border-[#50B248] shadow-lg"
                     src={
                       JSON.parse(collectiondata[4]).collectionImageURL ||
                       "default-image.jpg"
@@ -779,7 +792,7 @@ function CollectionDetails() {
 
                 <div className="flex-1 space-y-4 sm:space-y-6">
                   <div className="space-y-2">
-                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#FCD378]">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#50B248]">
                       {collectiondata[2]}
                     </h1>
                     <p className="text-sm sm:text-base text-gray-300 leading-relaxed">
@@ -790,7 +803,7 @@ function CollectionDetails() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-[#1f1f22] p-4 rounded-lg">
                     <div className="flex flex-col space-y-2">
                       <span className="text-xs text-gray-400 uppercase tracking-wider">Collection ID</span>
-                      <h3 className="text-sm font-medium font-Quicksand text-[#FCD378] truncate hover:text-clip">
+                      <h3 className="text-sm font-medium font-Quicksand text-[#50B248] truncate hover:text-clip">
                         {principalStringg}
                       </h3>
                     </div>
@@ -815,7 +828,7 @@ function CollectionDetails() {
               <div className="hidden sm:flex items-center justify-between text-[12px] md:text-sm lg:text-base ml-2">
                 <div className="relative   min-w-[160px] md:min-w-[180px] flex justify-center lg:mr-5">
                   {currentDropDown === dropdownItems.type && (
-                    <ul className="absolute no-scrollbar top-10 left-0 mt-2 bg-black text-[#FCD378] rounded shadow-lg  p-0 list-none z-50 w-full h-[160px] overflow-y-auto ">
+                    <ul className="absolute no-scrollbar top-10 left-0 mt-2 bg-black text-[#50B248] rounded shadow-lg  p-0 list-none z-50 w-full h-[160px] overflow-y-auto ">
                       {cardTypeList.map((eachType, index) => (
                         <>
                           <div
@@ -836,7 +849,7 @@ function CollectionDetails() {
                             )}
                           </div>
                           {index != cardTypeList.length - 1 && (
-                            <hr className="my-1 border-t border-[#FCD378]" />
+                            <hr className="my-1 border-t border-[#50B248]" />
                           )}
                         </>
                       ))}
@@ -848,8 +861,8 @@ function CollectionDetails() {
                       onClickAnyFilter(dropdownItems.type);
                     }}
                     className={`rounded-full flex justify-center items-center gap-1 
-                                     h-full p-2 bg-[#000] text-[#FCD378]  hover:border-[#FCD378] border-2 ${currentDropDown === dropdownItems.type
-                        ? "border-[#FCD378]"
+                                     h-full p-2 bg-[#000] text-[#50B248] hover:border-[#50B248] border-2 ${currentDropDown === dropdownItems.type
+                        ? "border-[#50B248]"
                         : " border-gray-800"
                       }`}
                   >
@@ -866,8 +879,8 @@ function CollectionDetails() {
                       onClickAnyFilter(dropdownItems.price);
                     }}
                     className={`rounded-full flex justify-center items-center gap-1 
-                                     p-2 bg-[#000] text-[#FCD378]  hover:border-[#FCD378] border-2 ${currentDropDown === dropdownItems.price
-                        ? "border-[#FCD378]"
+                                     p-2 bg-[#000] text-[#50B248] hover:border-[#50B248] border-2 ${currentDropDown === dropdownItems.price
+                        ? "border-[#50B248]"
                         : " border-gray-800"
                       }`}
                   >
@@ -882,7 +895,7 @@ function CollectionDetails() {
 
                   {currentDropDown === dropdownItems.price && (
                     <div
-                      className="absolute top-10 border border-[#FCD378] mt-2 bg-black text-[#FCD378] rounded shadow-lg  p-4 z-50 h-[150px] flex flex-col items-center justify-around"
+                      className="absolute top-10 border border-[#50B248] mt-2 bg-black text-[#50B248] rounded shadow-lg  p-4 z-50 h-[150px] flex flex-col items-center justify-around"
                       onClick={(e) => e.stopPropagation()}
                     >
                       <h1>Price in ICP</h1>
@@ -894,7 +907,7 @@ function CollectionDetails() {
                           }}
                           placeholder="From"
                           type="number"
-                          className="w-20 mb:2 md:mb-0 md:mr-3 rounded-sm border text-[#FCD378] border-[#FCD378] bg-transparent outline-none p-1 text-sm"
+                          className="w-20 mb:2 md:mb-0 md:mr-3 rounded-sm border text-[#50B248] border-[#50B248] bg-transparent outline-none p-1 text-sm"
                         />
                         <input
                           value={toPrice}
@@ -903,12 +916,12 @@ function CollectionDetails() {
                           }}
                           placeholder="to"
                           type="number"
-                          className="w-20 rounded-sm border text-[#FCD378] border-[#FCD378] bg-transparent outline-none p-1 text-sm"
+                          className="w-20 rounded-sm border text-[#50B248] border-[#50B248]bg-transparent outline-none p-1 text-sm"
                         />
                       </div>
                       <div className="">
                         <button
-                          className={`w-20 border-none bg-[#FCD378] text-black h-6 mr-3 rounded-full ${isNaN(applyPriceRange.from) ||
+                          className={`w-20 border-none bg-[#50B248] text-black h-6 mr-3 rounded-full ${isNaN(applyPriceRange.from) ||
                             isNaN(applyPriceRange.to)
                             ? "opacity-30"
                             : "opacity-100"
@@ -931,7 +944,7 @@ function CollectionDetails() {
                           Cancel
                         </button>
                         <button
-                          className={`w-20 border-none bg-[#FCD378] text-black h-6 rounded-full ${isNaN(fromPrice) || isNaN(toPrice)
+                          className={`w-20 border-none bg-[#50B248] text-black h-6 rounded-full ${isNaN(fromPrice) || isNaN(toPrice)
                             ? "opacity-30"
                             : "opacity-100"
                             }`}
@@ -952,7 +965,7 @@ function CollectionDetails() {
                   )}
                 </div>
                 <div className=" relative lg:ml-auto mr-2 lg:mr-20 w-[160px] h-[40px] md:w-[180px] bottom-6">
-                  <span className="relative z-10 top-3 text-xs bg-gray-800 text-[#FCD378] rounded-full px-2  left-5 ">
+                  <span className="relative z-10 top-3 text-xs bg-gray-800 text-[#50B248] rounded-full px-2  left-5 ">
                     Filter & Sort
                   </span>
                   <button
@@ -961,8 +974,8 @@ function CollectionDetails() {
                       onClickAnyFilter(dropdownItems.filter);
                     }}
                     className={` absolute  rounded-full flex justify-center items-center gap-1 
-                                    w-full h-full p-2 bg-[#000] text-[#FCD378]  hover:border-[#FCD378] border-2 ${currentDropDown === dropdownItems.filter
-                        ? "border-[#FCD378]"
+                                    w-full h-full p-2 bg-[#000] text-[#50B248]  hover:border-[#50B248] border-2 ${currentDropDown === dropdownItems.filter
+                        ? "border-[#50B248]"
                         : " border-gray-800"
                       }`}
                   >
@@ -970,7 +983,7 @@ function CollectionDetails() {
                     {currentFilterOption}
                   </button>
                   {currentDropDown === dropdownItems.filter && (
-                    <ul className="absolute top-[60px] left-0 mt-2 no-scrollbar bg-black text-[#FCD378] rounded shadow-lg  p-0 list-none z-50 w-full h-[160px] overflow-y-auto ">
+                    <ul className="absolute top-[60px] left-0 mt-2 no-scrollbar bg-black text-[#50B248] rounded shadow-lg  p-0 list-none z-50 w-full h-[160px] overflow-y-auto ">
                       {filterListOptions.map((eachFilter, index) => (
                         <>
                           <div
@@ -991,7 +1004,7 @@ function CollectionDetails() {
                             )}
                           </div>
                           {index != filterListOptions.length - 1 && (
-                            <hr className="my-1 border-t border-[#FCD378]" />
+                            <hr className="my-1 border-t border-[#50B248]" />
                           )}
                         </>
                       ))}
@@ -1001,7 +1014,7 @@ function CollectionDetails() {
               </div>
               <button
                 className={`rounded-full flex justify-center items-center w-[120px] h-[35px] mt-5 gap-1 
-                  p-2 bg-[#000] text-[#FCD378] border-2 border-gray-800 ml-auto mr-5 sm:hidden`}
+                  p-2 bg-[#000] text-[#50B248] border-2 border-gray-800 ml-auto mr-5 sm:hidden`}
                 onClick={() => updateFiltersDisplayStatus(true)}
               >
                 <LuFilter />
@@ -1098,7 +1111,7 @@ function CollectionDetails() {
                       <div className="w-full m-4 max-w-lg bg-[#111] rounded-t-xl sm:rounded-xl p-4 sm:p-6">
                         <div className="flex items-center justify-end">
                           <button
-                            className="text-[#FCD378] bottom-1 mb-1 z-10"
+                            className="text-[#50B248] bottom-1 mb-1 z-10"
                             onClick={() => updateFiltersDisplayStatus(false)}
                           >
                             <RxCross2 size={20} />
@@ -1107,7 +1120,7 @@ function CollectionDetails() {
                         <div className="flex flex-col items-center justify-around h-[80%] text-[16px]">
                           <div className="relative w-full flex justify-center">
                             {currentDropDown === dropdownItems.type && (
-                              <ul className="absolute top-10 left-0 mt-2 bg-black border border-[#FCD378] text-[#FCD378] rounded shadow-lg  p-0 list-none z-50 w-full h-[130px] overflow-y-auto ">
+                              <ul className="absolute top-10 left-0 mt-2 bg-black border border-[#50B248] text-[#50B248] rounded shadow-lg  p-0 list-none z-50 w-full h-[130px] overflow-y-auto ">
                                 {cardTypeList.map((eachType, index) => (
                                   <>
                                     <div
@@ -1130,7 +1143,7 @@ function CollectionDetails() {
                                       )}
                                     </div>
                                     {index != cardTypeList.length - 1 && (
-                                      <hr className="my-1 border-t border-[#FCD378]" />
+                                      <hr className="my-1 border-t border-[#50B248]" />
                                     )}
                                   </>
                                 ))}
@@ -1142,7 +1155,7 @@ function CollectionDetails() {
                                 onClickAnyFilter(dropdownItems.type);
                               }}
                               className={`rounded-md flex justify-center items-center gap-1 
-                                                w-full h-full p-2 bg-[#000]  text-[#FCD378]  hover:border-[#FCD378] border border-[#FCD378] ${currentDropDown ===
+                                                w-full h-full p-2 bg-[#000]  text-[#50B248]  hover:border-[#50B248] border border-[#50B248] ${currentDropDown ===
                                 dropdownItems.filter &&
                                 "opacity-10"
                                 } `}
@@ -1159,7 +1172,7 @@ function CollectionDetails() {
                                 onClickAnyFilter(dropdownItems.price);
                               }}
                               className={`rounded-md flex justify-center items-center gap-1 w-[100%]
-                                                p-2 bg-[#000] text-[#FCD378]  border border-[#FCD378]`}
+                                                p-2 bg-[#000] text-[#50B248]  border border-[#50B248]`}
                             >
                               <CiDollar size={20} />
                               Price (
@@ -1172,7 +1185,7 @@ function CollectionDetails() {
                             </button>
                             {currentDropDown === dropdownItems.price && (
                               <div
-                                className="absolute top-10  mt-2 border border-[#FCD378] bg-black text-[#FCD378] rounded shadow-lg  p-1 z-50 w-[100%] h-[120px] flex flex-col items-center justify-around"
+                                className="absolute top-10  mt-2 border border-[#50B248] bg-black text-[#50B248] rounded shadow-lg  p-1 z-50 w-[100%] h-[120px] flex flex-col items-center justify-around"
                                 onClick={(e) => e.stopPropagation()}
                               >
                                 <h1>Price in ICP</h1>
@@ -1184,7 +1197,7 @@ function CollectionDetails() {
                                     }}
                                     placeholder="From"
                                     type="number"
-                                    className="w-20 mr-2 rounded-sm border text-[#FCD378] border-[#FCD378] bg-transparent outline-none p-1 text-sm"
+                                    className="w-20 mr-2 rounded-sm border text-[#50B248] border-[#50B248] bg-transparent outline-none p-1 text-sm"
                                   />
                                   <input
                                     value={toPrice}
@@ -1193,12 +1206,12 @@ function CollectionDetails() {
                                     }}
                                     placeholder="to"
                                     type="number"
-                                    className="w-20 rounded-sm border text-[#FCD378] border-[#FCD378] bg-transparent outline-none p-1 text-sm"
+                                    className="w-20 rounded-sm border text-[#50B248] border-[#50B248] bg-transparent outline-none p-1 text-sm"
                                   />
                                 </div>
                                 <div className="">
                                   <button
-                                    className={`w-[80px] border-none bg-[#FCD378] text-black h-[24px] mr-3 rounded-full ${isNaN(applyPriceRange.from) ||
+                                    className={`w-[80px] border-none bg-[#50B248] text-black h-[24px] mr-3 rounded-full ${isNaN(applyPriceRange.from) ||
                                       isNaN(applyPriceRange.to)
                                       ? "opacity-20"
                                       : "opacity-100"
@@ -1221,7 +1234,7 @@ function CollectionDetails() {
                                     Cancel
                                   </button>
                                   <button
-                                    className={`w-[80px] border-none bg-[#FCD378] text-black h-[24px] rounded-full ${isNaN(fromPrice) || isNaN(toPrice)
+                                    className={`w-[80px] border-none bg-[#50B248] text-black h-[24px] rounded-full ${isNaN(fromPrice) || isNaN(toPrice)
                                       ? "opacity-20"
                                       : "opacity-100"
                                       }`}
@@ -1244,7 +1257,7 @@ function CollectionDetails() {
                             )}
                           </div>
                           <div className="relative  h-[40px] w-full bottom-5 ">
-                            <span className="relative top-3 text-xs bg-gray-800 text-[#FCD378] rounded-full px-2 z-10 left-5 ">
+                            <span className="relative top-3 text-xs bg-gray-800 text-[#50B248] rounded-full px-2 z-10 left-5 ">
                               Filter & Sort
                             </span>
                             <button
@@ -1253,7 +1266,7 @@ function CollectionDetails() {
                                 onClickAnyFilter(dropdownItems.filter);
                               }}
                               className={` absolute rounded-md flex justify-center items-center gap-1 
-                                                w-full h-full p-2 bg-[#000] text-[#FCD378]  border-[#FCD378] border ${currentDropDown ===
+                                                w-full h-full p-2 bg-[#000] text-[#50B248]  border-[#50B248] border ${currentDropDown ===
                                 dropdownItems.type &&
                                 "opacity-5"
                                 }  `}
@@ -1262,7 +1275,7 @@ function CollectionDetails() {
                               {currentFilterOption}
                             </button>
                             {currentDropDown === dropdownItems.filter && (
-                              <ul className="absolute bottom-[30px] left-0 mt-2 border border-[#FCD378]  bg-black text-[#FCD378] rounded shadow-lg  p-0 list-none z-50 w-full h-[130px] overflow-y-auto ">
+                              <ul className="absolute bottom-[30px] left-0 mt-2 border border-[#50B248]  bg-black text-[#50B248] rounded shadow-lg  p-0 list-none z-50 w-full h-[130px] overflow-y-auto ">
                                 {filterListOptions.map((eachFilter, index) => (
                                   <>
                                     <div
@@ -1294,7 +1307,7 @@ function CollectionDetails() {
                                         )}
                                     </div>
                                     {index != filterListOptions.length - 1 && (
-                                      <hr className="my-1 border-t border-[#FCD378]" />
+                                      <hr className="my-1 border-t border-[#50B248]" />
                                     )}
                                   </>
                                 ))}

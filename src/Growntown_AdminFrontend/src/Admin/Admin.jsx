@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useAuths } from "../utils/useAuthClient.jsx";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -22,6 +22,7 @@ import UnauthorizedPage from "./collection/UnauthorizedPage";
 import NftTypeSetting from "./NftTypeSettings/NftTypeSetting.jsx";
 import { useSearch } from "../context/SearchContext";
 import SearchResults from "./SearchResults.jsx";
+import { useSelector } from "react-redux";
 
 function Admin() {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,6 +32,18 @@ function Admin() {
   const navigate = useNavigate();
   const [searchVisible, setSearchVisible] = useState(false);
   const { handleSearch, searchResults, setSearchResults } = useSearch();
+  const location = useLocation();
+  const pathWithoutId = location.pathname.split("/").slice(0, -1).join("/");
+  const nftSearchData = useSelector((state)=>state.universalSearch.nftSearchData)
+  const userSearchData = useSelector((state)=>state.universalSearch.userSearchData)
+    
+  console.log('userSearchData',userSearchData)
+  useEffect(()=>{
+    console.log('pathWithoutId=>',location?.pathname)
+    console.log('pathWithoutId=>',pathWithoutId)
+
+  },[location])
+
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -119,7 +132,21 @@ function Admin() {
       return;
     }
 
+    const searchLower  = query.toLowerCase();
+
     try {
+
+      if(pathWithoutId === "/Admin/collection/collectionDetails" && nftSearchData ){
+        const filteredNft= nftSearchData?.NFTList.filter((nft)=>nft[0][2].nonfungible.name?.toLowerCase().includes(searchLower))
+        setSearchResults({nfts:{collectiondata:nftSearchData?.collectiondata,NFTList:filteredNft}});
+        setSearchVisible(nftSearchData.NFTList.length > 0);
+        console.log(' =>', nftSearchData)
+      }else if(location?.pathname === "/admin/users" && userSearchData ){
+        const filteredUsers =  userSearchData?.alluser.filter((user) =>user[3].toLowerCase().includes(searchLower));
+        setSearchResults({users:filteredUsers});
+        setSearchVisible(userSearchData.alluser.length > 0);    
+      }
+      else{
       const collections = await fetchAndProcessCollections();
       const filteredResults = [];
       
@@ -130,7 +157,6 @@ function Admin() {
         item[1].forEach(collection => {
           if (!collection || !Array.isArray(collection) || collection.length < 3) return;
           
-          const searchLower = query.toLowerCase();
           const collNameMatch = collection[2]?.toLowerCase().includes(searchLower);
           
           // Process NFTs with more complete data
@@ -160,8 +186,9 @@ function Admin() {
         });
       });
 
-      setSearchResults(filteredResults);
+      setSearchResults({collections:filteredResults});
       setSearchVisible(filteredResults.length > 0);
+    }
       
     } catch (error) {
       console.error("Error processing search:", error);
@@ -184,7 +211,7 @@ function Admin() {
   return (
     <div className="min-h-screen w-full bg-[#0D0D0D] flex flex-col lg:grid lg:grid-cols-[auto_1fr]">
       {/* Sidebar */}
-      <aside className="fixed lg:sticky top-0 left-0 h-full z-40">
+      <aside className="fixed lg:sticky top-0 left-0 h-screen z-40">
         <SideBar isOpen={isOpen} toggleSidebar={toggleSidebar} />
       </aside>
 
@@ -196,7 +223,9 @@ function Admin() {
           <div className="relative hidden sm:block sm:w-[50%] lg:w-full max-w-2xl mx-auto xl:mx-0" id="search-container">
             <input
               type="text"
-              placeholder="Search collections and NFTs..."
+              placeholder={`Search ${pathWithoutId === "/Admin/collection/collectionDetails" ? 'NFT' :
+                location?.pathname === "/admin/users" ? 'User' : 'Collection'
+               }...`}
               className="w-full p-2 pl-10 rounded-lg bg-[#2b2b2b] text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-all"
               onChange={handleSearchInput}
             />
@@ -212,7 +241,10 @@ function Admin() {
             {searchVisible && (
               <div className="absolute left-0 right-0 mt-1 z-50">
                 <SearchResults 
-                  results={searchResults} 
+                  collections={searchResults?.collections} 
+                  nfts={searchResults?.nfts}
+                  users={searchResults?.users}
+
                   onClose={() => setSearchVisible(false)}
                 />
               </div>

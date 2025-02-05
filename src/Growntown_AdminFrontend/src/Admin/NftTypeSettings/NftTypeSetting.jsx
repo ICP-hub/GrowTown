@@ -164,7 +164,7 @@ const NftTypeSetting = () => {
       {loading && (
         <div className="absolute backdrop-blur-lg w-full top-[50%] left-[50%] transform -translate-x-1/2 -translate-y-1/2">
           <div className="w-[30%]  flex mx-auto my-auto ">
-            <Createcollectionloader  message={' NFT type'}/>
+            <Createcollectionloader  message={' NFT type '}/>
           </div>
 
         </div>

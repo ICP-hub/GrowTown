@@ -10,7 +10,7 @@ import Footer from "../components/Footer";
 const LandingPage = ()=>{
 
     return(
-      <div className=" w-screen">
+      <div className=" ">
         <Header/>
         <HeroComp/>
         <VideoComp/>

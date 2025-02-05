@@ -29,10 +29,10 @@ export const VideoComp = () => {
   }, [inView]);
 
   return (
-    <div ref={ref} className="bg-[#00A6C0] flex justify-center items-center h-screen w-full overflow-hidden -mt-1">
+    <div ref={ref} className="bg-[#00A6C0] flex justify-center items-center py-40 xl:h-screen w-full overflow-hidden -mt-1">
       {/* Video Frame Wrapper */}
       <div className="relative flex justify-center items-center w-[90%] md:w-[60%] lg:w-[65%] aspect-video"
-        data-aos='zoom-in'
+      data-aos='zoom-in'
       >
         
         {/* Wooden Frame Image with AOS Animation */}
@@ -46,7 +46,7 @@ export const VideoComp = () => {
         />
 
         {/* Video Background Inside the Frame */}
-        <div className="absolute w-[75%] h-[66%] md:w-[92%] md:h-[80%] lg:w-[92.5%] lg:h-[79.5%] rounded-3xl overflow-hidden bg-black bottom-[12%] md:bottom-[8%] lg:bottom-[8.5%]">
+        <div className="absolute w-[92.5%] h-[79.5%] rounded-lg lg:rounded-3xl overflow-hidden bg-black bottom-[8%] lg:bottom-[8.5%]">
           {!isPlay ? (
             // Play Button (Only Shows When Video is Stopped)
             <div

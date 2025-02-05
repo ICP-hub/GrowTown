@@ -66,8 +66,8 @@ function Users() {
   };
     
   return (
-    <div className="w-full mx-2 h-full  px-10 text-white flex flex-col items-center rounded-xl">
-      <div className="flex justify-between items-center w-full mb-6 mt-5">
+    <div className="w-full mx-2 h-full  px-4 sm:px-8 md:px-16 pt-10 text-white flex flex-col items-center rounded-xl">
+      <div className="flex justify-between items-center w-full ">
         <BackButton />
         {/* all order button is not needed
           <div className="flex space-x-4">
