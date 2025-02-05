@@ -30,6 +30,13 @@ namespace IC.GameKit
             {
                 mDelegationIdentity = value;
                 EnableButtons();
+
+                // ✅ Call AutoCreateUser when DelegationIdentity is set
+                if (mDelegationIdentity != null)
+                {
+                    Debug.Log("✅ Delegation Identity is set. Calling AutoCreateUser...");
+                    AutoCreateUser();
+                }
             }
         }
 
@@ -40,6 +47,10 @@ namespace IC.GameKit
             mCollectionButton = GameObject.Find("Button_Collection")?.GetComponent<Button>();
 
             mEd25519Identity = Ed25519Identity.Generate();
+            if (mEd25519Identity != null)
+            {
+                AutoCreateUser();
+            }
         }
 
         public void EnableButtons()
@@ -72,6 +83,7 @@ namespace IC.GameKit
                 Debug.LogError($"❌ API call failed: {e.Message}");
             }
         }
+
         public async void GetAllCollections()
         {
             if (DelegationIdentity == null)
@@ -107,5 +119,66 @@ namespace IC.GameKit
                 Debug.LogError($"❌ API call failed: {e.Message}");
             }
         }
+
+        private async void AutoCreateUser()
+        {
+            if (DelegationIdentity == null)
+            {
+                Debug.LogError("❌ DelegationIdentity is NULL, API call cannot proceed!");
+                return;
+            }
+
+            var agent = new HttpAgent(DelegationIdentity);
+            var canisterId = Principal.FromText(greetBackendCanister);
+            var client = new GreetingClient.GreetingClient(agent, canisterId);
+
+            try
+            {
+                Debug.Log("🔄 Fetching user principal from Greet()...");
+                string userPrincipalString = await client.GetPrinicpal();
+
+                Principal userPrincipal;
+                try
+                {
+                    // ✅ Ensure proper Principal conversion
+                    userPrincipal = Principal.FromText(userPrincipalString);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"❌ Invalid Principal format: {userPrincipalString}. Error: {ex.Message}");
+                    return;
+                }
+
+                // Generate a UUID
+                string uuid = GenerateUUID();
+
+                Debug.Log($"✅ Principal response: {userPrincipal}");
+                Debug.Log($"✅ Generated UUID: {uuid}");
+
+                // ✅ Properly pass Principal and UUID as Candid arguments
+                CandidArg arg = CandidArg.FromCandid(
+                    CandidTypedValue.Principal(userPrincipal), // Valid Principal
+                    CandidTypedValue.Text(uuid) // UUID as Text
+                );
+
+                // Call create_user function on the canister
+                CandidArg reply = await agent.CallAsynchronousAndWaitAsync(canisterId, "create_user", arg);
+                Debug.Log($"✅ create_user response: {reply}");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"❌ Failed to create user: {e.Message}");
+            }
+        }
+
+
+        /// <summary>
+        /// Generates a UUID for user registration.
+        /// </summary>
+        private string GenerateUUID()
+        {
+            return Guid.NewGuid().ToString();
+        }
+
     }
 }

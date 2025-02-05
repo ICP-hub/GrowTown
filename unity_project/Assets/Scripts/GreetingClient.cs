@@ -34,6 +34,14 @@ namespace GreetingClient
             return reply.ToObjects<string>(this.Converter);
         }
 
+        public async Task<string> GetPrinicpal()
+        {
+            CandidArg arg = CandidArg.FromCandid();
+            QueryResponse response = await this.Agent.QueryAsync(this.CanisterId, "getPrincipal", arg);
+            CandidArg reply = response.ThrowOrGetReply();
+            return reply.ToObjects<string>(this.Converter);
+        }
+
         public async Task<int> GetAllCollections()
         {
             CandidArg arg = CandidArg.FromCandid();
