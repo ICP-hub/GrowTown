@@ -6,13 +6,13 @@ using EdjCase.ICP.Candid.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
-using UnityMainThreadDispatcher;
+
 
 namespace IC.GameKit
 {
     public class TestICPAgent : MonoBehaviour
     {
-        public string greetFrontend = "https://7ynkd-kiaaa-aaaac-ahmfq-cai.icp0.io/";
+        public string greetFrontend = "https://7kl52-gyaaa-aaaac-ahmgq-cai.icp0.io/";
         public string greetBackendCanister = "7nk3o-laaaa-aaaac-ahmga-cai";
 
         Text mMyPrincipalText = null;
@@ -29,7 +29,7 @@ namespace IC.GameKit
             set
             {
                 mDelegationIdentity = value;
-                EnableButtons(); 
+                EnableButtons();
             }
         }
 
@@ -72,69 +72,40 @@ namespace IC.GameKit
                 Debug.LogError($"❌ API call failed: {e.Message}");
             }
         }
-public async void GetAllCollections()
-{
-    if (DelegationIdentity == null)
-    {
-        Debug.LogError("❌ DelegationIdentity is NULL, cannot fetch collections!");
-        return;
-    }
-
-    Debug.Log("✅ Fetching all collections...");
-
-    var agent = new HttpAgent(DelegationIdentity);
-    var canisterId = Principal.FromText(greetBackendCanister);
-    var client = new GreetingClient.GreetingClient(agent, canisterId);
-
-    try
-    {
-        Debug.Log("🔄 Sending getAllCollections request...");
-        List<(Principal, List<(ulong, Principal, string, string, string)>)> collections = await client.GetAllCollections();
-
-        Debug.Log($"✅ Received {collections.Count} collections.");
-
-        if (collections.Count == 0)
+        public async void GetAllCollections()
         {
-            Debug.LogWarning("⚠ No collections found.");
-        }
-
-        var collectionDataText = GameObject.Find("CollectionData")?.GetComponent<Text>();
-
-        if (collectionDataText == null)
-        {
-            Debug.LogError("❌ CollectionData UI not found.");
-            return;
-        }
-
-        string displayText = "User Collections:\n";
-
-        foreach (var collection in collections)
-        {
-            Debug.Log($"📌 User: {collection.Item1}");
-            displayText += $"User: {collection.Item1}\n";
-
-            foreach (var item in collection.Item2)
+            if (DelegationIdentity == null)
             {
-                Debug.Log($"  📦 Time: {item.Item1}, CanisterId: {item.Item2}, Name: {item.Item3}, Symbol: {item.Item4}, Metadata: {item.Item5}");
-                displayText += $"Time: {item.Item1}, CanisterId: {item.Item2}, Name: {item.Item3}, Symbol: {item.Item4}, Metadata: {item.Item5}\n";
+                Debug.LogError("❌ DelegationIdentity is NULL, cannot fetch collections!");
+                return;
+            }
+
+            Debug.Log("✅ Fetching total collections count...");
+
+            var agent = new HttpAgent(DelegationIdentity);
+            var canisterId = Principal.FromText(greetBackendCanister);
+            var client = new GreetingClient.GreetingClient(agent, canisterId);
+
+            try
+            {
+                Debug.Log("🔄 Sending getAllCollections request...");
+                int totalCollections = await client.GetAllCollections(); // Expecting an integer now
+
+                Debug.Log($"✅ Total collections retrieved: {totalCollections}");
+
+                // Find the UI Text object
+                var collectionDataText = GameObject.Find("CollectionData")?.GetComponent<Text>();
+                if (collectionDataText == null)
+                {
+                    Debug.LogError("❌ CollectionData UI not found.");
+                    return;
+                }
+                collectionDataText.text = $"Total Collections: {totalCollections}";
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"❌ API call failed: {e.Message}");
             }
         }
-
-        Debug.Log($"✅ Final Display Text:\n{displayText}");
-
-        PimDeWitte.UnityMainThreadDispatcher.Instance().Enqueue(() =>
-{
-    collectionDataText.text = displayText;
-});
-
-
-    }
-    catch (Exception e)
-    {
-        Debug.LogError($"❌ API call failed: {e.Message}");
-    }
-}
-
-
     }
 }

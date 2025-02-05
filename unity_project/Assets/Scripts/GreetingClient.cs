@@ -5,7 +5,8 @@ using EdjCase.ICP.Agent.Responses;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;        // Required for Exception handling
-using UnityEngine; 
+using System.Numerics; // Required for BigInteger (handling large numbers)
+using UnityEngine;
 
 namespace GreetingClient
 {
@@ -33,28 +34,31 @@ namespace GreetingClient
             return reply.ToObjects<string>(this.Converter);
         }
 
-       public async Task<List<(Principal, List<(ulong, Principal, string, string, string)>)>> GetAllCollections()
-{
-    CandidArg arg = CandidArg.FromCandid();
-    try
-    {
-        Debug.Log("🔄 Calling getAllCollections...");
-        QueryResponse response = await this.Agent.QueryAsync(this.CanisterId, "getAllCollections", arg);
-        CandidArg reply = response.ThrowOrGetReply();
+        public async Task<int> GetAllCollections()
+        {
+            CandidArg arg = CandidArg.FromCandid();
+            try
+            {
+                Debug.Log("🔄 Calling getAllCollections...");
+                CandidArg reply = await this.Agent.CallAsynchronousAndWaitAsync(this.CanisterId, "totalcollections", arg);
 
-        Debug.Log("✅ Received response from getAllCollections.");
+                Debug.Log($"✅ Received response from getAllCollections: {reply}");
 
-        var collections = reply.ToObjects<List<(Principal, List<(ulong, Principal, string, string, string)>)>>(this.Converter);
+                // Convert Nat (ICP's unbounded integer) to C# BigInteger
+                UnboundedUInt totalCollectionsNat = reply.ToObjects<UnboundedUInt>(this.Converter);
+                BigInteger bigIntValue = totalCollectionsNat.ToBigInteger();
 
-        Debug.Log($"✅ Parsed {collections.Count} collections.");
-        return collections;
-    }
-    catch (Exception e)
-    {
-        Debug.LogError($"❌ Failed to fetch collections: {e.Message}");
-        return new List<(Principal, List<(ulong, Principal, string, string, string)>)>();
-    }
-}
+                // Convert safely to int, ensuring it doesn't exceed Int32.MaxValue
+                int totalCollections = bigIntValue > int.MaxValue ? int.MaxValue : (int)bigIntValue;
 
+                Debug.Log($"✅ Parsed total collections: {totalCollections}");
+                return totalCollections;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"❌ Failed to fetch collections: {e.Message}");
+                return 0; // Return 0 on failure
+            }
+        }
     }
 }
