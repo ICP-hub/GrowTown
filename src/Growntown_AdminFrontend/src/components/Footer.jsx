@@ -1,30 +1,34 @@
 import React from 'react'
 
 const Footer = () => {
-    const socialImg = ['prime_twitter.svg', 'ic_baseline-discord.svg', 'lineicons_telegram.svg'];
+    const socialLinks = [
+        { img: 'prime_twitter.svg', link: 'https://x.com/Grow_Town' },
+        { img: 'ic_baseline-discord.svg', link: 'https://discord.gg/FXaaZr7T' },
+        { img: 'lineicons_telegram.svg', link: 'https://t.me/growtownchat' }
+    ];
     return (
         <div className='w-full relative -mt-20 sm:-mt-24 bg-[#D9D9D93D] z-50 overflow-hidden backdrop-blur-lg'>
             <div className="bg-transparent text-white px-6 h-full py-4 shadow-md">
 
 
-                <img src="images/GrowTownLogo .png" alt="logo" className=" w-20 sm:w-auto absolute left-[50%] transform -translate-x-1/2 my-auto"
-                    draggable='false'
-                    loading="lazy"
+                <img src="images/GrowTownLogo .png" alt="logo" className=" w-20 sm:w-auto absolute left-[50%] transform -translate-x-1/2 my-auto" 
+                 draggable='false'
+                 loading="lazy"/>
+                
+                     {/* Social Links */}
+               <div className="flex justify-end items-center gap-2 sm:gap-5  h-12 sm:h-16 mx-auto w-auto lg:mr-4 ">
+               {socialLinks.map((item, index) => (
+            <a key={index} href={item.link} target="_blank" rel="noopener noreferrer">
+                <img
+                    src={`images/${item.img}`}
+                    alt="social icon"
+                    className="h-6 w-6 hover:opacity-80 cursor-pointer"
+                     draggable='false'
+              loading="lazy"
                 />
-
-                {/* Social Links */}
-                <div className="flex justify-end items-center gap-5  h-12 sm:h-16 mx-auto w-auto lg:mr-4 ">
-                    {socialImg.map((img, index) => (
-                        <img
-                            key={index}
-                            src={`images/${img}`}
-                            alt="social icon"
-                            className=" h-5 w-5 sm:h-7 sm:w-7 hover:opacity-80 cursor-pointer"
-                            draggable='false'
-                            loading="lazy"
-                        />
-                    ))}
-                </div>
+            </a>
+        ))}
+                        </div>
 
             </div>
 

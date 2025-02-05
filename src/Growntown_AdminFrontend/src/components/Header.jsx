@@ -45,8 +45,9 @@ const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     return (
-        <div className='w-full top-0 bg-[#D9D9D93D] z-50 fixed backdrop-blur-lg'>
-            <nav className="bg-transparent text-white px-6 py-4 shadow-md">
+        <div className='w-full top-0 bg-[#D9D9D93D] z-50 sticky '>
+        <div className='  w-full absolute backdrop-blur-lg'>
+        <nav className="bg-transparent text-white px-6 py-4   shadow-md">
                 <div className="container mx-auto flex items-center justify-between">
                     {/* Logo */}
                     <div className="flex items-center">
@@ -60,7 +61,7 @@ const Header = () => {
                     <ul className="hidden md:flex  md:text-xl font-bold text-[#4B2519] space-x-6">
                         {navText.map((text, index) => (
                             <a href={`#${text}`} key={index}>
-                                <li className="hover:text-[#FFF3C5] cursor-pointer text-2xl">
+                                <li className="hover:text-[#FFF3C5] cursor-pointer text-2xl custom-fingerpaint-small">
                                     {text}
                                 </li>
                             </a>
@@ -114,7 +115,7 @@ const Header = () => {
                         {navText.map((text, index) => (
                             <a href={`#${text}`} key={index}>
                                 <li
-                                    className="hover:text-[#FFF3C5] cursor-pointer text-center py-2 border-b border-gray-700"
+                                    className="hover:text-[#FFF3C5] cursor-pointer text-center py-2 border-b border-gray-700 custom-fingerpaint" 
                                 >
                                     {text}
                                 </li>
@@ -130,6 +131,7 @@ const Header = () => {
                     </div>
                 </div>
             </nav>
+            </div>
         </div>
     );
 };
