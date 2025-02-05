@@ -579,7 +579,7 @@ const Modal = (props) => {
         </div>
         <div className="flex justify-center mt-2 md:mt-3">
           {type === "add" && (
-            <div className="flex  justify-center gap-[10%] items-center">
+            <div className="flex  justify-center gap-2 sm:gap-[10%] items-center">
               <div onClick={() => toggleModal()}>
                 <Buttons bgColor="black" hover={{ textColor: 'text-red-600', scale: 'scale-110' }} textColor="white" buttonName={"Cancel"} />
               </div>

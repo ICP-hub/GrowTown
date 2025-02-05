@@ -209,7 +209,7 @@ function Admin() {
   }
 
   return (
-    <div className="container max-w-[2000px] mx-auto">
+    <div className="container max-w-[2000px] mx-auto custom-poppins">
     <div className="min-h-screen w-full bg-[#0D0D0D] flex flex-col lg:grid lg:grid-cols-[auto_1fr]">
       {/* Sidebar */}
       <aside className="fixed lg:sticky top-0 left-0 h-screen  z-40">

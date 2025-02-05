@@ -78,7 +78,7 @@ function Users() {
         <div className="overflow-x-auto border w-full border-[#50B248] rounded-2xl">
             <table className="w-full border text-left">
               <thead className="bg-[#50B248]">
-                <tr className="text-center">
+                <tr className="text-center custom-poppins">
                   <th className="px-4 py-3 text-black w-1/4">Name</th>
                   <th className="px-4 py-3 text-black w-1/4">Email</th>
                   <th className="px-4 py-3 text-black w-1/4">Principal</th>
@@ -88,7 +88,7 @@ function Users() {
               <tbody>
                 {loading ? (
                   Array(5).fill("").map((_, index) => (
-                    <tr key={index} className="border-t border-gray-600">
+                    <tr key={index} className="border-t border-gray-600 ">
                       <td className="px-4 py-3 text-center flex items-center gap-2">
                         <Skeleton circle height={30} width={30} baseColor="#202020" highlightColor="#282828" />
                         <Skeleton height={20} width={150} baseColor="#202020" highlightColor="#282828" />
@@ -117,7 +117,7 @@ function Users() {
                       ? Principal.fromUint8Array(userPrincipalArray._arr).toText()
                       : null;
                     return (
-                      <tr key={index} className={` hover:bg-gray-800 whitespace-nowrap text-white`}>
+                      <tr key={index} className={` hover:bg-gray-800 whitespace-nowrap text-white `}>
                         <td className="px-4 py-3 text-center">
                           <img src="/image/admin.png" alt="" className="w-8 h-8 rounded-full mr-4 inline-block" />
                           {user[3]}

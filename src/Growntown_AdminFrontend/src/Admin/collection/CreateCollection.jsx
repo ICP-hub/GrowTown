@@ -641,7 +641,7 @@ const CreateCollection = () => {
 
 
                   {/* Form Buttons */}
-                  <div className="flex  justify-around gap-[14%] w-[100%] mt-[10px]  pb-8 sm:mb-0">
+                  <div className="flex  justify-center md:justify-around gap-[14%] w-[100%] mt-[10px]  pb-8 sm:mb-0 mx-auto">
                     <div
                       type="button"
                       onClick={() => navigate(-1)}
@@ -651,7 +651,7 @@ const CreateCollection = () => {
                     </div>
 
                     <div onClick={handleSubmit} className="mt-10 ml-4">
-                      <Buttons bgColor="white" textColor="black" buttonName={"Create Collection"} />
+                      <Buttons bgColor="white" textColor="black" buttonName={"Create"} />
                     </div>
 
                   </div>
