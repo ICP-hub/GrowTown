@@ -3,12 +3,12 @@ using EdjCase.ICP.Agent;
 using EdjCase.ICP.Agent.Identities;
 using EdjCase.ICP.Agent.Models;
 using EdjCase.ICP.Candid.Models;
-using EdjCase.ICP.Candid.Utilities;
 using Newtonsoft.Json;
 using System;
 using System.Web;
 using System.Collections.Generic;
-
+using System.Linq;
+using System.Text;
 
 namespace IC.GameKit
 {
@@ -35,9 +35,10 @@ namespace IC.GameKit
             mTestICPAgent = gameObject.GetComponent<TestICPAgent>();
             if (mTestICPAgent == null)
             {
-                Debug.LogError("TestICPAgent component not found on GameObject.");
+                Debug.LogError("❌ TestICPAgent component not found on GameObject.");
             }
         }
+
         private bool IsRunningOnMobile()
         {
 #if UNITY_ANDROID || UNITY_IOS
@@ -60,7 +61,7 @@ namespace IC.GameKit
             }
 
             string route = IsRunningOnMobile() ? "app" : "";
-            string sessionKeyHex = ByteUtil.ToHexString(mTestICPAgent.TestIdentity.PublicKey.ToDerEncoding());
+            string sessionKeyHex = ToHexString(mTestICPAgent.TestIdentity.PublicKey.ToDerEncoding());
             string targetUrl = $"{mTestICPAgent.greetFrontend}{route}?sessionkey={sessionKeyHex}";
 
             Debug.Log($"🔗 Opening browser in Native App: {targetUrl}");
@@ -122,7 +123,7 @@ namespace IC.GameKit
             var delegations = new List<SignedDelegation>();
             foreach (var signedDelegationModel in delegationChainModel.delegations)
             {
-                var pubKey = SubjectPublicKeyInfo.FromDerEncoding(ByteUtil.FromHexString(signedDelegationModel.delegation.pubkey));
+                var pubKey = SubjectPublicKeyInfo.FromDerEncoding(FromHexString(signedDelegationModel.delegation.pubkey));
                 var expiration = ICTimestamp.FromNanoSeconds(Convert.ToUInt64(signedDelegationModel.delegation.expiration, 16));
 
                 if (expiration.NanoSeconds < ICTimestamp.Now().NanoSeconds)
@@ -132,12 +133,39 @@ namespace IC.GameKit
                 }
 
                 var delegation = new Delegation(pubKey, expiration);
-                var signature = ByteUtil.FromHexString(signedDelegationModel.signature);
+                var signature = FromHexString(signedDelegationModel.signature);
                 delegations.Add(new SignedDelegation(delegation, signature));
             }
 
-            var chainPublicKey = SubjectPublicKeyInfo.FromDerEncoding(ByteUtil.FromHexString(delegationChainModel.publicKey));
+            var chainPublicKey = SubjectPublicKeyInfo.FromDerEncoding(FromHexString(delegationChainModel.publicKey));
             return new DelegationIdentity(mTestICPAgent.TestIdentity, new DelegationChain(chainPublicKey, delegations));
+        }
+
+        /// <summary>
+        /// Converts a byte array to a hexadecimal string.
+        /// </summary>
+        /// <param name="bytes">Byte array</param>
+        /// <returns>Hex string</returns>
+        private static string ToHexString(byte[] bytes)
+        {
+            return BitConverter.ToString(bytes).Replace("-", "").ToLower();
+        }
+
+        /// <summary>
+        /// Converts a hexadecimal string to a byte array.
+        /// </summary>
+        /// <param name="hex">Hex string</param>
+        /// <returns>Byte array</returns>
+        private static byte[] FromHexString(string hex)
+        {
+            if (hex.Length % 2 != 0)
+            {
+                throw new ArgumentException("Invalid hex string length.");
+            }
+
+            return Enumerable.Range(0, hex.Length / 2)
+                .Select(i => Convert.ToByte(hex.Substring(i * 2, 2), 16))
+                .ToArray();
         }
     }
 }
