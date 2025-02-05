@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const Createcollectionloader = ({ done, total }) => {
+const Createcollectionloader = ({ done=0, total=0, message }) => {
   const [progress, setProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
 
@@ -18,7 +18,7 @@ const Createcollectionloader = ({ done, total }) => {
       <div className="flex flex-col items-center mb-8">
         <div className="w-20 h-20 border-8 border-gray-700 border-t-gray-400 rounded-full animate-spin"></div>
         <p className="mt-2 text-2xl font-medium text-white">
-          Please wait till NFT Minted...
+          Please wait till {message}...
         </p>
       </div>
 
@@ -36,7 +36,7 @@ const Createcollectionloader = ({ done, total }) => {
 
       {/* Progress Text */}
       <p className="mt-6 text-2xl text-white">
-        <span>{done}</span> / <span>{total}</span> NFT Minting...
+        <span>{done}</span> / <span>{total}</span> {message}...
       </p>
     </div>
   );

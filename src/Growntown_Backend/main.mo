@@ -1,4 +1,3 @@
-
 import ExtTokenClass "../EXT-V2/ext_v2/v2";
 import Cycles "mo:base/ExperimentalCycles";
 import Principal "mo:base/Principal";
@@ -101,9 +100,9 @@ actor Main {
     };
   };
 
-  type NftTypeMetadata ={
-    nfttype: Text;
-    nft_type_quantity: Nat;
+  type NftTypeMetadata = {
+    nfttype : Text;
+    nft_type_quantity : Nat;
     nft_type_cost : Nat64;
   };
 
@@ -147,51 +146,47 @@ actor Main {
   type CommonError = ExtCore.CommonError;
   type MetadataLegacy = ExtCommon.Metadata;
 
+  public type SupportedStandard = {
+    url : Text;
+    name : Text;
+  };
 
- public type SupportedStandard = {
-        url: Text;
-        name: Text;
+  public type Icrc28TrustedOriginsResponse = {
+    trusted_origins : [Text];
+  };
+
+  // Function to return supported standards
+  public query func icrc10_supported_standards() : async [SupportedStandard] {
+    return [
+      {
+        url = "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-10/ICRC-10.md";
+        name = "ICRC-10";
+      },
+      {
+        url = "https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md";
+        name = "ICRC-28";
+      },
+    ];
+  };
+
+  // Function to return trusted origins
+  public func icrc28_trusted_origins() : async Icrc28TrustedOriginsResponse {
+    let trusted_origins = [
+      "https://7ynkd-kiaaa-aaaac-ahmfq-cai.icp0.io",
+      "http://localhost:3001",
+      "http://bd3sg-teaaa-aaaaa-qaaba-cai.localhost:4943",
+      "http://127.0.0.1:4943/?canisterId=bd3sg-teaaa-aaaaa-qaaba-cai",
+      "http://127.0.0.1:4943",
+    ];
+
+    return {
+      trusted_origins = trusted_origins;
     };
-
-    public type Icrc28TrustedOriginsResponse = {
-        trusted_origins: [Text];
-    };
-
-    // Function to return supported standards
-    public query func icrc10_supported_standards() : async [SupportedStandard] {
-        return [
-            {
-                url = "https://github.com/dfinity/ICRC/blob/main/ICRCs/ICRC-10/ICRC-10.md";
-                name = "ICRC-10";
-            },
-            {
-                url = "https://github.com/dfinity/wg-identity-authentication/blob/main/topics/icrc_28_trusted_origins.md";
-                name = "ICRC-28";
-            }
-        ];
-    };
-
-    // Function to return trusted origins
-    public func icrc28_trusted_origins() : async Icrc28TrustedOriginsResponse {
-        let trusted_origins = [
-            "https://7ynkd-kiaaa-aaaac-ahmfq-cai.icp0.io",
-            "http://localhost:3001",
-            "http://bd3sg-teaaa-aaaaa-qaaba-cai.localhost:4943",
-            "http://127.0.0.1:4943/?canisterId=bd3sg-teaaa-aaaaa-qaaba-cai",
-            "http://127.0.0.1:4943",
-        ];
-
-        return {
-            trusted_origins = trusted_origins;
-        };
-    };
-
-
+  };
 
   /* -------------------------------------------------------------------------- */
   /*                         Data Maps                                          */
   /* -------------------------------------------------------------------------- */
-
 
   // Maps user and the collection canisterIds they create
   private var usersCollectionMap = TrieMap.TrieMap<Principal, [(Time.Time, Principal)]>(Principal.equal, Principal.hash);
@@ -211,8 +206,8 @@ actor Main {
   private var userDetailsMap : TrieMap.TrieMap<Principal, UserDetails> = TrieMap.TrieMap<Principal, UserDetails>(Principal.equal, Principal.hash);
 
   //private stable var Objects Array
-  private stable var _objects_Array: [(Nat, NftTypeMetadata)] = [];
-  private stable var _objectIdCounter: Nat = 0;
+  private stable var _objects_Array : [(Nat, NftTypeMetadata)] = [];
+  private stable var _objectIdCounter : Nat = 0;
   /* -------------------------------------------------------------------------- */
   /*                         SYSTEM FUNCTIONS                                   */
   /* -------------------------------------------------------------------------- */
@@ -266,7 +261,7 @@ actor Main {
   /* -------------------------------------------------------------------------- */
 
   //add collection manually to collection map
-   public query (message) func greet() : async Text {
+  public query (message) func greet() : async Text {
     return "Hello, " # Principal.toText(message.caller) # "!";
   };
   public shared ({ caller = user }) func add_collection_to_map(collection_id : Principal) : async Text {
@@ -573,102 +568,123 @@ actor Main {
 
   //add object data
   // public shared func addObject(objMetadata: NftTypeMetadata) : async Text {
-  // let costPerUnitInE8s = objMetadata.nft_type_cost * 100000000; 
-  
+  // let costPerUnitInE8s = objMetadata.nft_type_cost * 100000000;
+
   // let existingObject = Array.find(_objects_Array, func (entry: (Nat, NftTypeMetadata)) : Bool {
   //   return entry.1.nfttype == objMetadata.nfttype and entry.1.nft_type_quantity == objMetadata.nft_type_quantity;
   // });
-  
+
   // switch (existingObject) {
   //   case (?_) {
-      
+
   //     return "Error: Object with name '" # objMetadata.nfttype # "' and value " # Nat.toText(objMetadata.nft_type_quantity) # " already exists.";
   //   };
   //   case null {
-  //     let newId = _objectIdCounter; 
-  //     _objectIdCounter += 1; 
-    
+  //     let newId = _objectIdCounter;
+  //     _objectIdCounter += 1;
+
   //     let updatedMetadata : NftTypeMetadata = {
   //       nfttype = objMetadata.nfttype;
   //       nft_type_quantity = objMetadata.nft_type_quantity;
   //       nft_type_cost = costPerUnitInE8s;
   //     };
-  //     _objects_Array := Array.append(_objects_Array, [(newId, updatedMetadata)]); 
+  //     _objects_Array := Array.append(_objects_Array, [(newId, updatedMetadata)]);
   //     return "Object added successfully with ID: " # Nat.toText(newId) # " and Name: " # objMetadata.nfttype # " with cost per unit (in e8s): " # Nat64.toText(costPerUnitInE8s);
   //   };
   // };
   // };
-  public shared func addObject(objMetadata: NftTypeMetadata) : async Text {
-  let costPerUnit = objMetadata.nft_type_cost; 
-  
-  let existingObject = Array.find(_objects_Array, func (entry: (Nat, NftTypeMetadata)) : Bool {
-    return entry.1.nfttype == objMetadata.nfttype and entry.1.nft_type_quantity == objMetadata.nft_type_quantity;
-  });
-  
-  switch (existingObject) {
-    case (?_) {
-      return "Error: Object with name '" # objMetadata.nfttype # "' and value " # Nat.toText(objMetadata.nft_type_quantity) # " already exists.";
-    };
-    case null {
-      let newId = _objectIdCounter; 
-      _objectIdCounter += 1; 
-    
-      let updatedMetadata : NftTypeMetadata = {
-        nfttype = objMetadata.nfttype;
-        nft_type_quantity = objMetadata.nft_type_quantity;
-        nft_type_cost = costPerUnit;
+  public shared func addObject(objMetadata : NftTypeMetadata) : async Text {
+    let costPerUnit = objMetadata.nft_type_cost;
+
+    let existingObject = Array.find(
+      _objects_Array,
+      func(entry : (Nat, NftTypeMetadata)) : Bool {
+        return entry.1.nfttype == objMetadata.nfttype and entry.1.nft_type_quantity == objMetadata.nft_type_quantity;
+      },
+    );
+
+    switch (existingObject) {
+      case (?_) {
+        return "Error: Object with name '" # objMetadata.nfttype # "' and value " # Nat.toText(objMetadata.nft_type_quantity) # " already exists.";
       };
-      _objects_Array := Array.append(_objects_Array, [(newId, updatedMetadata)]); 
-      return "Object added successfully with ID: " # Nat.toText(newId) # " and Name: " # objMetadata.nfttype # " with cost : " # Nat64.toText(costPerUnit);
+      case null {
+        let newId = _objectIdCounter;
+        _objectIdCounter += 1;
+
+        let updatedMetadata : NftTypeMetadata = {
+          nfttype = objMetadata.nfttype;
+          nft_type_quantity = objMetadata.nft_type_quantity;
+          nft_type_cost = costPerUnit;
+        };
+        _objects_Array := Array.append(_objects_Array, [(newId, updatedMetadata)]);
+        return "Object added successfully with ID: " # Nat.toText(newId) # " and Name: " # objMetadata.nfttype # " with cost : " # Nat64.toText(costPerUnit);
+      };
     };
-  };
   };
 
-  public shared func removeObject(id: Nat) : async Text {
-  // Find the object by ID using Array.find
-  let existingObject = Array.find(_objects_Array, func (entry: (Nat, NftTypeMetadata)) : Bool {
-    return entry.0 == id;
-  });
+  public shared func removeObject(id : Nat) : async Text {
+    // Find the object by ID using Array.find
+    let existingObject = Array.find(
+      _objects_Array,
+      func(entry : (Nat, NftTypeMetadata)) : Bool {
+        return entry.0 == id;
+      },
+    );
 
-  switch (existingObject) {
-    case (?_) {
-      // Object found, filter it out from the array
-      _objects_Array := Array.filter(_objects_Array, func (entry: (Nat, NftTypeMetadata)) : Bool {
-        return entry.0 != id; // Keep entries that don't match the ID
-      });
-      return "Object with ID: " # Nat.toText(id) # " has been successfully removed.";
+    switch (existingObject) {
+      case (?_) {
+        // Object found, filter it out from the array
+        _objects_Array := Array.filter(
+          _objects_Array,
+          func(entry : (Nat, NftTypeMetadata)) : Bool {
+            return entry.0 != id; // Keep entries that don't match the ID
+          },
+        );
+        return "Object with ID: " # Nat.toText(id) # " has been successfully removed.";
+      };
+      case null {
+        return "Error: Object with ID: " # Nat.toText(id) # " does not exist.";
+      };
     };
-    case null {
-      return "Error: Object with ID: " # Nat.toText(id) # " does not exist.";
-    };
-  };
   };
 
   public shared func getObjects() : async [(Nat, NftTypeMetadata)] {
-  return _objects_Array;
+    return _objects_Array;
   };
 
-  public shared func getObjectsAsPairs() : async { nfttype: [Text]; nft_type_quantity: [Nat] } {
-  let nftTypes = Array.map<(Nat, NftTypeMetadata), Text>(_objects_Array, func (entry: (Nat, NftTypeMetadata)) : Text {
-    return entry.1.nfttype;
-  });
+  public shared func getObjectsAsPairs() : async {
+    nfttype : [Text];
+    nft_type_quantity : [Nat];
+  } {
+    let nftTypes = Array.map<(Nat, NftTypeMetadata), Text>(
+      _objects_Array,
+      func(entry : (Nat, NftTypeMetadata)) : Text {
+        return entry.1.nfttype;
+      },
+    );
 
-  let nftQuantities = Array.map<(Nat, NftTypeMetadata), Nat>(_objects_Array, func (entry: (Nat, NftTypeMetadata)) : Nat {
-    return entry.1.nft_type_quantity;
-  });
+    let nftQuantities = Array.map<(Nat, NftTypeMetadata), Nat>(
+      _objects_Array,
+      func(entry : (Nat, NftTypeMetadata)) : Nat {
+        return entry.1.nft_type_quantity;
+      },
+    );
 
-  return { nfttype = nftTypes; nft_type_quantity = nftQuantities };
+    return { nfttype = nftTypes; nft_type_quantity = nftQuantities };
   };
 
-  public shared func findCost(nfttype: Text, nftamount: Nat) : async ?Nat64 {
-  let foundObject = Array.find(_objects_Array, func (entry: (Nat, NftTypeMetadata)) : Bool {
-    return entry.1.nfttype == nfttype and entry.1.nft_type_quantity == nftamount;
-  });
+  public shared func findCost(nfttype : Text, nftamount : Nat) : async ?Nat64 {
+    let foundObject = Array.find(
+      _objects_Array,
+      func(entry : (Nat, NftTypeMetadata)) : Bool {
+        return entry.1.nfttype == nfttype and entry.1.nft_type_quantity == nftamount;
+      },
+    );
 
-  switch (foundObject) {
-    case (?entry) { return ?entry.1.nft_type_cost; };
-    case null { return null; };
-  };
+    switch (foundObject) {
+      case (?entry) { return ?entry.1.nft_type_cost };
+      case null { return null };
+    };
   };
 
   // Token will be transfered to this Vault and gives you req details to construct a link out of it, which you can share
@@ -964,7 +980,7 @@ actor Main {
   public shared func getSingleNonFungibleTokens(
     _collectionCanisterId : Principal,
     _tokenId : TokenIndex,
-    user : AccountIdentifier
+    user : AccountIdentifier,
   ) : async [(TokenIndex, TokenIdentifier, AccountIdentifier, Metadata, ?Nat64, Bool)] {
 
     // Define the actor interface for the other canister
@@ -1022,6 +1038,127 @@ actor Main {
 
     return totalNFTs; // Return the total number of NFTs across all collections
   };
+
+  public shared func getAllNFTNames() : async [Text] {
+    var nftNames : [Text] = [];
+    for ((_, collections) in usersCollectionMap.entries()) {
+      for ((_, collectionCanisterId) in collections.vals()) {
+        let collectionCanisterActor = actor (Principal.toText(collectionCanisterId)) : actor {
+          getAllNonFungibleTokenData : () -> async [(TokenIndex, AccountIdentifier, Types.Metadata)];
+        };
+
+        try {
+          let nfts = await collectionCanisterActor.getAllNonFungibleTokenData();
+          for ((_, _, metadata) in nfts.vals()) {
+            let nftName = switch (metadata) {
+              case (#nonfungible { name }) name;
+              case (_) "Unknown NFT";
+            };
+            nftNames := Array.append(nftNames, [nftName]);
+          };
+        } catch (_e) {
+
+          Debug.print(Text.concat("Error fetching NFT names from canister: ", Principal.toText(collectionCanisterId)));
+        };
+      };
+    };
+
+    return nftNames;
+  };
+
+  // public shared func getCollectionAndNFTNames() : async [(Text, [(Text, [Text])])] {
+  //   var result : [(Text, [(Text, [Text])])] = [];
+
+  //   // Iterate through all entries in usersCollectionMap
+  //   for ((userPrincipal, collections) in usersCollectionMap.entries()) {
+  //     var collectionNFTs : [(Text, [Text])] = [];
+
+  //     // Iterate through each collection the user has
+  //     for ((time, collectionCanisterId) in collections.vals()) {
+  //       try {
+  //         // First get collection details
+  //         let collectionCanisterActor = actor (Principal.toText(collectionCanisterId)) : actor {
+  //           getCollectionDetails : () -> async (Text, Text, Text);
+  //           getAllNonFungibleTokenData : () -> async [(TokenIndex, AccountIdentifier, Types.Metadata)];
+  //         };
+
+  //         // Get collection name from metadata
+  //         let (collectionName, _, _) = await collectionCanisterActor.getCollectionDetails();
+
+  //         var nftNames : [Text] = [];
+
+  //         // Get all NFTs for this collection
+  //         let nfts = await collectionCanisterActor.getAllNonFungibleTokenData();
+  //         for ((_, _, metadata) in nfts.vals()) {
+  //           let nftName = switch (metadata) {
+  //             case (#nonfungible { name }) name;
+  //             case (_) "Unknown NFT";
+  //           };
+  //           nftNames := Array.append<Text>(nftNames, [nftName]);
+  //         };
+
+  //         // Add collection with its NFTs to the list
+  //         collectionNFTs := Array.append<(Text, [Text])>(collectionNFTs, [(collectionName, nftNames)]);
+
+  //       } catch (_e) {
+  //         Debug.print("Error fetching data for canister: " # Principal.toText(collectionCanisterId));
+  //         collectionNFTs := Array.append<(Text, [Text])>(collectionNFTs, [("Unknown Collection", [])]);
+  //       };
+  //     };
+
+  //     // Add this user's collections and their NFTs to the result
+  //     result := Array.append(result, [(Principal.toText(userPrincipal), collectionNFTs)]);
+  //   };
+
+  //   return result;
+  // };
+
+  public shared func getCollectionAndNFTNames() : async [(Text, [(Time.Time, Principal, [(Text, [Text])])])] {
+    var result : [(Text, [(Time.Time, Principal, [(Text, [Text])])])] = [];
+
+    for ((userPrincipal, collections) in usersCollectionMap.entries()) {
+      var collectionNFTs : [(Time.Time, Principal, [(Text, [Text])])] = [];
+
+      for ((time, collectionCanisterId) in collections.vals()) {
+        try {
+          let collectionCanisterActor = actor (Principal.toText(collectionCanisterId)) : actor {
+            getCollectionDetails : () -> async (Text, Text, Text);
+            getAllNonFungibleTokenData : () -> async [(TokenIndex, AccountIdentifier, Types.Metadata)];
+          };
+
+          let (collectionName, _, _) = await collectionCanisterActor.getCollectionDetails();
+
+          var nftNames : [Text] = [];
+
+          let nfts = await collectionCanisterActor.getAllNonFungibleTokenData();
+          for ((_, _, metadata) in nfts.vals()) {
+            let nftName = switch (metadata) {
+              case (#nonfungible { name }) name;
+              case (_) "Unknown NFT";
+            };
+            nftNames := Array.append<Text>(nftNames, [nftName]);
+          };
+
+          collectionNFTs := Array.append<(Time.Time, Principal, [(Text, [Text])])>(
+            collectionNFTs,
+            [(time, collectionCanisterId, [(collectionName, nftNames)])],
+          );
+
+        } catch (_e) {
+          Debug.print("Error fetching data for canister: " # Principal.toText(collectionCanisterId));
+          collectionNFTs := Array.append<(Time.Time, Principal, [(Text, [Text])])>(
+            collectionNFTs,
+            [(time, collectionCanisterId, [("Unknown Collection", [])])],
+          );
+        };
+      };
+
+      result := Array.append(result, [(Principal.toText(userPrincipal), collectionNFTs)]);
+    };
+
+    return result;
+  };
+
 
   /* -------------------------------------------------------------------------- */
   /*                            User Related Methods                            */
@@ -1211,125 +1348,118 @@ actor Main {
   };
 
   //usernftcollection (mycollection)
-  // public shared ({ caller = user }) func userNFTcollection(
-  //   _collectionCanisterId : Principal,
-  //   user : AccountIdentifier,
-  //   chunkSize : Nat,
-  //   pageNo : Nat,
-  // ) : async Result.Result<{ boughtNFTs : [(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)]; unboughtNFTs : [(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)] }, CommonError> {
-  //   if (Principal.isAnonymous(Principal.fromText(user))) {
-  //     throw Error.reject("User is not authenticated");
-  //   };
-
-  //   // Define the canister actor interface
-  //   let collectionCanisterActor = actor (Principal.toText(_collectionCanisterId)) : actor {
-  //     getAllNonFungibleTokenData : () -> async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64)];
-  //     getCollectionDetails : () -> async (Text, Text, Text);
-  //   };
-
-  //   // Fetch the collection name and details
-  //   let (collectionName, _, _) = await collectionCanisterActor.getCollectionDetails();
-
-  //   // Fetch all NFTs in the collection
-  //   let allNFTs = await collectionCanisterActor.getAllNonFungibleTokenData();
-
-  //   // Fetch the listings (unbought NFTs)
-  //   let marketplaceListings = await listings(_collectionCanisterId);
-
-  //   var boughtNFTs : [(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)] = [];
-  //   var unboughtNFTs : [(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)] = [];
-
-  //   // Iterate through all NFTs in the collection
-  //   for ((tokenIndex, nftOwner, metadata, price) in allNFTs.vals()) {
-  //     let tokenIdentifier = ExtCore.TokenIdentifier.fromPrincipal(_collectionCanisterId, tokenIndex);
-
-  //     // Check if the NFT is listed in the marketplace (unbought)
-  //     let isListed = Array.find<(TokenIndex, TokenIdentifier, Listing, Metadata)>(
-  //       marketplaceListings,
-  //       func((listedIndex, _, _, _)) {
-  //         listedIndex == tokenIndex;
-  //       },
-  //     );
-
-  //     if (nftOwner == user) {
-  //       // If the user owns the NFT, add it to the boughtNFTs list with its price
-  //       boughtNFTs := Array.append(boughtNFTs, [(tokenIdentifier, tokenIndex, metadata, collectionName, _collectionCanisterId, price)]);
-  //     } else if (isListed != null) {
-  //       // Check if an NFT with the same name already exists in boughtNFTs or unboughtNFTs
-  //       let nameExistsInBoughtNFTs = Array.find<((TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64))>(
-  //         boughtNFTs,
-  //         func((_, _, existingMetadata, _, _, _)) {
-  //           switch (existingMetadata) {
-  //             case (#nonfungible(existingNftData)) {
-  //               switch (metadata) {
-  //                 case (#nonfungible(nftData)) {
-  //                   return existingNftData.name == nftData.name;
-  //                 };
-  //                 case (_) { return false };
-  //               };
-  //             };
-  //             case (_) { return false };
-  //           };
-  //         },
-  //       );
-
-  //       let nameExistsInUnboughtNFTs = Array.find<((TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64))>(
-  //         unboughtNFTs,
-  //         func((_, _, existingMetadata, _, _, _)) {
-  //           switch (existingMetadata) {
-  //             case (#nonfungible(existingNftData)) {
-  //               switch (metadata) {
-  //                 case (#nonfungible(nftData)) {
-  //                   return existingNftData.name == nftData.name;
-  //                 };
-  //                 case (_) { return false };
-  //               };
-  //             };
-  //             case (_) { return false };
-  //           };
-  //         },
-  //       );
-
-  //       // If the name doesn't exist in either list, add the NFT to the unboughtNFTs list
-  //       if (nameExistsInBoughtNFTs == null and nameExistsInUnboughtNFTs == null) {
-  //         unboughtNFTs := Array.append(unboughtNFTs, [(tokenIdentifier, tokenIndex, metadata, collectionName, _collectionCanisterId, price)]);
-  //       };
-  //     };
-  //   };
-
-  //   // Paginate both boughtNFTs and unboughtNFTs
-  //   let boughtNFTsPaginated = Pagin.paginate<(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)>(boughtNFTs, chunkSize);
-  //   let unboughtNFTsPaginated = Pagin.paginate<(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)>(unboughtNFTs, chunkSize);
-
-  //   // Check page availability for both lists
-  //   if (boughtNFTsPaginated.size() <= pageNo and unboughtNFTsPaginated.size() <= pageNo) {
-  //     return #err(#Other("Page not found"));
-  //   };
-
-  //   // Get the pages for both lists
-  //   let boughtNFTsPage = if (pageNo < boughtNFTsPaginated.size()) {
-  //     boughtNFTsPaginated[pageNo];
-  //   } else { [] };
-  //   let unboughtNFTsPage = if (pageNo < unboughtNFTsPaginated.size()) {
-  //     unboughtNFTsPaginated[pageNo];
-  //   } else { [] };
-
-  //   // Return paginated boughtNFTs and unboughtNFTs
-  //   return #ok({
-  //     boughtNFTs = boughtNFTsPage;
-  //     unboughtNFTs = unboughtNFTsPage;
-  //     current_page = pageNo + 1;
-  //     // total_pages = boughtNFTsPage.size();
-  //     // total_pages_unbought = unboughtNFTsPage.size();
-  //   });
-  // };
-
-  public shared func userNFTcollection(_collectionCanisterId: Principal, user : AccountIdentifier) : async Result.Result<[(TokenIdentifier, Metadata)], CommonError> {
-    let myNFTcollection = actor (Principal.toText(_collectionCanisterId)) : actor {
-        myCollection: (user : AccountIdentifier) -> async (Result.Result<[(TokenIdentifier, Metadata)], CommonError>);
+  public shared ({ caller = user }) func userNFTcollection(
+    _collectionCanisterId : Principal,
+    user : AccountIdentifier,
+    chunkSize : Nat,
+    pageNo : Nat,
+  ) : async Result.Result<{ boughtNFTs : [(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)]; unboughtNFTs : [(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)] }, CommonError> {
+    if (Principal.isAnonymous(Principal.fromText(user))) {
+      throw Error.reject("User is not authenticated");
     };
-    return await myNFTcollection.myCollection(user : AccountIdentifier);
+
+    // Define the canister actor interface
+    let collectionCanisterActor = actor (Principal.toText(_collectionCanisterId)) : actor {
+      getAllNonFungibleTokenData : () -> async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64)];
+      getCollectionDetails : () -> async (Text, Text, Text);
     };
+
+    // Fetch the collection name and details
+    let (collectionName, _, _) = await collectionCanisterActor.getCollectionDetails();
+
+    // Fetch all NFTs in the collection
+    let allNFTs = await collectionCanisterActor.getAllNonFungibleTokenData();
+
+    // Fetch the listings (unbought NFTs)
+    let marketplaceListings = await listings(_collectionCanisterId);
+
+    var boughtNFTs : [(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)] = [];
+    var unboughtNFTs : [(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)] = [];
+
+    // Iterate through all NFTs in the collection
+    for ((tokenIndex, nftOwner, metadata, price) in allNFTs.vals()) {
+      let tokenIdentifier = ExtCore.TokenIdentifier.fromPrincipal(_collectionCanisterId, tokenIndex);
+
+      // Check if the NFT is listed in the marketplace (unbought)
+      let isListed = Array.find<(TokenIndex, TokenIdentifier, Listing, Metadata)>(
+        marketplaceListings,
+        func((listedIndex, _, _, _)) {
+          listedIndex == tokenIndex;
+        },
+      );
+
+      if (nftOwner == user) {
+        // If the user owns the NFT, add it to the boughtNFTs list with its price
+        boughtNFTs := Array.append(boughtNFTs, [(tokenIdentifier, tokenIndex, metadata, collectionName, _collectionCanisterId, price)]);
+      } else if (isListed != null) {
+        // Check if an NFT with the same name already exists in boughtNFTs or unboughtNFTs
+        let nameExistsInBoughtNFTs = Array.find<((TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64))>(
+          boughtNFTs,
+          func((_, _, existingMetadata, _, _, _)) {
+            switch (existingMetadata) {
+              case (#nonfungible(existingNftData)) {
+                switch (metadata) {
+                  case (#nonfungible(nftData)) {
+                    return existingNftData.name == nftData.name;
+                  };
+                  case (_) { return false };
+                };
+              };
+              case (_) { return false };
+            };
+          },
+        );
+
+        let nameExistsInUnboughtNFTs = Array.find<((TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64))>(
+          unboughtNFTs,
+          func((_, _, existingMetadata, _, _, _)) {
+            switch (existingMetadata) {
+              case (#nonfungible(existingNftData)) {
+                switch (metadata) {
+                  case (#nonfungible(nftData)) {
+                    return existingNftData.name == nftData.name;
+                  };
+                  case (_) { return false };
+                };
+              };
+              case (_) { return false };
+            };
+          },
+        );
+
+        // If the name doesn't exist in either list, add the NFT to the unboughtNFTs list
+        if (nameExistsInBoughtNFTs == null and nameExistsInUnboughtNFTs == null) {
+          unboughtNFTs := Array.append(unboughtNFTs, [(tokenIdentifier, tokenIndex, metadata, collectionName, _collectionCanisterId, price)]);
+        };
+      };
+    };
+
+    // Paginate both boughtNFTs and unboughtNFTs
+    let boughtNFTsPaginated = Pagin.paginate<(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)>(boughtNFTs, chunkSize);
+    let unboughtNFTsPaginated = Pagin.paginate<(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)>(unboughtNFTs, chunkSize);
+
+    // Check page availability for both lists
+    if (boughtNFTsPaginated.size() <= pageNo and unboughtNFTsPaginated.size() <= pageNo) {
+      return #err(#Other("Page not found"));
+    };
+
+    // Get the pages for both lists
+    let boughtNFTsPage = if (pageNo < boughtNFTsPaginated.size()) {
+      boughtNFTsPaginated[pageNo];
+    } else { [] };
+    let unboughtNFTsPage = if (pageNo < unboughtNFTsPaginated.size()) {
+      unboughtNFTsPaginated[pageNo];
+    } else { [] };
+
+    // Return paginated boughtNFTs and unboughtNFTs
+    return #ok({
+      boughtNFTs = boughtNFTsPage;
+      unboughtNFTs = unboughtNFTsPage;
+      current_page = pageNo + 1;
+      // total_pages = boughtNFTsPage.size();
+      // total_pages_unbought = unboughtNFTsPage.size();
+    });
+  };
 
   //User favorite NFTS from userNFTCollection
 
@@ -1444,7 +1574,6 @@ actor Main {
     };
   };
 
-
   //USER ACTIVITY
   public shared func useractivity(_collectionCanisterId : Principal, buyerId : AccountIdentifier) : async [(TokenIndex, TokenIdentifier, Transaction, Text)] {
     let transactionActor = actor (Principal.toText(_collectionCanisterId)) : actor {
@@ -1539,7 +1668,6 @@ actor Main {
       total_pages = index_pages.size();
     });
   };
-
 
   /* -------------------------------------------------------------------------- */
   /*                                  MARKETPLACE                               */
@@ -1909,6 +2037,23 @@ actor Main {
       Debug.print("Unexpected error occurred during transfer and NFT settle.");
       let errorMessage = "Unexpected Transfer Failed: " # Error.message(err);
       return #err(#Other(errorMessage));
+    };
+  };
+
+  public shared (_msg) func redeemtoken(_collectionCanisterId : Principal, tokenId : TokenIndex) : async Result.Result<(), Text> {
+    let tokenActor = actor (Principal.toText(_collectionCanisterId)) : actor {
+      burnToken : (TokenIndex) -> async Result.Result<(), Text>;
+    };
+
+    let burnResult = await tokenActor.burnToken(tokenId);
+
+    switch (burnResult) {
+      case (#ok(())) {
+        return #ok();
+      };
+      case (#err(errorMessage)) {
+        return #err("Burn token failed: " # errorMessage);
+      };
     };
   };
 

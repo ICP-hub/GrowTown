@@ -17,8 +17,9 @@ const ConnectBtn = ({ onClick }) => {
           dxl:h-[35px] text-[10px] md:text-[15px] dlg:text-[19px] font-[400] items-center justify-center  rounded-full  bg-gradient-to-r from-[#f09787]  to-[#CACCF5]"
         >
             <div className=" relative w-full h-full hover:scale-105 transition-all duration-300  rounded-full flex items-center justify-center ">
-            <h1 className="text-white sm:text-lg font-bold absolute my-auto"> Connect Wallet </h1>
-            <img src='images/ButtonCustom.png' className='h-full w-full   rounded-full  object-cover' />
+                <h1 className="text-white sm:text-lg font-bold absolute my-auto"> Connect Wallet </h1>
+                <img src='images/ButtonCustom.png' className='h-full w-full   rounded-full  object-cover' draggable='false'
+                    loading="lazy" />
 
             </div>
 
@@ -50,7 +51,8 @@ const Header = () => {
                     {/* Logo */}
                     <div className="flex items-center">
                         <a href='#heroPage'>
-                            <img src="images/GrowTownLogo .png" alt="logo" className="h-10 sm:h-16 w-auto" />
+                            <img src="images/GrowTownLogo .png" alt="logo" className="h-10 sm:h-16 w-auto" draggable='false'
+                                loading="lazy" />
                         </a>
                     </div>
 
