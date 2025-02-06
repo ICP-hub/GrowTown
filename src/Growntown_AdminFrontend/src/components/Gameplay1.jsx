@@ -3,7 +3,7 @@ import React from 'react'
 const Gameplay = () => {
     return (
 
-        <div id='Gameplay' className="bg-[#50d2fe] h-[750px] xl:h-screen relative  w-full ">
+        <div id='Gameplay' className="bg-[#50d2fe] h-[750px] md:h-[850px] xl:h-screen relative  w-full ">
                     {/* Background Image */}
                     <div className='absolute w-full'>
                     <img src="images/bg01.png" alt="background" className="  w-full -mt-[1px] h-screen object-cover" 
@@ -53,7 +53,7 @@ const Gameplay = () => {
                    </div>
                         </div>
 
-                <div className='absolute z-10 top-[500px] sm:top-[550px] xl:top-[650px] w-full ' 
+                <div className='absolute z-10 top-[500px] sm:top-[550px] md:top-[600px] xl:top-[650px] w-full ' 
                 data-aos='fade-up' 
                 >
                         

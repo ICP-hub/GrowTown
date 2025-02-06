@@ -91,7 +91,7 @@ const Gameplay2 = () => {
 
 
                 <div id='Subscribe' className=' z-10 bottom-56 xl:bottom-64 w-full absolute left-[50%]  transform -translate-x-1/2 flex justify-center text-[#FFF3C5]'>
-                    <div className=' w-[90%] md:w-[50%] lg:w-[40%]'>
+                    <div className=' w-[80%] md:w-[50%] lg:w-[40%]'>
                         <h1 className='  sm:text-lg md:text-xl lg:text-2xl xl:text-3xl px-10 text-bold text-center custom-ironman '> Subscribe to Receive our newsletter to follow the news</h1>
 
                         <div className="flex border backdrop-blur-lg  border-[#FFF3C5]  justify-between h-14 md:h-20 rounded-lg mt-6 sm:mt-10 shadow-lg">
