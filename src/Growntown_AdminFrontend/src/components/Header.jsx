@@ -52,16 +52,16 @@ const Header = () => {
                     {/* Logo */}
                     <div className="flex items-center">
                         <a href='#heroPage'>
-                            <img src="images/GrowTownLogo .png" alt="logo" className="h-10 sm:h-16 w-auto" draggable='false'
+                            <img src="images/GrowTownLogo .png" alt="logo" className="h-10 sm:h-12 md:h-14 xl:h-16 w-auto" draggable='false'
                                 loading="lazy" />
                         </a>
                     </div>
 
                     {/* Desktop Menu */}
-                    <ul className="hidden md:flex  md:text-xl font-bold text-[#4B2519] space-x-6">
+                    <ul className="hidden md:flex  font-bold text-[#4B2519] space-x-4 xl:space-x-6">
                         {navText.map((text, index) => (
                             <a href={`#${text}`} key={index}>
-                                <li className="hover:text-[#FFF3C5] cursor-pointer text-2xl custom-fingerpaint-small">
+                                <li className="hover:text-[#FFF3C5] cursor-pointer text-base lg:text-xl custom-fingerpaint-small">
                                     {text}
                                 </li>
                             </a>

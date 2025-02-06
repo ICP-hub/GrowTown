@@ -3,7 +3,7 @@ import React from 'react'
 const Gameplay = () => {
     return (
 
-        <div id='Gameplay' className="bg-[#50d2fe] h-screen relative  w-full ">
+        <div id='Gameplay' className="bg-[#50d2fe] h-[750px] xl:h-screen relative  w-full ">
                     {/* Background Image */}
                     <div className='absolute w-full'>
                     <img src="images/bg01.png" alt="background" className="  w-full -mt-[1px] h-screen object-cover" 
@@ -53,22 +53,22 @@ const Gameplay = () => {
                    </div>
                         </div>
 
-                <div className='absolute z-10 top-[450px] sm:top-[550px] xl:top-[650px] w-full ' 
+                <div className='absolute z-10 top-[500px] sm:top-[550px] xl:top-[650px] w-full ' 
                 data-aos='fade-up' 
                 >
                         
-                    <div className=' absolute ml-4 xl:ml-0 w-[55%] xl:w-[35%]  z-20 top-0  md:top-16 xl:top-24 xl:left-[50%] transform xl:-translate-x-1/2'
+                    <div className=' absolute ml-4 xl:ml-0 w-[55%] lg:w-[40%] 2xl:w-[35%]  z-20 top-0  md:top-8 xl:left-[50%] transform xl:-translate-x-1/2'
                     
                     >
                         <h1 className=" custom-ironman text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl' mb-2 lg:mb-8 text-center  text-[#FFF3C5] font-bold lg:mr-28">
                             GAMEPLAY
                         </h1>
-                        <p className=' text-sm md:text-base lg:text-lg xl:text-2xl text-center  font-semibold custom-fingerpaint-small text-[#4B2519] h-44 sm:h-48 xl:h-auto overflow-y-scroll no-scrollbar'>
+                        <p className=' text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl text-center  font-semibold custom-fingerpaint-small text-[#4B2519] h-44 sm:h-48 xl:h-auto overflow-y-scroll no-scrollbar'>
                             GrowTown Gameplay combines farming, trading, and adventure in a dynamic Web3 ecosystem. Players cultivate crops, raise animals, and trade assets through an NFT marketplace. Action-packed quests, seasonal events, and eco-friendly challenges add excitement and depth. With opportunities to collaborate or compete, players can shape their farms and strategies. GrowTown offers immersive, creative, and rewarding gameplay, seamlessly integrating blockchain technology into an engaging farming simulation experience.
                         </p>
                     </div>
 
-                    <div className='absolute z-10 flex right-4 xl:right-16  mt-20 2xl:top-28'
+                    <div className='absolute z-10 flex right-4 xl:right-16  mt-8 2xl:top-28'
                      
                     >
                         <img src='images/tomatoPlant.png' className='h-36 sm:h-44 lg:h-56  ' draggable='false'
