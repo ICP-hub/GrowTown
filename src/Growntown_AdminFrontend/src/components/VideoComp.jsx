@@ -30,7 +30,7 @@ export const VideoComp = () => {
 
   return (
     <div ref={ref} className="bg-[#00A6C0] -mt-1">
-      <div className="container mx-auto max-w-[2000px]  flex justify-center items-center py-40 xl:h-screen  overflow-hidden ">
+      <div className="container mx-auto max-w-[2000px]  flex justify-center items-center py-16 xl:h-screen  overflow-hidden ">
       {/* Video Frame Wrapper */}
       <div className="relative flex justify-center items-center w-[90%] md:w-[60%] lg:w-[65%] aspect-video  "
       data-aos='zoom-in'

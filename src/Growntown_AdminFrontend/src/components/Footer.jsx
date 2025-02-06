@@ -11,7 +11,7 @@ const Footer = () => {
             <div className="bg-transparent text-white px-6 h-full py-4 shadow-md  container mx-auto max-w-[2000px]  ">
 
 
-                <img src="images/GrowTownLogo .png" alt="logo" className=" w-20 sm:w-auto absolute left-[50%] transform -translate-x-1/2 my-auto" 
+                <img src="images/GrowTownLogo .png" alt="logo" className=" w-16 sm:w-24 xl:w-28 absolute left-[50%] transform -translate-x-1/2 my-auto" 
                  draggable='false'
                  loading="lazy"/>
                 
@@ -22,7 +22,7 @@ const Footer = () => {
                 <img
                     src={`images/${item.img}`}
                     alt="social icon"
-                    className="h-6 w-6 hover:opacity-80 cursor-pointer"
+                    className="h-5 w-5 sm:h-6 sm:w-6 hover:opacity-80 cursor-pointer"
                      draggable='false'
               loading="lazy"
                 />

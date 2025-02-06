@@ -12,7 +12,7 @@ const Gameplay2 = () => {
                 <div className='relative max-w-[2000px]  h-full  container mx-auto'>
 
                     {/* Farmhouse */}
-                    <div  className='absolute bottom-20  sm:bottom-48 lg:bottom-64 xl:bottom-96  z-10 xl:h-auto   '
+                    <div  className='absolute bottom-20  sm:bottom-48 lg:bottom-64 xl:bottom-[500px]  z-10 xl:h-auto   '
                         data-aos='fade-right'
                         >
                     <img src='images/farm barn  3.png' className=' w-[160px] sm:w-[250px] md:w-[300px] xl:w-auto xl-h-auto '
@@ -49,14 +49,14 @@ const Gameplay2 = () => {
                     </div> */}
 
                     {/* WindMill */}
-                    <div className='  absolute bottom-0 z-30 right-0' >
+                    <div className='  absolute -bottom-36 z-30 right-0' >
                         <div>
                             <img src='images/windMill.png' className='w-[200px] sm:w-[250px] md:w-[380px] xl:w-auto xl-h-auto '
                                 data-aos='fade-left'
                                  draggable='false'
               loading="lazy"
                             />
-                            <div className='flex absolute   xl:right-36 -mt-24 w-24 lg:w-auto lg:h-auto lg:justify-end '>
+                            <div className='flex absolute   xl:right-44 -mt-20 xl:-mt-32 w-24 lg:w-auto lg:h-auto lg:justify-end '>
                                 <img src='images/rocks 6.png' className='mb-20 w-14 h-14 sm:w-auto sm:h-auto'  draggable='false'
               loading="lazy"/>
                                 <img src='images/rocks 5.png' className='mt-16 w-14 h-14 sm:w-auto sm:h-auto '  draggable='false'
@@ -86,7 +86,7 @@ const Gameplay2 = () => {
 
                 </div>
                 {/* water leaf */}
-                <img src='images/leaf01.png ' className='  z-10   w-20 lg:w-auto lg:h-auto  bottom-20 lg:bottom-40 left-[5%] absolute  ' />
+                <img src='images/leaf01.png ' className='  z-10   w-24 md:w-36 lg:w-auto lg:h-auto  bottom-20 lg:bottom-40 left-[5%] absolute  ' />
                 <img src='images/leaf01.png ' className='  z-10 w-28 left-[30%] bottom-0 absolute' />
 
 
@@ -94,15 +94,15 @@ const Gameplay2 = () => {
                     <div className=' w-[80%] md:w-[50%] lg:w-[40%]'>
                         <h1 className='  sm:text-lg md:text-xl lg:text-2xl xl:text-3xl px-10 text-bold text-center custom-ironman '> Subscribe to Receive our newsletter to follow the news</h1>
 
-                        <div className="flex border backdrop-blur-lg  border-[#FFF3C5]  justify-between h-20 rounded-lg mt-10 shadow-lg">
+                        <div className="flex border backdrop-blur-lg  border-[#FFF3C5]  justify-between h-14 md:h-20 rounded-lg mt-6 sm:mt-10 shadow-lg">
                             <input
                                 type="text"
                                 placeholder="Enter Email Address"
                                 className="bg-transparent w-full h-full px-4 text-white placeholder-white outline-none rounded-l-lg custom-fingerpaint-small placeholder:text-base sm:placeholder:text-lg"
                             />
-                            <div className=" h-full md:w-[40%] relative rounded-r-lg flex items-center justify-center cursor-pointer hover:shadow-md hover:scale-95 transition duration-300">
-                                <h1 className="text-white text-xs sm:text-sm lg:text-md -mt-2 font-bold absolute my-auto custom-ironman"> SUBSCRIBE </h1>
-                                <img src='images/ButtonCustom.png' className='h-full my-auto w-full mt-[1px]   object-cover' />
+                            <div className=" h-full w-[70%] sm:w-[65%] 2xl:w-[40%] relative rounded-r-lg flex items-center justify-center cursor-pointer hover:shadow-md hover:scale-95 transition duration-300">
+                                <h1 className="text-white text-[12px] sm:text-sm lg:text-md -mt-1 font-bold absolute my-auto custom-ironman"> SUBSCRIBE </h1>
+                                <img src='images/ButtonCustom.png' className='h-full my-auto w-full mt-1   object-fill shadow-lg' />
 
                             </div>
                         </div>
@@ -120,12 +120,12 @@ const Gameplay2 = () => {
                   {/* man laying on haystack*/}
                  <div
                  data-aos='fade-left'
-                   className='absolute right-0 top-40 lg:bottom-48  '>
+                   className='absolute right-0 top-56 lg:bottom-48  '>
                  
-                 <img src='images/Pose4.png' className='absolute w-28 top-8  sm:w-40 sm:mt-10 md:mt-28 md:w-44  lg:w-56 xl:w-auto'/>
-                  <img src='images/haystack 2.png' className=' w-36 sm:w-48 md:w-60 lg:w-72 xl:w-auto'/>
+                 <img src='images/Pose4.png' className='absolute w-28 top-10  sm:w-40 sm:mt-10 md:mt-28 md:w-44  lg:w-56 xl:w-auto'/>
+                  <img src='images/haystack 2.png' className=' w-40 sm:w-48 md:w-60 lg:w-72 xl:w-auto'/>
 
-                 <img src='images/pumpkin02.png ' className=' absolute mt-20 lg:w-36 right-0' />
+                 <img src='images/pumpkin02.png ' className=' absolute mt-16 sm:mt-20 lg:w-36 right-0' />
                  </div>
             </div>
             </div>

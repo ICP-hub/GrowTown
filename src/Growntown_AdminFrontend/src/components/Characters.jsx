@@ -45,11 +45,11 @@ const Characters = () => {
           {/* Wooden Board */}
           <div className="absolute mt-8 sm:mt-0 ">
             <div className='relative'>
-              <h1 className='absolute top-10 lg:top-20 text-2xl lg:text-3xl left-[50%] transform -translate-x-1/2 font-bold text-[#FFF3C5] custom-fingerpaint-small'>Tom</h1>
-              <img src="images/woodenBoard.png" alt="Wooden Board" className="  h-[160px] lg:h-[300px]"
+              <h1 className='absolute top-10 md:top-12 lg:top-20 text-xl md:text-2xl lg:text-3xl left-[50%] transform -translate-x-1/2 font-bold text-[#FFF3C5] custom-fingerpaint-small'>Tom</h1>
+              <img src="images/woodenBoard.png" alt="Wooden Board" className="  h-[160px] md:h-[200px] lg:h-[300px]"
                draggable='false'
                loading="lazy" />
-              <h1 className='absolute bottom-12 lg:bottom-24 text-2xl lg:text-3xl left-[50%] transform -translate-x-1/2 font-bold text-[#FFF3C5] custom-fingerpaint-small' >Jerry</h1>
+              <h1 className='absolute bottom-12 md:bottom-14 lg:bottom-24  text-xl md:text-2xl lg:text-3xl left-[50%] transform -translate-x-1/2 font-bold text-[#FFF3C5] custom-fingerpaint-small' >Jerry</h1>
             </div>
 
 
@@ -83,7 +83,7 @@ const Characters = () => {
               loading="lazy"
           />
 
-<img src='images/pumpkin02.png ' className=' absolute z-50 md:w-32 -bottom-16 left-0 sm:left-20 2xl:left-48 ' />
+<img src='images/pumpkin02.png ' className=' w-20 absolute z-50 md:w-36  -bottom-12 left-0 sm:left-24 2xl:left-64 ' />
         </div>
       </div>
       </div>
