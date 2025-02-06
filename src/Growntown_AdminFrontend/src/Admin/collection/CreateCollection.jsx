@@ -554,7 +554,7 @@ const CreateCollection = () => {
                           }}
                           type="text"
                           placeholder=""
-                          className="pl-4 rounded-md bg-transparent border  h-[30px] md:h-[45px] w-full"
+                          className="pl-4 p-4 sm:p-0 rounded-md bg-transparent border  h-[30px] md:h-[45px] w-full"
                         />
                       </div>
 

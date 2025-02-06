@@ -393,11 +393,12 @@ function CollectionDetails() {
     nftType,
     artistname,
     newtype,
-    nftSeason,
+    nftRarity,
     nftimageFullHDblob,
     nftimageHeadSDblob,
     nftimageFullSDblob
   ) => {
+
     try {
       const imageurl1 = await UploadedNftImageusingBase64(nftimageHeadHDblob);
       const imageurl2 = await UploadedNftImageusingBase64(nftimageFullHDblob);
@@ -425,7 +426,7 @@ function CollectionDetails() {
         date: formattedDate,
         artistname,
         newtype,
-        nftSeason,
+        nftRarity,
         imageurl1,
         imageurl2,
         imageurl3,
@@ -570,7 +571,7 @@ function CollectionDetails() {
         nftDetails.nftType,
         nftDetails.artistname,
         nftDetails.newtype,
-        nftDetails.nftSeason,
+        nftDetails.nftRarity,
         nftDetails.nftFullImage,
         nftDetails.nftImageSD,
         nftDetails.nftFullImageSD
@@ -793,6 +794,7 @@ function CollectionDetails() {
                 <div className="w-full sm:w-auto md:w-48 lg:w-64">
                   <img
                     className="w-full h-48 sm:h-40 md:h-48 rounded-xl object-cover border-2 border-[#50B248] shadow-lg"
+                    style={{borderColor:colcolor}}
                     src={
                       collectionImageURL
                     }

@@ -54,7 +54,7 @@ const UserDetails = () => {
       <div className="px-4 sm:px-8 md:px-16 pt-10 mx-auto ">
         {/* Back Button */}
         <div className="flex items-center justify-start w-full mb-6">
-          {loading ? <Skeleton width={1210} height={35} /> : <BackButton />}
+          {loading ? <Skeleton width={40} height={35} /> : <BackButton />}
         </div>
 
         {/* Profile Card */}
