@@ -171,10 +171,21 @@ function CollectionDetails() {
   // let currentpage = 2;
   // const totalpage = 5;
 
+      // Utility function to check if a string is valid JSON
+      const isValidJSON = (str) => {
+        try {
+            JSON.parse(str);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    };
+
   const jsonString = collectiondata[4];
-  const parsedData = JSON.parse(jsonString);
-  const colldescription = parsedData.description;
-  const colcolor = parsedData.collColor;
+  const parsedData = (typeof collectiondata[4] === "string" && isValidJSON(collectiondata[4])) && JSON.parse(jsonString);
+  const colldescription = parsedData.description || '';
+  const colcolor = parsedData.collColor || '';
+  const collectionImageURL = parsedData.collectionImageURL || "default-image.jpg";
   // console.log(colcolor, "this is colle");
   // console.log(colldescription);
 
@@ -382,11 +393,12 @@ function CollectionDetails() {
     nftType,
     artistname,
     newtype,
-    nftSeason,
+    nftRarity,
     nftimageFullHDblob,
     nftimageHeadSDblob,
     nftimageFullSDblob
   ) => {
+
     try {
       const imageurl1 = await UploadedNftImageusingBase64(nftimageHeadHDblob);
       const imageurl2 = await UploadedNftImageusingBase64(nftimageFullHDblob);
@@ -414,7 +426,7 @@ function CollectionDetails() {
         date: formattedDate,
         artistname,
         newtype,
-        nftSeason,
+        nftRarity,
         imageurl1,
         imageurl2,
         imageurl3,
@@ -559,7 +571,7 @@ function CollectionDetails() {
         nftDetails.nftType,
         nftDetails.artistname,
         nftDetails.newtype,
-        nftDetails.nftSeason,
+        nftDetails.nftRarity,
         nftDetails.nftFullImage,
         nftDetails.nftImageSD,
         nftDetails.nftFullImageSD
@@ -782,9 +794,9 @@ function CollectionDetails() {
                 <div className="w-full sm:w-auto md:w-48 lg:w-64">
                   <img
                     className="w-full h-48 sm:h-40 md:h-48 rounded-xl object-cover border-2 border-[#50B248] shadow-lg"
+                    style={{borderColor:colcolor}}
                     src={
-                      JSON.parse(collectiondata[4]).collectionImageURL ||
-                      "default-image.jpg"
+                      collectionImageURL
                     }
                     alt={collectiondata[2]}
                   />

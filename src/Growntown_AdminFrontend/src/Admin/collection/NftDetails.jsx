@@ -121,7 +121,9 @@ const NftDetails = () => {
   // Add this near other data processing
   const quantity = Number(nftdata?.[4]) || "Not Available";
   const nftType = metadata?.nftType || nftdata?.[2]?.nonfungible?.nftType || "Null";
-  const rarity = metadata?.newtype || "Null";
+  const rarity = metadata?.nftRarity || "Null";
+
+  console.log('metadata',metadata)
 
   // If there's no NFT data, return a message or redirect back
   if (!nftdata && !loading) {
@@ -157,21 +159,12 @@ const NftDetails = () => {
     <SkeletonTheme baseColor="#202020" highlightColor="#282828">
       <div className="">
         <div className="w-[96%] pt-8  mx-auto relative">
-        {/* Top Corner Button */}
-        {/* <div className="absolute top-4 right-4">
-          <button
-            onClick={callingbutton}
-            className="bg-yellow-400 text-black font-semibold px-4 py-2 rounded-md shadow-md hover:bg-yellow-500"
-          >
-            for calling listprice
-          </button>
-        </div> */}
 
           {/* Back Button */}
           <div className="flex items-center  justify-start w-full mb-6">
             <div className="hidden sm:block">
               {loading ? (
-                <Skeleton width={1210} height={35} />
+                <Skeleton width={40} height={35} />
               ) : (
                 <BackButton className="hover:scale-105 transition-transform duration-300" />
               )}
@@ -181,7 +174,7 @@ const NftDetails = () => {
           {/* NFT Details Section */}
           <div className="flex flex-col lg:flex-row gap-6 backdrop-blur-sm bg-[#29292c]/40 p-6 rounded-2xl shadow-2xl">
             {/* NFT Image Section */}
-            <div className="flex justify-center lg:justify-start lg:w-1/2">
+            <div className="flex justify-center lg:justify-start lg:w-[50%] xl:w-[40%]">
               {loading ? (
                 <div className="w-full h-[500px]"> {/* Added wrapper div for full width */}
                   <Skeleton height="100%" width="100%" className="rounded-xl w-[80%]" />
@@ -199,7 +192,7 @@ const NftDetails = () => {
             </div>
 
             {/* NFT Details Card */}
-            <div className="lg:w-1/2">
+            <div className="lg:w-[50%] xl:w-[60%] ">
               {loading ? (
                 <div className="flex flex-col gap-6 w-full">
                   {/* Title and Collection */}
@@ -253,11 +246,11 @@ const NftDetails = () => {
                   </div>
 
                   {/* Details Grid - 4 columns */}
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    <div className="p-3 bg-white/5 rounded-xl">
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    {/* <div className="p-3 bg-white/5 rounded-xl">
                       <p className="text-sm text-gray-400">Season</p>
-                      <p className="text-base text-white">{metadata?.nftSeason || "Null"}</p>
-                    </div>
+                      <p className="text-base text-white">{metadata?.nftRarity || "Null"}</p>
+                    </div> */}
                     <div className="p-3 bg-white/5 rounded-xl">
                       <p className="text-sm text-gray-400">Quantity</p>
                       <p className="text-base text-white">{quantity}</p>
@@ -266,7 +259,7 @@ const NftDetails = () => {
                       <p className="text-sm text-gray-400">Type</p>
                       <p className="text-base text-white">{nftType}</p>
                     </div>
-                    <div className="p-3 bg-white/5 rounded-xl">
+                    <div className="p-3 bg-white/5 col-span-2 md:col-span-1 rounded-xl">
                       <p className="text-sm text-gray-400">Status</p>
                       <span className={`px-2 py-0.5 rounded-full text-sm ${
                         isOwned ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'

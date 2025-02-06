@@ -23,7 +23,7 @@ const Modal = (props) => {
 
   const [nftPrice, setPrice] = useState(0);
   const [nftQuantity, setNftQuantity] = useState('');
-  const [nftRarity, setNftRarity] = useState(null);
+  const [nftRarity, setNftRarity] = useState('Divine');
   const [Quantity, setQuantity] = useState(null);
 
   const [nftName, setNftName] = useState("");
@@ -34,7 +34,6 @@ const Modal = (props) => {
 
   const [nftcolor, setnftcolor] = useState("Golden");
   const [arstistname, setartistName] = useState("");
-  const [nftSeason, setnftSeason] = useState("Golden Age");
 
   const [nftFullImage, setNftFullImage] = useState("");
   const [nftFullImageSD, setNftFullImageSD] = useState("");
@@ -89,7 +88,7 @@ const Modal = (props) => {
       // nftImageURL &&
       nftcolor &&
       // arstistname &&
-      nftSeason &&
+      nftRarity &&
       nftFullImage &&
       imageurl1 &&
       imageurl2
@@ -105,7 +104,7 @@ const Modal = (props) => {
         nftDescription,
         nftcolor,
         arstistname,
-        nftSeason,
+        nftRarity,
         nftFullImage,
         nftFullImageSD,
         nftImageSD,
@@ -136,7 +135,7 @@ const Modal = (props) => {
       // nftImageURL &&
       nftcolor &&
       // arstistname &&
-      nftSeason &&
+      nftRarity &&
       nftFullImage &&
       imageurl1 &&
       imageurl2
@@ -152,7 +151,7 @@ const Modal = (props) => {
         nftDescription,
         nftcolor,
         arstistname,
-        nftSeason,
+        nftRarity,
         nftFullImage,
         nftFullImageSD,
         nftImageSD,
@@ -226,7 +225,7 @@ const Modal = (props) => {
       }
     }
   };
-
+  console.log('nftRarity collection details',nftRarity)
 
   return (
     <div className="add_new_nft_popup_bg_container w-full sm:w-[70%] shadow-lg lg:w-[50%] mx-4 xl:w-[40%] h-[90%] rounded-xl overflow-y-scroll no-scrollbar p-10 border border-[#50B248]">
@@ -579,7 +578,7 @@ const Modal = (props) => {
         </div>
         <div className="flex justify-center mt-2 md:mt-3">
           {type === "add" && (
-            <div className="flex  justify-center gap-[10%] items-center">
+            <div className="flex  justify-center gap-2 sm:gap-[10%] items-center">
               <div onClick={() => toggleModal()}>
                 <Buttons bgColor="black" hover={{ textColor: 'text-red-600', scale: 'scale-110' }} textColor="white" buttonName={"Cancel"} />
               </div>

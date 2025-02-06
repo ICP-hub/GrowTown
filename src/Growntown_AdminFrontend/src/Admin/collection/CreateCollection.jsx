@@ -508,7 +508,7 @@ const CreateCollection = () => {
       <div className=" overflow-y-scroll  h-screen no-scrollbar  no-scroll  md:w-full px-4 sm:px-8 md:px-16 pt-10 ">
         {/* <Createcollectionloader done={done} total={total} /> */}
         {loading ? (
-          <Createcollectionloader done={done} total={totalnft} message={' Collection minting'} />
+          <Createcollectionloader done={done} total={totalnft} message={' Collection'} />
         ) : (
    
           <div className="w-full">
@@ -554,7 +554,7 @@ const CreateCollection = () => {
                           }}
                           type="text"
                           placeholder=""
-                          className="pl-4 rounded-md bg-transparent border  h-[30px] md:h-[45px] w-full"
+                          className="pl-4 p-4 sm:p-0 sm:pl-4 rounded-md bg-transparent border  h-[30px] md:h-[45px] w-full"
                         />
                       </div>
 
@@ -641,7 +641,7 @@ const CreateCollection = () => {
 
 
                   {/* Form Buttons */}
-                  <div className="flex  justify-around gap-[14%] w-[100%] mt-[10px]  pb-8 sm:mb-0">
+                  <div className="flex  justify-center md:justify-around gap-[14%] w-[100%] mt-[10px]  pb-8 sm:mb-0 mx-auto">
                     <div
                       type="button"
                       onClick={() => navigate(-1)}
@@ -651,7 +651,7 @@ const CreateCollection = () => {
                     </div>
 
                     <div onClick={handleSubmit} className="mt-10 ml-4">
-                      <Buttons bgColor="white" textColor="black" buttonName={"Create Collection"} />
+                      <Buttons bgColor="white" textColor="black" buttonName={"Create"} />
                     </div>
 
                   </div>

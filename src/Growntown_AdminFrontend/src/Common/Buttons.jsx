@@ -24,11 +24,11 @@ const Buttons = ({ buttonName, hover, bgColor, textColor, icon }) => {
         }}
       ></div>
       <div
-        className="absolute  flex items-center z-0 font-semibold whitespace-nowrap left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%]"
+        className="absolute md:text-lg flex items-center z-0 font-semibold whitespace-nowrap left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%]"
        
       >
        <h1 className={` text-${textColor} ml-2 md:ml-0 hover:${hover?.textColor} transition-all ease-in-out hover:${hover?.scale}`}> {buttonName}  </h1>
-        {icon && <span className='sm:ml-1 '> {icon} </span>}
+        {icon && <span className='sm:ml-2 '> {icon} </span>}
       </div>
     </div>
   )

@@ -130,7 +130,7 @@ const NftTypeSetting = () => {
                     />
                   </label>
                 </div>
-                <div className="flex mt-10 justify-center gap-5 items-center">
+                <div className="flex mt-10 justify-center gap-2 sm:gap-5 items-center">
                   <button onClick={onCancelButton} disabled={loading}>
                     <Buttons
                       bgColor="#242426"

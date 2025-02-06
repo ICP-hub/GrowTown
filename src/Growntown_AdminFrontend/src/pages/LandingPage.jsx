@@ -10,7 +10,7 @@ import Footer from "../components/Footer";
 const LandingPage = ()=>{
 
     return(
-      <div className=" ">
+      <div className="">
         <Header/>
         <HeroComp/>
         <VideoComp/>

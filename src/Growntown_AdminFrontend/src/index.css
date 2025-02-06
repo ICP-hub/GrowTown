@@ -285,6 +285,14 @@ body {
   font-style: normal;
 }
 
+
+@font-face {
+  font-family: "Poppins";
+  src: url('/assets/fonts/Poppins-Regular.ttf') format('truetype'); /* Corrected format */
+  font-weight: 400;
+  font-style: normal;
+}
+
 /* Example Usage */
 .custom-ironman {
   font-family: "Iron Man", sans-serif;
@@ -298,6 +306,9 @@ body {
   font-size: 20px; /* Adjust size as needed */
   font-weight: 400;
   text-transform: capitalize;
+}
+.custom-poppins{
+  font-family: "Poppins", sans-serif;
 }
 .custom-line-clamp {
   display: -webkit-box;

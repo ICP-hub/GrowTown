@@ -51,10 +51,10 @@ const UserDetails = () => {
 
   return (
     <SkeletonTheme baseColor="#1a1a1d" highlightColor="#333">
-      <div className="px-4 sm:px-8 md:px-16 py-10 mx-auto max-w-7xl">
+      <div className="px-4 sm:px-8 md:px-16 pt-10 mx-auto ">
         {/* Back Button */}
         <div className="flex items-center justify-start w-full mb-6">
-          {loading ? <Skeleton width={1210} height={35} /> : <BackButton />}
+          {loading ? <Skeleton width={40} height={35} /> : <BackButton />}
         </div>
 
         {/* Profile Card */}
@@ -68,7 +68,7 @@ const UserDetails = () => {
               ) : (
                 <img
                   src={
-                    image?.length ? image[0] : 
+                    // image?.length ? image[0] : 
                     "/images/Admin.png"}
                   alt={`Image of ${name}`}
                   className="rounded-full h-24 w-24 sm:h-36 sm:w-36 border-2 text-center border-gray-700 shadow-lg"

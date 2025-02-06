@@ -2,7 +2,8 @@ import React from 'react'
 
 const About = () => {
   return (
-    <div id='About' className='bg-[#00A6C0] relative flex justify-center items-center h-screen w-full -mt-1'>
+    <div className='bg-[#00A6C0] h-screen w-full '>
+    <div id='About' className=' relative flex justify-center items-center h-full w-full -mt-1  container mx-auto max-w-[2000px] '>
       
       {/* left cloud*/}
       <div className='absolute z-10 -left-0 top-0 overflow-hidden'>
@@ -47,6 +48,7 @@ const About = () => {
          draggable='false'
               loading="lazy"
       />
+    </div>
     </div>
   )
 }
