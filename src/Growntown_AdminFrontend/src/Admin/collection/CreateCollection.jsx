@@ -508,7 +508,7 @@ const CreateCollection = () => {
       <div className=" overflow-y-scroll  h-screen no-scrollbar  no-scroll  md:w-full px-4 sm:px-8 md:px-16 pt-10 ">
         {/* <Createcollectionloader done={done} total={total} /> */}
         {loading ? (
-          <Createcollectionloader done={done} total={totalnft} message={' Collection minting'} />
+          <Createcollectionloader done={done} total={totalnft} message={' Collection'} />
         ) : (
    
           <div className="w-full">
@@ -554,7 +554,7 @@ const CreateCollection = () => {
                           }}
                           type="text"
                           placeholder=""
-                          className="pl-4 p-4 sm:p-0 rounded-md bg-transparent border  h-[30px] md:h-[45px] w-full"
+                          className="pl-4 p-4 sm:p-0 sm:pl-4 rounded-md bg-transparent border  h-[30px] md:h-[45px] w-full"
                         />
                       </div>
 
