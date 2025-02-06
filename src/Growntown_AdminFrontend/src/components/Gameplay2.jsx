@@ -122,8 +122,8 @@ const Gameplay2 = () => {
                  data-aos='fade-left'
                    className='absolute right-0 top-56 lg:bottom-48  '>
                  
-                 <img src='images/Pose4.png' className='absolute w-28 top-8  sm:w-40 sm:mt-10 md:mt-28 md:w-44  lg:w-56 xl:w-auto'/>
-                  <img src='images/haystack 2.png' className=' w-36 sm:w-48 md:w-60 lg:w-72 xl:w-auto'/>
+                 <img src='images/Pose4.png' className='absolute w-28 top-10  sm:w-40 sm:mt-10 md:mt-28 md:w-44  lg:w-56 xl:w-auto'/>
+                  <img src='images/haystack 2.png' className=' w-40 sm:w-48 md:w-60 lg:w-72 xl:w-auto'/>
 
                  <img src='images/pumpkin02.png ' className=' absolute mt-16 sm:mt-20 lg:w-36 right-0' />
                  </div>
