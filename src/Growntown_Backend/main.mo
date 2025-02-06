@@ -264,6 +264,9 @@ actor Main {
   public query (message) func greet() : async Text {
     return "Hello, " # Principal.toText(message.caller) # "!";
   };
+  public query (message) func getPrincipal() : async Text {
+    return  Principal.toText(message.caller);
+  };
   public shared ({ caller = user }) func add_collection_to_map(collection_id : Principal) : async Text {
     if (Principal.isAnonymous(user)) {
       throw Error.reject("User is not authenticated");

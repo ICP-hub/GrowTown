@@ -1,18 +1,19 @@
 using UnityEngine;
 using UnityEngine.UI;
+using EdjCase.ICP.Agent;
 using EdjCase.ICP.Agent.Agents;
 using EdjCase.ICP.Agent.Identities;
 using EdjCase.ICP.Candid.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
-using UnityMainThreadDispatcher;
+using System.Runtime.InteropServices;
 
 namespace IC.GameKit
 {
     public class TestICPAgent : MonoBehaviour
     {
-        public string greetFrontend = "https://7ynkd-kiaaa-aaaac-ahmfq-cai.icp0.io/";
+        public string greetFrontend = "https://7kl52-gyaaa-aaaac-ahmgq-cai.icp0.io/";
         public string greetBackendCanister = "7nk3o-laaaa-aaaac-ahmga-cai";
 
         Text mMyPrincipalText = null;
@@ -29,17 +30,29 @@ namespace IC.GameKit
             set
             {
                 mDelegationIdentity = value;
-                EnableButtons(); 
+                EnableButtons();
             }
         }
 
         void Start()
         {
+            WasmtimeLoader.LoadWasmtime();
+
             mMyPrincipalText = GameObject.Find("My Princinpal")?.GetComponent<Text>();
             mGreetButton = GameObject.Find("Button_Greet")?.GetComponent<Button>();
             mCollectionButton = GameObject.Find("Button_Collection")?.GetComponent<Button>();
 
             mEd25519Identity = Ed25519Identity.Generate();
+
+            if (mCollectionButton != null)
+            {
+                Debug.Log("✅ Collection Button Found and Assigned");
+                mCollectionButton.onClick.AddListener(() => GetAllCollections());
+            }
+            else
+            {
+                Debug.LogError("❌ Collection Button Not Found");
+            }
         }
 
         public void EnableButtons()
@@ -59,8 +72,8 @@ namespace IC.GameKit
             }
 
             var agent = new HttpAgent(DelegationIdentity);
-            var canisterId = Principal.FromText(greetBackendCanister);
-            var client = new GreetingClient.GreetingClient(agent, canisterId);
+            var backendCanisterId = Principal.FromText(greetBackendCanister);
+            var client = new GreetingClient.GreetingClient(agent, backendCanisterId);
 
             try
             {
@@ -72,8 +85,11 @@ namespace IC.GameKit
                 Debug.LogError($"❌ API call failed: {e.Message}");
             }
         }
-public async void GetAllCollections()
+
+        public async void GetAllCollections()
 {
+    Debug.Log("📌 Collection Button Clicked!");
+
     if (DelegationIdentity == null)
     {
         Debug.LogError("❌ DelegationIdentity is NULL, cannot fetch collections!");
@@ -83,51 +99,23 @@ public async void GetAllCollections()
     Debug.Log("✅ Fetching all collections...");
 
     var agent = new HttpAgent(DelegationIdentity);
-    var canisterId = Principal.FromText(greetBackendCanister);
-    var client = new GreetingClient.GreetingClient(agent, canisterId);
+    var backendCanisterId = Principal.FromText(greetBackendCanister);
+    var client = new GreetingClient.GreetingClient(agent, backendCanisterId);
 
     try
     {
         Debug.Log("🔄 Sending getAllCollections request...");
         List<(Principal, List<(ulong, Principal, string, string, string)>)> collections = await client.GetAllCollections();
+        Debug.Log($"✅ Received {collections.Count} user collections.");
 
-        Debug.Log($"✅ Received {collections.Count} collections.");
-
-        if (collections.Count == 0)
+        foreach (var (userPrincipal, collectionList) in collections)
         {
-            Debug.LogWarning("⚠ No collections found.");
-        }
-
-        var collectionDataText = GameObject.Find("CollectionData")?.GetComponent<Text>();
-
-        if (collectionDataText == null)
-        {
-            Debug.LogError("❌ CollectionData UI not found.");
-            return;
-        }
-
-        string displayText = "User Collections:\n";
-
-        foreach (var collection in collections)
-        {
-            Debug.Log($"📌 User: {collection.Item1}");
-            displayText += $"User: {collection.Item1}\n";
-
-            foreach (var item in collection.Item2)
+            Debug.Log($"👤 User Principal: {userPrincipal}");
+            foreach (var (timestamp, canisterId, name, symbol, metadata) in collectionList)
             {
-                Debug.Log($"  📦 Time: {item.Item1}, CanisterId: {item.Item2}, Name: {item.Item3}, Symbol: {item.Item4}, Metadata: {item.Item5}");
-                displayText += $"Time: {item.Item1}, CanisterId: {item.Item2}, Name: {item.Item3}, Symbol: {item.Item4}, Metadata: {item.Item5}\n";
+                Debug.Log($"📦 Collection: {name} ({symbol}) - {metadata} (Canister: {canisterId}, Timestamp: {timestamp})");
             }
         }
-
-        Debug.Log($"✅ Final Display Text:\n{displayText}");
-
-        PimDeWitte.UnityMainThreadDispatcher.Instance().Enqueue(() =>
-{
-    collectionDataText.text = displayText;
-});
-
-
     }
     catch (Exception e)
     {
@@ -136,5 +124,37 @@ public async void GetAllCollections()
 }
 
 
+
+    public static class WasmtimeLoader
+    {
+        public static void LoadWasmtime()
+        {
+            try
+            {
+                string pluginPath = Application.dataPath + "/Plugins/libwasmtime.dylib";
+                IntPtr handle = dlopen(pluginPath, RTLD_NOW);
+
+                if (handle == IntPtr.Zero)
+                {
+                    Debug.LogError($"❌ Failed to load Wasmtime from {pluginPath} - " + Marshal.PtrToStringAnsi(dlerror()));
+                    return;
+                }
+
+                Debug.Log("✅ Wasmtime successfully loaded!");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"❌ Failed to load Wasmtime: {e.Message}");
+            }
+        }
+
+        private const int RTLD_NOW = 2;
+
+        [DllImport("libdl")]
+        private static extern IntPtr dlopen(string path, int flag);
+
+        [DllImport("libdl")]
+        private static extern IntPtr dlerror();
     }
+}
 }
