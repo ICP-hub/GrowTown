@@ -17,7 +17,7 @@ const Gameplay = () => {
         
 
                 {/* well and rocks*/}
-                <div className=' absolute right-0 -top-20 sm:-top-10' >
+                <div className=' absolute right-0 -top-28 sm:-top-10' >
                     <img src='images/well.png' alt='well' className=' w-[140px]  lg:w-[220px] ' draggable='false'
               loading="lazy"/>
                     <img src='images/rocks 2.png' alt='rocks' className='absolute  w-16 sm:w-20 lg:w-auto right-0 lg:right-5 top-[320px] lg:top-[450px]'  draggable='false'
