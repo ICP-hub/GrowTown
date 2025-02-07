@@ -38,7 +38,7 @@ const HeroComp = () => {
 
           {/* Land and Lower Clouds */}
 
-          <div className='-ml-28 sm:-ml-0 mt-[20%] sm:mt-[60%]  lg:mt-0' data-aos='fade-up' data-aos-delay='500'>
+          <div className='-ml-28 sm:-ml-10 xl:-ml-0 mt-[20%] sm:mt-[60%]  lg:mt-0' data-aos='fade-up' data-aos-delay='500'>
 
             {/* Ship */}
             <img src='images/sheep.png' alt='sheep' data-aos='fade-up' data-aos-delay='1000'
@@ -73,11 +73,13 @@ const HeroComp = () => {
 
         {/* Center Hero Content */}
         <div
-          className='absolute z-40 top-[16%]   sm:top-[10%] left-[52%] xl:left-[50%] transform -translate-x-1/2'
+          className='absolute z-40 top-[16%] w-full sm:w-auto sm:top-[10%]  sm:left-[50%] transform sm:-translate-x-1/2'
 
         >
           <img src='/images/LogoGif (1).gif' alt='logo' data-aos='zoom-in' 
-          className=' min-w-96 sm:w-auto' />
+           className=' mx-auto w-96 sm:w-auto' 
+           draggable='false'
+           loading="lazy"/>
 
           <div data-aos='fade-down' className=' mt-[50%]  sm:mt-0' data-aos-delay='1000'>
             <div className=' mx-auto w-[60%]  sm:w-auto  mb-10 -mt-2 '>
@@ -86,19 +88,19 @@ const HeroComp = () => {
            </h1> */}
             </div>
            
-            <div className='flex mx-auto w-[60%] sm:w-auto flex-col sm:flex-row justify-center sm:gap-[5%] gap-5 mt-[15%] sm:mt-0 text-white'>
-              <div className='p-1 ml-2 sm:ml-0 w-[80%] sm:w-auto px-2 bg-black flex justify-center items-center rounded-lg'>
+            <div className='flex mx-auto w-[45%] xs:w-[40%]  sm:w-auto flex-col sm:flex-row whitespace-nowrap  justify-center sm:gap-[5%] gap-5 mt-[15%] sm:mt-0 text-white'>
+            <div className=' sm:ml-0 p-1 sm:w-auto px-2 bg-black flex justify-center items-center rounded-lg'>
               <img src='images/appleIcon.svg' className='my-auto mx-1' />
                 <div className='mx-1 ml-2 custom-fingerpaint'>
-                  <h2 className=' text-sm '>Available on</h2>
-                  <h1 className=' text-lg'>App Store</h1>
+                <h2 className=' text-xs sm:text-sm '>Available on</h2>
+                <h1 className=' sm:text-lg'>App Store</h1>
                 </div>
               </div>
-              <div className='ml-2 sm:ml-0 bg-black w-[80%] sm:w-auto flex  items-center p-1 px-2 justify-center rounded-lg'>
+              <div className='  sm:ml-0 bg-black  sm:w-auto flex  items-center p-1 px-2 justify-center rounded-lg'>
                 <img src='images/andIcon.svg' className='my-auto mx-1' />
                 <div className='mx-1 ml-2 custom-fingerpaint'>
-                  <h2 className=' text-sm'>Available on</h2>
-                  <h1 className=' text-lg'>Play Store</h1>
+                <h2 className=' text-xs sm:text-sm '>Available on</h2>
+                <h1 className=' sm:text-lg'>Play Store</h1>
                 </div>
               </div>
             </div>
