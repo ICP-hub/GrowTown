@@ -107,17 +107,40 @@ const NativeAppLogin = () => {
   };
 
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
-      <h1 className="text-black">DFINITY Greeting App</h1>
-      <div className="flex flex-col">
-        <button className="text-white bg-black mb-4" onClick={handleLogin}>
-          Login
-        </button>
-        <button className="text-white bg-black" onClick={handleGreet} disabled={loading}>
-          {loading ? "Loading..." : "Greet"}
-        </button>
-      </div>
-      {greeting && <p id="greeting" className="text-black">{greeting}</p>}
+<div className="flex bg-gradient-to-r from-[#4f2cda] to-[#885ae6] min-h-screen bg-gray-900 text-white justify-center items-center">
+  {/* Inner */}
+  <div className="bg-white sm:hidden shadow-lg  mx-5 rounded-lg w-full max-w-md p-10">
+    <div className="text-black">
+      <h1 className="text-3xl font-bold">Welcome to Your GrowTown</h1>
+      <p className="text-xs mt-2">
+        GrowTown Gameplay combines farming, trading, and adventure in a dynamic Web3 ecosystem.
+      </p>
+    </div>
+    <div className="mt-8 mb-16">
+      <img src="loginBg2.png" className="rounded-lg w-full" />
+    </div>
+    <button
+      className="py-3 bg-gradient-to-r from-[#4f2cda] to-[#885ae6] w-full hover:bg-[#4f2cda] text-white font-semibold rounded-lg shadow-md transition-all duration-300 hover:scale-105"
+      onClick={handleLogin}
+    >
+      Connect Wallet
+    </button>
+  </div>
+
+
+{/* UI for Desktop */}
+<div className="hidden sm:flex w-full h-full justify-center items-center">
+  {/* Center element */}
+  <div className="w-[600px] bg-[#885ae6] rounded-3xl h-[350px] p-5 shadow-lg flex justify-center   items-center">
+    <div className="h-full flex justify-center items-center bg-white rounded-3xl backdrop-blur-md w-full">
+      <h1 className="text-black text-center text-3xl font-bold px-8">
+        The Login Experience is Designed for Mobile Only.  
+        Please use Mobile for Login.
+      </h1>
+    </div>
+  </div>
+</div>
+ 
     </div>
   );
 };
