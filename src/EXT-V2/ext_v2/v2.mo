@@ -2274,42 +2274,42 @@ actor class EXTNFT(init_owner : Principal) = this {
 
     return Buffer.toArray(fungibleTokenData);
   };
-  // public query func getAllNonFungibleTokenData() : async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64)] {
-  //   if (_tokenMetadata.size() == 0) {
-  //       return [];
-  //   };
+  public query func getAllNFTData() : async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64)] {
+    if (_tokenMetadata.size() == 0) {
+      return [];
+    };
 
-  //   let nonFungibleTokenData = Buffer.Buffer<(TokenIndex, AccountIdentifier, Metadata, ?Nat64)>(_tokenMetadata.size());
+    let nonFungibleTokenData = Buffer.Buffer<(TokenIndex, AccountIdentifier, Metadata, ?Nat64)>(_tokenMetadata.size());
 
-  //   for ((tokenIndex, metadata) in _tokenMetadata.entries()) {
-  //       switch (metadata) {
-  //           case (#nonfungible(_)) {
-  //               // Fetch the owner of the token
-  //               let owner = switch (_registry.get(tokenIndex)) {
-  //                   case (?owner) { owner };
-  //                   case (null) {
-  //                       AID.fromPrincipal(Principal.fromText("aaaaa-aa"), null);
-  //                   };
-  //               };
+    for ((tokenIndex, metadata) in _tokenMetadata.entries()) {
+      switch (metadata) {
+        case (#nonfungible(_)) {
+          // Fetch the owner of the token
+          let owner = switch (_registry.get(tokenIndex)) {
+            case (?owner) { owner };
+            case (null) {
+              AID.fromPrincipal(Principal.fromText("aaaaa-aa"), null);
+            };
+          };
 
-  //               // Fetch the price if the token is listed in the marketplace
-  //               let listing = _tokenListing.get(tokenIndex);
-  //               let price = switch (listing) {
-  //                   case (?l) ?l.price;  // If listed, return the price
-  //                   case (_) null;  // If not listed, return null for price
-  //               };
+          // Fetch the price if the token is listed in the marketplace
+          let listing = _tokenListing.get(tokenIndex);
+          let price = switch (listing) {
+            case (?l) ?l.price; // If listed, return the price
+            case (_) null; // If not listed, return null for price
+          };
 
-  //               // Add token details including price to the buffer
-  //               nonFungibleTokenData.add((tokenIndex, owner, metadata, price));
-  //           };
-  //           case (#fungible(_)) {
-  //               // Do nothing for fungible tokens
-  //           };
-  //       };
-  //   };
+          // Add token details including price to the buffer
+          nonFungibleTokenData.add((tokenIndex, owner, metadata, price));
+        };
+        case (#fungible(_)) {
+          // Do nothing for fungible tokens
+        };
+      };
+    };
 
-  //   return Buffer.toArray(nonFungibleTokenData);
-  // };
+    return Buffer.toArray(nonFungibleTokenData);
+  };
 
   public query func getAllNonFungibleTokenData() : async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64)] {
     if (_tokenMetadata.size() == 0) {
@@ -2720,46 +2720,71 @@ actor class EXTNFT(init_owner : Principal) = this {
     };
   };
 
-  // public shared func burnToken(tokenId : TokenIndex) : async () {
-  //     // Burn address - represented as a series of zeros
-  //     let burnAddress : AccountIdentifier = "0000000000000000000000000000000000000000000000000000000000000001";
+  //burntoken(redeem)
+  // public shared func burnToken(tokenIdentifier : TokenIdentifier) : async Result.Result<(Metadata, Bool), Text> {
+  //   let burnAddress : AccountIdentifier = "0000000000000000000000000000000000000000000000000000000000000001";
 
-  //     // Get current owner of the token
-  //     switch (_registry.get(tokenId)) {
+  //   if (ExtCore.TokenIdentifier.isPrincipal(tokenIdentifier, Principal.fromActor(this)) == false) {
+  //     return #err("Invalid Token Identifier");
+  //   };
+  //   let tokenId = ExtCore.TokenIdentifier.getIndex(tokenIdentifier);
+
+  //   switch (_tokenMetadata.get(tokenId)) {
+  //     case (?metadata) {
+
+  //       switch (_registry.get(tokenId)) {
   //         case (?owner) {
-  //             // Remove token from previous owner's holdings
-  //             _removeFromUserTokens(tokenId, owner);
 
-  //             // Update registry to transfer token to burn address
-  //             _registry.put(tokenId, burnAddress);
+  //           _removeFromUserTokens(tokenId, owner);
 
-  //             // Add token to burn address holdings
-  //             _addToUserTokens(tokenId, burnAddress);
+  //           _registry.put(tokenId, burnAddress);
+
+  //           _addToUserTokens(tokenId, burnAddress);
+
+  //           return #ok((metadata, true));
   //         };
-  //         case (_) {
-  //             // Token does not exist or no previous owner, handle error if necessary
+  //         case (null) {
+  //           return #err("Token owner not found.");
   //         };
+  //       };
   //     };
+  //     case (null) {
+  //       return #err("Token metadata not found.");
+  //     };
+  //   };
   // };
 
-  public shared func burnToken(tokenId : TokenIndex) : async Result.Result<(), Text> {
-
+  public shared ({ caller = caller }) func burnToken(tokenIdentifier : TokenIdentifier) : async Result.Result<(Metadata, Bool), Text> {
     let burnAddress : AccountIdentifier = "0000000000000000000000000000000000000000000000000000000000000001";
 
-    switch (_registry.get(tokenId)) {
-      case (?owner) {
+    if (ExtCore.TokenIdentifier.isPrincipal(tokenIdentifier, Principal.fromActor(this)) == false) {
+      return #err("Invalid Token Identifier");
+    };
 
-        _removeFromUserTokens(tokenId, owner);
+    let tokenId = ExtCore.TokenIdentifier.getIndex(tokenIdentifier);
 
-        _registry.put(tokenId, burnAddress);
+    switch (_tokenMetadata.get(tokenId)) {
+      case (?metadata) {
+        switch (_registry.get(tokenId)) {
+          case (?owner) {
+            // Ownership Check
+            if (owner != caller) {
+              return #err("Unauthorized: Only the token owner can burn this token.");
+            };
 
-        _addToUserTokens(tokenId, burnAddress);
+            _removeFromUserTokens(tokenId, owner);
+            _registry.put(tokenId, burnAddress);
+            _addToUserTokens(tokenId, burnAddress);
 
-        return #ok();
+            return #ok((metadata, true));
+          };
+          case (null) {
+            return #err("Token owner not found.");
+          };
+        };
       };
       case (null) {
-
-        return #err("Token does not exist or is already burned.");
+        return #err("Token metadata not found.");
       };
     };
   };

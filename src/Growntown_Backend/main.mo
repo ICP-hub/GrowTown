@@ -113,12 +113,12 @@ actor Main {
     createdAt : Time.Time;
   };
 
-  //To store additional user details
+  //Additional user details
   type UserDetails = {
     name : Text;
     email : Text;
     telegram : Text;
-    profilepic : ?Blob;
+    profilepic : ?Text;
 
   };
 
@@ -208,6 +208,10 @@ actor Main {
   //private stable var Objects Array
   private stable var _objects_Array : [(Nat, NftTypeMetadata)] = [];
   private stable var _objectIdCounter : Nat = 0;
+
+  //stable storage to store the redeemed tokens by the user
+  private stable var _redeemedTokens : [(Principal, TokenIdentifier)] = [];
+
   /* -------------------------------------------------------------------------- */
   /*                         SYSTEM FUNCTIONS                                   */
   /* -------------------------------------------------------------------------- */
@@ -269,7 +273,6 @@ actor Main {
       throw Error.reject("User is not authenticated");
     };
     let canisterId = Principal.fromActor(Main);
-    // Check if the caller is one of the controllers
     let controllerResult = await isController(canisterId, user);
 
     if (controllerResult == false) {
@@ -279,20 +282,16 @@ actor Main {
     let userCollections = usersCollectionMap.get(user);
     switch (userCollections) {
       case null {
-        // No collections exist for the user, so create a new list with the collection
         let updatedCollections = [(Time.now(), collection_id)];
         usersCollectionMap.put(user, updatedCollections);
         return "Collection added";
       };
       case (?collections) {
-        // Convert the array to a list for easier manipulation
         let collectionsList = List.fromArray(collections);
-        // Check if the collection already exists in the list
         let collExists = List.some<(Time.Time, Principal)>(collectionsList, func((_, collId)) { collId == collection_id });
         if (collExists) {
           return "Collection already added";
         } else {
-          // Add the new collection to the list and update the map
           let newCollectionsList = List.push((Time.now(), collection_id), collectionsList);
           usersCollectionMap.put(user, List.toArray(newCollectionsList));
           return "Collection added";
@@ -308,35 +307,27 @@ actor Main {
     };
 
     let canisterId = Principal.fromActor(Main);
-
-    // Check if the caller is one of the controllers (admin check)
     let controllerResult = await isController(canisterId, user);
     if (controllerResult == false) {
       return "Unauthorized: Only admins can delete a collection.";
     };
 
     var found = false;
-
-    // Iterate through all entries in usersCollectionMap
     for ((userPrincipal, collections) in usersCollectionMap.entries()) {
       var updatedCollections = List.filter<(Time.Time, Principal)>(
         List.fromArray(collections),
-        func((_, collId)) {
+        func((_, collId)) { 
           if (collId == collection_id) {
             found := true;
-            return false; // Exclude the target collection
+            return false;
           };
           return true;
         },
       );
-
-      // Update the map for this user if a collection was removed
       if (found) {
         usersCollectionMap.put(userPrincipal, List.toArray(updatedCollections));
       };
     };
-
-    // Return appropriate response based on whether the collection was found
     if (found) {
       return "Collection removed successfully.";
     } else {
@@ -372,7 +363,6 @@ actor Main {
     await collectionCanisterActor.setMinter(user);
     await collectionCanisterActor.ext_setCollectionMetadata(_title, _symbol, _metadata);
 
-    // Updating the userCollectionMap
     let collections = usersCollectionMap.get(user);
     switch (collections) {
       case null {
@@ -415,35 +405,28 @@ actor Main {
     return usersCollectionMap.get(user);
   };
 
-  // // Getting all the collections ever created(only gets the canisterIds)
+  // Getting all the collections ever created
   public shared func getAllCollections() : async [(Principal, [(Time.Time, Principal, Text, Text, Text)])] {
     var result : [(Principal, [(Time.Time, Principal, Text, Text, Text)])] = [];
 
-    // Iterate through all entries in usersCollectionMap
     for ((userPrincipal, collections) in usersCollectionMap.entries()) {
       var collectionDetails : [(Time.Time, Principal, Text, Text, Text)] = [];
 
-      // Iterate through each collection the user has
       for ((time, collectionCanisterId) in collections.vals()) {
-        // Try-catch block to handle potential errors while fetching collection metadata
+
         try {
           let collectionCanisterActor = actor (Principal.toText(collectionCanisterId)) : actor {
-            getCollectionDetails : () -> async (Text, Text, Text); // Assuming it returns (name, symbol, metadata)
+            getCollectionDetails : () -> async (Text, Text, Text);
           };
 
-          // Fetch the collection details (name, symbol, metadata)
           let (collectionName, collectionSymbol, collectionMetadata) = await collectionCanisterActor.getCollectionDetails();
 
-          // Add collection with its name, symbol, and metadata to the list
           collectionDetails := Array.append(collectionDetails, [(time, collectionCanisterId, collectionName, collectionSymbol, collectionMetadata)]);
         } catch (_e) {
           Debug.print("Error fetching collection details for canister: " # Principal.toText(collectionCanisterId));
-          // Handle failure by appending the collection with placeholder values
           collectionDetails := Array.append(collectionDetails, [(time, collectionCanisterId, "Unknown Collection", "Unknown Symbol", "Unknown Metadata")]);
         };
       };
-
-      // Append user's collections to the result
       result := Array.append(result, [(userPrincipal, collectionDetails)]);
     };
 
@@ -476,18 +459,14 @@ actor Main {
     // throw Error.reject("Unauthorized: Only admins can view collection nfts");
     // };
 
-    // Define the canister actor interface
     let collectionCanisterActor = actor (Principal.toText(_collectionCanisterId)) : actor {
       getAllNonFungibleTokenData : () -> async [(TokenIndex, AccountIdentifier, Types.Metadata, ?Nat64)];
     };
 
-    // Retrieve all NFTs from the specified collection canister
     let nfts = await collectionCanisterActor.getAllNonFungibleTokenData();
 
-    // Apply pagination
     let paginatedNFTs = Pagin.paginate<(TokenIndex, AccountIdentifier, Types.Metadata, ?Nat64)>(nfts, chunkSize);
 
-    // Get the specific page of NFTs
     let nftPage = if (pageNo < paginatedNFTs.size()) {
       paginatedNFTs[pageNo];
     } else { [] };
@@ -523,13 +502,10 @@ actor Main {
       try2getAllNonFungibleTokenData : () -> async [(TokenIndex, AccountIdentifier, Types.Metadata, ?Nat64, Nat)];
     };
 
-    // Retrieve all filtered NFTs from the specified collection canister
     let nfts = await collectionCanisterActor.try2getAllNonFungibleTokenData();
 
-    // Apply pagination
     let paginatedNFTs = Pagin.paginate<(TokenIndex, AccountIdentifier, Types.Metadata, ?Nat64, Nat)>(nfts, chunkSize);
 
-    // Get the specific page of NFTs
     let nftPage = if (pageNo < paginatedNFTs.size()) {
       paginatedNFTs[pageNo];
     } else { [] };
@@ -549,16 +525,14 @@ actor Main {
     let collectionCanisterActor = actor (Principal.toText(collectionCanisterId)) : actor {
       getAllNonFungibleTokenData : () -> async [(TokenIndex, AccountIdentifier, Types.Metadata)];
     };
-
-    // Attempt to retrieve all NFTs from the specified collection canister
     try {
       let nfts = await collectionCanisterActor.getAllNonFungibleTokenData();
-      let nftCount = nfts.size(); // Count the total number of NFTs
-      return (nfts, nftCount); // Return both the NFT details and the count
+      let nftCount = nfts.size();
+      return (nfts, nftCount);
     } catch (_e) {
-      // Handle potential errors (e.g., canister not responding, method not implemented)
+
       Debug.print(Text.concat("Error fetching NFTs from canister: ", Principal.toText(collectionCanisterId)));
-      return ([], 0); // Return an empty list and a count of 0 in case of error
+      return ([], 0);
     };
   };
 
@@ -566,33 +540,6 @@ actor Main {
   /*                             NFT related methods                            */
   /* -------------------------------------------------------------------------- */
 
-  //add object data
-  // public shared func addObject(objMetadata: NftTypeMetadata) : async Text {
-  // let costPerUnitInE8s = objMetadata.nft_type_cost * 100000000;
-
-  // let existingObject = Array.find(_objects_Array, func (entry: (Nat, NftTypeMetadata)) : Bool {
-  //   return entry.1.nfttype == objMetadata.nfttype and entry.1.nft_type_quantity == objMetadata.nft_type_quantity;
-  // });
-
-  // switch (existingObject) {
-  //   case (?_) {
-
-  //     return "Error: Object with name '" # objMetadata.nfttype # "' and value " # Nat.toText(objMetadata.nft_type_quantity) # " already exists.";
-  //   };
-  //   case null {
-  //     let newId = _objectIdCounter;
-  //     _objectIdCounter += 1;
-
-  //     let updatedMetadata : NftTypeMetadata = {
-  //       nfttype = objMetadata.nfttype;
-  //       nft_type_quantity = objMetadata.nft_type_quantity;
-  //       nft_type_cost = costPerUnitInE8s;
-  //     };
-  //     _objects_Array := Array.append(_objects_Array, [(newId, updatedMetadata)]);
-  //     return "Object added successfully with ID: " # Nat.toText(newId) # " and Name: " # objMetadata.nfttype # " with cost per unit (in e8s): " # Nat64.toText(costPerUnitInE8s);
-  //   };
-  // };
-  // };
   public shared func addObject(objMetadata : NftTypeMetadata) : async Text {
     let costPerUnit = objMetadata.nft_type_cost;
 
@@ -623,21 +570,19 @@ actor Main {
   };
 
   public shared func removeObject(id : Nat) : async Text {
-    // Find the object by ID using Array.find
     let existingObject = Array.find(
       _objects_Array,
       func(entry : (Nat, NftTypeMetadata)) : Bool {
         return entry.0 == id;
       },
     );
-
     switch (existingObject) {
       case (?_) {
-        // Object found, filter it out from the array
+
         _objects_Array := Array.filter(
           _objects_Array,
           func(entry : (Nat, NftTypeMetadata)) : Bool {
-            return entry.0 != id; // Keep entries that don't match the ID
+            return entry.0 != id;
           },
         );
         return "Object with ID: " # Nat.toText(id) # " has been successfully removed.";
@@ -687,7 +632,7 @@ actor Main {
     };
   };
 
-  // Token will be transfered to this Vault and gives you req details to construct a link out of it, which you can share
+  // function to mannually get Tokenidentifier
   public shared ({ caller = _user }) func getNftTokenId(
     _collectionCanisterId : Principal,
     _tokenId : TokenIndex,
@@ -697,7 +642,7 @@ actor Main {
     return tokenIdentifier;
   };
 
-  // Minting  a NFT pass the collection canisterId in which you want to mint and the required details to add, this enables minting multiple tokens
+  // Minting NFTs
   public shared ({ caller = user }) func mintExtNonFungible(
     _collectionCanisterId : Principal,
     name : Text,
@@ -748,76 +693,6 @@ actor Main {
     List.toArray(result_list);
   };
 
-  // //mint function including price listing
-  // public shared ({ caller = user }) func mintExtNonFungible2(
-  //   _collectionCanisterId : Principal,
-  //   name : Text,
-  //   desc : Text,
-  //   asset : Text,
-  //   thumb : Text,
-  //   metadata : ?MetadataContainer,
-  //   amount : Nat,
-  //   price : ?Nat64,
-  // ) : async [(TokenIndex, TokenIdentifier, Result.Result<(), CommonError>)] {
-  //   // let collectionCanisterActor for ext_mint
-  //   let collectionCanisterActor = actor (Principal.toText(_collectionCanisterId)) : actor {
-  //     ext_mint : (
-  //       request : [(AccountIdentifier, Types.Metadata)]
-  //     ) -> async [TokenIndex];
-  //   };
-
-  //   // Prepare metadata for non-fungible tokens
-  //   let metadataNonFungible : Types.Metadata = #nonfungible {
-  //     name = name;
-  //     description = desc;
-  //     asset = asset;
-  //     thumbnail = thumb;
-  //     metadata = metadata;
-  //   };
-
-  //   // Prepare receiver's AccountIdentifier
-  //   let receiver = AID.fromPrincipal(user, null);
-  //   var request : [(AccountIdentifier, Types.Metadata)] = [];
-  //   var i : Nat = 0;
-
-  //   // Populate mint request for the specified amount
-  //   while (i < amount) {
-  //     request := Array.append(request, [(receiver, metadataNonFungible)]);
-  //     i := i + 1;
-  //   };
-
-  //   // Mint NFTs
-  //   let extMint = await collectionCanisterActor.ext_mint(request);
-
-  //   // Marketplace actor for listing price
-  //   let marketplaceActor = actor (Principal.toText(_collectionCanisterId)) : actor {
-  //     ext_marketplaceList : (caller : Principal, request : ListRequest) -> async Result.Result<(), CommonError>;
-  //   };
-
-  //   // Collect results
-  //   var resultList = List.nil<(TokenIndex, TokenIdentifier, Result.Result<(), CommonError>)>();
-
-  //   for (i in extMint.vals()) {
-  //     // Retrieve token identifier
-  //     let _tokenIdentifier = await getNftTokenId(_collectionCanisterId, i);
-
-  //     // Prepare ListRequest with the same price for all tokens
-  //     let listRequest : ListRequest = {
-  //       token = _tokenIdentifier;
-  //       price = price; // Optional price
-  //       from_subaccount = null; // Optional field, set to null
-  //     };
-
-  //     // List price for the NFT
-  //     let listPriceResult = await marketplaceActor.ext_marketplaceList(user, listRequest);
-
-  //     // Collect result
-  //     resultList := List.push((i, _tokenIdentifier, listPriceResult), resultList);
-  //   };
-
-  //   return List.toArray(resultList);
-  // };
-
   public shared ({ caller = user }) func mintExtNonFungible3(
     _collectionCanisterId : Principal,
     name : Text,
@@ -828,14 +703,11 @@ actor Main {
     amount : Nat,
     price : ?Nat64,
   ) : async [(TokenIndex, TokenIdentifier, Result.Result<(), CommonError>)] {
-    // Create a collection canister actor for ext_mint
     let collectionCanisterActor = actor (Principal.toText(_collectionCanisterId)) : actor {
       ext_mint : (
         request : [(AccountIdentifier, Types.Metadata)]
       ) -> async [TokenIndex];
     };
-
-    // Prepare metadata for non-fungible tokens
     let metadataNonFungible : Types.Metadata = #nonfungible {
       name = name;
       description = desc;
@@ -844,10 +716,8 @@ actor Main {
       metadata = metadata;
     };
 
-    // Prepare receiver's AccountIdentifier
     let receiver = AID.fromPrincipal(user, null);
 
-    // Populate mint request for the specified amount
     var request : [(AccountIdentifier, Types.Metadata)] = [];
     var i : Nat = 0;
     while (i < amount) {
@@ -855,45 +725,35 @@ actor Main {
       i := i + 1;
     };
 
-    // Mint NFTs
     let extMint = await collectionCanisterActor.ext_mint(request);
 
     if (Array.size(extMint) != amount) {
       Debug.trap("Error: Not all tokens were minted successfully.");
     };
 
-    // Create a marketplace actor for listing price
     let marketplaceActor = actor (Principal.toText(_collectionCanisterId)) : actor {
       ext_marketplaceList : (caller : Principal, request : ListRequest) -> async Result.Result<(), CommonError>;
     };
 
-    // Prepare results array
     var results : [(TokenIndex, TokenIdentifier, Result.Result<(), CommonError>)] = [];
 
-    // Process minted tokens and prepare results
     for (index in extMint.vals()) {
-      // Retrieve token identifier
-      let _tokenIdentifier = await getNftTokenId(_collectionCanisterId, index);
 
-      // Prepare ListRequest with the same price for all tokens
+      let _tokenIdentifier = await getNftTokenId(_collectionCanisterId, index);
       let listRequest : ListRequest = {
         token = _tokenIdentifier;
-        price = price; // Optional price
-        from_subaccount = null; // Optional field, set to null
+        price = price;
+        from_subaccount = null;
       };
 
-      // List price for the NFT
       let listPriceResult = await marketplaceActor.ext_marketplaceList(user, listRequest);
 
-      // Add the result to the results array
       results := Array.append(results, [(index, _tokenIdentifier, listPriceResult)]);
     };
-
-    // Return the array of results
     return results;
   };
 
-  // Minting  a Fungible token pass the collection canisterId in which you want to mint and the required details to add, this enables minting multiple tokens
+  // Minting Fungible Tokens
   public shared ({ caller = user }) func mintExtFungible(
     _collectionCanisterId : Principal,
     name : Text,
@@ -947,64 +807,29 @@ actor Main {
     await collectionCanisterActor.getAllNonFungibleTokenData();
   };
 
-  //function to get details of a particular nft
-  // public shared func getSingleNonFungibleTokens(
-  //   _collectionCanisterId : Principal,
-  //   _tokenId : TokenIndex,
-  //   user : AccountIdentifier // Add user parameter to check ownership
-  // ) : async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64, Bool)] {
-
-  //   // Define the actor interface for the other canister
-  //   let collectionCanisterActor = actor (Principal.toText(_collectionCanisterId)) : actor {
-  //     getSingleNonFungibleTokenData : (TokenIndex) -> async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64)];
-  //   };
-
-  //   // Make the inter-canister call to fetch the token data (including price)
-  //   let tokenData = await collectionCanisterActor.getSingleNonFungibleTokenData(_tokenId);
-
-  //   var isOwned : Bool = false; // Ownership flag
-
-  //   // Check if tokenData contains elements
-  //   if (tokenData.size() > 0) {
-  //     let (tokenIndex, nftOwner, metadata, price) = tokenData[0]; // Access the first tuple in the array
-  //     isOwned := (nftOwner == user); // Set ownership flag if the user is the owner
-
-  //     // Return token data along with the ownership status
-  //     return [(tokenIndex, nftOwner, metadata, price, isOwned)];
-  //   } else {
-  //     // Handle the case where no data is returned
-  //     return [];
-  //   };
-  // };
-
+  //fetch details of a particular NFT
   public shared func getSingleNonFungibleTokens(
     _collectionCanisterId : Principal,
     _tokenId : TokenIndex,
     user : AccountIdentifier,
   ) : async [(TokenIndex, TokenIdentifier, AccountIdentifier, Metadata, ?Nat64, Bool)] {
 
-    // Define the actor interface for the other canister
     let collectionCanisterActor = actor (Principal.toText(_collectionCanisterId)) : actor {
       getSingleNonFungibleTokenData : (TokenIndex) -> async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64)];
     };
 
-    // Make the inter-canister call to fetch the token data (including price)
     let tokenData = await collectionCanisterActor.getSingleNonFungibleTokenData(_tokenId);
 
-    var isOwned : Bool = false; // Ownership flag
+    var isOwned : Bool = false;
 
-    // Check if tokenData contains elements
     if (tokenData.size() > 0) {
-      let (tokenIndex, nftOwner, metadata, price) = tokenData[0]; // Access the first tuple in the array
-      isOwned := (nftOwner == user); // Set ownership flag if the user is the owner
+      let (tokenIndex, nftOwner, metadata, price) = tokenData[0];
+      isOwned := (nftOwner == user);
 
-      // Retrieve the TokenIdentifier
       let _tokenIdentifier = await getNftTokenId(_collectionCanisterId, tokenIndex);
 
-      // Return token data along with the ownership status and TokenIdentifier
       return [(tokenIndex, _tokenIdentifier, nftOwner, metadata, price, isOwned)];
     } else {
-      // Handle the case where no data is returned
       return [];
     };
   };
@@ -1017,26 +842,20 @@ actor Main {
   //fetch total number of nfts accross all collections
   public shared func getTotalNFTs() : async Nat {
     var totalNFTs : Nat = 0;
-
-    // Iterate through all entries in usersCollectionMap
     for ((_, collections) in usersCollectionMap.entries()) {
       for ((_, collectionCanisterId) in collections.vals()) {
         let collectionCanisterActor = actor (Principal.toText(collectionCanisterId)) : actor {
           getAllNonFungibleTokenData : () -> async [(TokenIndex, AccountIdentifier, Types.Metadata)];
         };
-
-        // Attempt to retrieve all NFTs from the specified collection canister and add to the total count
         try {
           let nfts = await collectionCanisterActor.getAllNonFungibleTokenData();
           totalNFTs += nfts.size();
         } catch (_e) {
-          // Handle potential errors, but continue to the next collection
           Debug.print(Text.concat("Error fetching NFTs from canister: ", Principal.toText(collectionCanisterId)));
         };
       };
     };
-
-    return totalNFTs; // Return the total number of NFTs across all collections
+    return totalNFTs;
   };
 
   public shared func getAllNFTNames() : async [Text] {
@@ -1065,53 +884,6 @@ actor Main {
 
     return nftNames;
   };
-
-  // public shared func getCollectionAndNFTNames() : async [(Text, [(Text, [Text])])] {
-  //   var result : [(Text, [(Text, [Text])])] = [];
-
-  //   // Iterate through all entries in usersCollectionMap
-  //   for ((userPrincipal, collections) in usersCollectionMap.entries()) {
-  //     var collectionNFTs : [(Text, [Text])] = [];
-
-  //     // Iterate through each collection the user has
-  //     for ((time, collectionCanisterId) in collections.vals()) {
-  //       try {
-  //         // First get collection details
-  //         let collectionCanisterActor = actor (Principal.toText(collectionCanisterId)) : actor {
-  //           getCollectionDetails : () -> async (Text, Text, Text);
-  //           getAllNonFungibleTokenData : () -> async [(TokenIndex, AccountIdentifier, Types.Metadata)];
-  //         };
-
-  //         // Get collection name from metadata
-  //         let (collectionName, _, _) = await collectionCanisterActor.getCollectionDetails();
-
-  //         var nftNames : [Text] = [];
-
-  //         // Get all NFTs for this collection
-  //         let nfts = await collectionCanisterActor.getAllNonFungibleTokenData();
-  //         for ((_, _, metadata) in nfts.vals()) {
-  //           let nftName = switch (metadata) {
-  //             case (#nonfungible { name }) name;
-  //             case (_) "Unknown NFT";
-  //           };
-  //           nftNames := Array.append<Text>(nftNames, [nftName]);
-  //         };
-
-  //         // Add collection with its NFTs to the list
-  //         collectionNFTs := Array.append<(Text, [Text])>(collectionNFTs, [(collectionName, nftNames)]);
-
-  //       } catch (_e) {
-  //         Debug.print("Error fetching data for canister: " # Principal.toText(collectionCanisterId));
-  //         collectionNFTs := Array.append<(Text, [Text])>(collectionNFTs, [("Unknown Collection", [])]);
-  //       };
-  //     };
-
-  //     // Add this user's collections and their NFTs to the result
-  //     result := Array.append(result, [(Principal.toText(userPrincipal), collectionNFTs)]);
-  //   };
-
-  //   return result;
-  // };
 
   public shared func getCollectionAndNFTNames() : async [(Text, [(Time.Time, Principal, [(Text, [Text])])])] {
     var result : [(Text, [(Time.Time, Principal, [(Text, [Text])])])] = [];
@@ -1159,7 +931,6 @@ actor Main {
     return result;
   };
 
-
   /* -------------------------------------------------------------------------- */
   /*                            User Related Methods                            */
   /* -------------------------------------------------------------------------- */
@@ -1169,8 +940,6 @@ actor Main {
     // if (Principal.isAnonymous(user)) {
     //   throw Error.reject("User is not authenticated");
     // };
-
-    // Check if the user already exists in the array
     let existingUser = Array.find<User>(
       usersArray,
       func(u : User) : Bool {
@@ -1180,18 +949,16 @@ actor Main {
 
     switch (existingUser) {
       case (?_) {
-        // If the user already exists, return an error
+
         return #err("User already exists.");
       };
       case (null) {
-        // Generate a unique ID for the new user
+
         let newUserId = userIdCounter + 1;
         userIdCounter := newUserId;
 
-        // Get the current time
         let currentTime = Time.now();
 
-        // Create the new user entry
         let newUser : User = {
           uid = uid;
           id = newUserId;
@@ -1200,23 +967,17 @@ actor Main {
 
         };
 
-        // Store the new user in the array
         usersArray := Array.append(usersArray, [newUser]);
 
         Debug.print("New user created with ID: " # Nat.toText(newUserId));
 
-        // Return the new user's ID and time of creation
         return #ok((newUserId, currentTime));
       };
     };
   };
 
   //enter user details
-  public shared ({ caller = user }) func updateUserDetails(accountIdentifier : Principal, name : Text, email : Text, telegram : Text, profilePic : ?Blob) : async Result.Result<Text, Text> {
-    if (Principal.isAnonymous(user)) {
-      throw Error.reject("User is not authenticated");
-    };
-    // Check if the user exists in the usersArray created by the `create_user` function
+  public shared ({ caller = user }) func updateUserDetails(accountIdentifier : Principal, name : Text, email : Text, telegram : Text, profilePic : ?Text) : async Result.Result<Text, Text> {
     let existingUser = Array.find<User>(
       usersArray,
       func(u : User) : Bool {
@@ -1224,21 +985,18 @@ actor Main {
       },
     );
 
-    // If the user does not exist, return an error
     switch (existingUser) {
       case (null) {
         return #err("User not found. Please create a user before setting details.");
       };
       case (?_) {
-        // If the user exists, proceed to store or update the user's name, email, telegram, and profile picture
         let userDetails : UserDetails = {
           name = name;
           email = email;
           telegram = telegram;
-          profilepic = profilePic; // Use the renamed parameter
+          profilepic = profilePic;
         };
 
-        // Add or update user details in the userDetailsMap
         userDetailsMap.put(accountIdentifier, userDetails);
 
         return #ok("User details updated successfully.");
@@ -1247,11 +1005,11 @@ actor Main {
   };
 
   // Get user details (for admin and user side both)
-  public shared query ({ caller = user }) func getUserDetails(accountIdentifier : Principal) : async Result.Result<(Principal, Text, Nat, Text, Text, Text, ?Blob), Text> {
-    if (Principal.isAnonymous(user)) {
-      throw Error.reject("User is not authenticated");
-    };
-    // Check if the user exists in the usersArray (created by the create_user function)
+  public shared query ({ caller = user }) func getUserDetails(accountIdentifier : Principal) : async Result.Result<(Principal, Text, Nat, Text, Text, Text, ?Text), Text> {
+    // if (Principal.isAnonymous(user)) {
+    //   throw Error.reject("User is not authenticated");
+    // };
+
     let existingUser = Array.find<User>(
       usersArray,
       func(u : User) : Bool {
@@ -1259,22 +1017,18 @@ actor Main {
       },
     );
 
-    // If the user does not exist, return an error
     switch (existingUser) {
       case (null) {
         return #err("User not found.");
       };
       case (?foundUser) {
-        // Fetch the user's details from the userDetailsMap
         let userDetails = userDetailsMap.get(accountIdentifier);
 
         switch (userDetails) {
           case (null) {
-            // Return basic user information if additional details are not found
             return #ok((foundUser.accountIdentifier, foundUser.uid, foundUser.id, "No Name", "No Email", "No Telegram", null));
           };
           case (?details) {
-            // Return the user's account identifier, uid, id, name, email, telegram, and profile picture
             return #ok((foundUser.accountIdentifier, foundUser.uid, foundUser.id, details.name, details.email, details.telegram, details.profilepic));
           };
         };
@@ -1283,44 +1037,37 @@ actor Main {
   };
 
   //fetch list of all users
-  public shared query ({ caller = user }) func getAllUsers(chunkSize : Nat, pageNo : Nat) : async Result.Result<{ data : [(Principal, Nat, Time.Time, Text, Text, ?Blob)]; current_page : Nat; total_pages : Nat }, Text> {
-    if (Principal.isAnonymous(user)) {
-      throw Error.reject("User is not authenticated");
-    };
-    // Map over the usersArray and extract the relevant fields
-    let allUsersDetails = Array.map<User, (Principal, Nat, Time.Time, Text, Text, ?Blob)>(
+  public shared query ({ caller = user }) func getAllUsers(chunkSize : Nat, pageNo : Nat) : async Result.Result<{ data : [(Principal, Nat, Time.Time, Text, Text, ?Text)]; current_page : Nat; total_pages : Nat }, Text> {
+    // if (Principal.isAnonymous(user)) {
+    //   throw Error.reject("User is not authenticated");
+    // };
+
+    let allUsersDetails = Array.map<User, (Principal, Nat, Time.Time, Text, Text, ?Text)>(
       usersArray,
-      func(u : User) : (Principal, Nat, Time.Time, Text, Text, ?Blob) {
-        // Fetch user details from the userDetailsMap
+      func(u : User) : (Principal, Nat, Time.Time, Text, Text, ?Text) {
         let userDetails = userDetailsMap.get(u.accountIdentifier);
 
-        // Determine the name to return (if not found, return "No Name")
         let name = switch (userDetails) {
-          case (null) "No Name"; // Default to "No Name" if details are not found
-          case (?details) details.name; // Return the user's name if available
+          case (null) "No Name";
+          case (?details) details.name;
         };
 
-        // Determine the email to return (if not found, return "No Email")
         let email = switch (userDetails) {
-          case (null) "No Email"; // Default to "No Email" if details are not found
-          case (?details) details.email; // Return the user's email if available
+          case (null) "No Email";
+          case (?details) details.email;
         };
 
-        // Get the profile picture, if available
         let profilePic = switch (userDetails) {
-          case (null) null; // No details found
-          case (?details) details.profilepic; // Return the profile picture if available
+          case (null) null;
+          case (?details) details.profilepic;
         };
 
-        // Return the user details including the profile picture
         return (u.accountIdentifier, u.id, u.createdAt, name, email, profilePic);
       },
     );
 
-    // Paginate the results
-    let index_pages = Pagin.paginate<(Principal, Nat, Time.Time, Text, Text, ?Blob)>(allUsersDetails, chunkSize);
+    let index_pages = Pagin.paginate<(Principal, Nat, Time.Time, Text, Text, ?Text)>(allUsersDetails, chunkSize);
 
-    // Error handling for invalid page numbers or empty data
     if (index_pages.size() < pageNo) {
       return #err("Page not found");
     };
@@ -1331,7 +1078,6 @@ actor Main {
 
     let users_page = index_pages[pageNo];
 
-    // Return the paginated result
     return #ok({
       data = users_page;
       current_page = pageNo + 1;
@@ -1347,140 +1093,93 @@ actor Main {
     return usersArray.size();
   };
 
-  //usernftcollection (mycollection)
+  //nfts bought by (mycollection)
   public shared ({ caller = user }) func userNFTcollection(
     _collectionCanisterId : Principal,
     user : AccountIdentifier,
     chunkSize : Nat,
     pageNo : Nat,
-  ) : async Result.Result<{ boughtNFTs : [(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)]; unboughtNFTs : [(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)] }, CommonError> {
-    if (Principal.isAnonymous(Principal.fromText(user))) {
-      throw Error.reject("User is not authenticated");
-    };
+  ) : async Result.Result<{ data : [(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)]; current_page : Nat; total_pages : Nat }, CommonError> {
 
-    // Define the canister actor interface
     let collectionCanisterActor = actor (Principal.toText(_collectionCanisterId)) : actor {
-      getAllNonFungibleTokenData : () -> async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64)];
+      getAllNFTData : () -> async [(TokenIndex, AccountIdentifier, Metadata, ?Nat64)];
       getCollectionDetails : () -> async (Text, Text, Text);
     };
 
-    // Fetch the collection name and details
     let (collectionName, _, _) = await collectionCanisterActor.getCollectionDetails();
-
-    // Fetch all NFTs in the collection
-    let allNFTs = await collectionCanisterActor.getAllNonFungibleTokenData();
-
-    // Fetch the listings (unbought NFTs)
-    let marketplaceListings = await listings(_collectionCanisterId);
+    let allNFTs = await collectionCanisterActor.getAllNFTData();
 
     var boughtNFTs : [(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)] = [];
-    var unboughtNFTs : [(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)] = [];
 
-    // Iterate through all NFTs in the collection
     for ((tokenIndex, nftOwner, metadata, price) in allNFTs.vals()) {
-      let tokenIdentifier = ExtCore.TokenIdentifier.fromPrincipal(_collectionCanisterId, tokenIndex);
-
-      // Check if the NFT is listed in the marketplace (unbought)
-      let isListed = Array.find<(TokenIndex, TokenIdentifier, Listing, Metadata)>(
-        marketplaceListings,
-        func((listedIndex, _, _, _)) {
-          listedIndex == tokenIndex;
-        },
-      );
-
       if (nftOwner == user) {
-        // If the user owns the NFT, add it to the boughtNFTs list with its price
-        boughtNFTs := Array.append(boughtNFTs, [(tokenIdentifier, tokenIndex, metadata, collectionName, _collectionCanisterId, price)]);
-      } else if (isListed != null) {
-        // Check if an NFT with the same name already exists in boughtNFTs or unboughtNFTs
-        let nameExistsInBoughtNFTs = Array.find<((TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64))>(
+        let tokenIdentifier = ExtCore.TokenIdentifier.fromPrincipal(_collectionCanisterId, tokenIndex);
+        boughtNFTs := Array.append(
           boughtNFTs,
-          func((_, _, existingMetadata, _, _, _)) {
-            switch (existingMetadata) {
-              case (#nonfungible(existingNftData)) {
-                switch (metadata) {
-                  case (#nonfungible(nftData)) {
-                    return existingNftData.name == nftData.name;
-                  };
-                  case (_) { return false };
-                };
-              };
-              case (_) { return false };
-            };
-          },
+          [(tokenIdentifier, tokenIndex, metadata, collectionName, _collectionCanisterId, price)],
         );
-
-        let nameExistsInUnboughtNFTs = Array.find<((TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64))>(
-          unboughtNFTs,
-          func((_, _, existingMetadata, _, _, _)) {
-            switch (existingMetadata) {
-              case (#nonfungible(existingNftData)) {
-                switch (metadata) {
-                  case (#nonfungible(nftData)) {
-                    return existingNftData.name == nftData.name;
-                  };
-                  case (_) { return false };
-                };
-              };
-              case (_) { return false };
-            };
-          },
-        );
-
-        // If the name doesn't exist in either list, add the NFT to the unboughtNFTs list
-        if (nameExistsInBoughtNFTs == null and nameExistsInUnboughtNFTs == null) {
-          unboughtNFTs := Array.append(unboughtNFTs, [(tokenIdentifier, tokenIndex, metadata, collectionName, _collectionCanisterId, price)]);
-        };
       };
     };
 
-    // Paginate both boughtNFTs and unboughtNFTs
-    let boughtNFTsPaginated = Pagin.paginate<(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)>(boughtNFTs, chunkSize);
-    let unboughtNFTsPaginated = Pagin.paginate<(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)>(unboughtNFTs, chunkSize);
+    let paginatedNFTs = Pagin.paginate<(TokenIdentifier, TokenIndex, Metadata, Text, Principal, ?Nat64)>(boughtNFTs, chunkSize);
 
-    // Check page availability for both lists
-    if (boughtNFTsPaginated.size() <= pageNo and unboughtNFTsPaginated.size() <= pageNo) {
+    if (pageNo >= paginatedNFTs.size()) {
       return #err(#Other("Page not found"));
     };
 
-    // Get the pages for both lists
-    let boughtNFTsPage = if (pageNo < boughtNFTsPaginated.size()) {
-      boughtNFTsPaginated[pageNo];
-    } else { [] };
-    let unboughtNFTsPage = if (pageNo < unboughtNFTsPaginated.size()) {
-      unboughtNFTsPaginated[pageNo];
-    } else { [] };
-
-    // Return paginated boughtNFTs and unboughtNFTs
     return #ok({
-      boughtNFTs = boughtNFTsPage;
-      unboughtNFTs = unboughtNFTsPage;
+      data = paginatedNFTs[pageNo];
       current_page = pageNo + 1;
-      // total_pages = boughtNFTsPage.size();
-      // total_pages_unbought = unboughtNFTsPage.size();
+      total_pages = paginatedNFTs.size();
     });
   };
 
-  //User favorite NFTS from userNFTCollection
+  //redeem token function (burn nft)
+  public shared ({ caller = user }) func redeemtoken(_collectionCanisterId : Principal, tokenIdentifier : TokenIdentifier) : async Result.Result<Metadata, Text> {
+    let tokenActor = actor (Principal.toText(_collectionCanisterId)) : actor {
+      burnToken : (TokenIdentifier) -> async Result.Result<(Metadata, Bool), Text>;
+    };
+
+    let burnResult = await tokenActor.burnToken(tokenIdentifier);
+    switch (burnResult) {
+      case (#ok((metadata, _isBurned))) {
+        _redeemedTokens := Array.append(_redeemedTokens, [(user, tokenIdentifier)]);
+        return #ok(metadata);
+      };
+      case (#err(errorMessage)) {
+        return #err("Burn token failed: " # errorMessage);
+      };
+    };
+  };
+
+  public query func getallRedeemedTokens() : async [(Principal, TokenIdentifier)] {
+    return _redeemedTokens;
+  };
+
+  public query func getRedeemedTokens(user : Principal) : async [(Principal, TokenIdentifier)] {
+    let userRedeemedTokens = Array.filter<(Principal, TokenIdentifier)>(
+      _redeemedTokens,
+      func((princ, _)) {
+        princ == user;
+      },
+    );
+    return userRedeemedTokens;
+  };
 
   // Function to add a token to the user's favorites
   func _addToFavorites(user : AccountIdentifier, tokenIdentifier : TokenIdentifier) : () {
 
-    // Check if the user already has favorites
     let userFavorites = switch (_favorites.get(user)) {
-      case (?favorites) favorites; // If the user has favorites, retrieve them
-      case (_) [] // If the user has no favorites, start with an empty array
+      case (?favorites) favorites;
+      case (_) [];
     };
 
-    // Append the new token to the user's favorites list
     let updatedFavorites = Array.append(userFavorites, [(tokenIdentifier)]);
 
-    // Update the user's favorites in the favorites map
     _favorites.put(user, updatedFavorites);
   };
 
   // ADD TO FAVORITES //
-
   public shared ({ caller = user }) func addToFavorites(
     user : AccountIdentifier,
     tokenIdentifier : TokenIdentifier,
@@ -1489,13 +1188,11 @@ actor Main {
       throw Error.reject("User is not authenticated");
     };
 
-    // Check if the user already has favorites
     let userFavorites = switch (_favorites.get(user)) {
-      case (?favorites) favorites; // If the user has favorites, retrieve them
-      case (_) [] // If the user has no favorites, start with an empty array
+      case (?favorites) favorites;
+      case (_) [];
     };
 
-    // Check if the token is already in the user's favorites
     let isAlreadyFavorite = Array.find(
       userFavorites,
       func(entry : (TokenIdentifier)) : Bool {
@@ -1506,28 +1203,25 @@ actor Main {
     if (isAlreadyFavorite) {
       return #err(#Other("Token is already in favorites"));
     } else {
-      // Append the new token to the user's favorites list (without metadata)
+
       let updatedFavorites = Array.append(userFavorites, [tokenIdentifier]);
 
-      // Update the user's favorites in the favorites map
       _favorites.put(user, updatedFavorites);
       return #ok("Token added to favorites successfully");
     };
   };
 
-  //REMOVE FROM FAVORITES //
-  // Function to remove a token from the user's favorites
+  //REMOVE FROM FAVORITES
   public shared ({ caller = user }) func removeFromFavorites(user : AccountIdentifier, tokenIdentifier : TokenIdentifier) : async Result.Result<Text, CommonError> {
     if (Principal.isAnonymous(Principal.fromText(user))) {
       throw Error.reject("User is not authenticated");
     };
-    // Check if the user already has favorites
+
     let userFavorites = switch (_favorites.get(user)) {
-      case (?favorites) favorites; // If the user has favorites, retrieve them
-      case (_) return #err(#Other("No favorites found for this user")); // If the user has no favorites, return an error
+      case (?favorites) favorites;
+      case (_) return #err(#Other("No favorites found for this user"));
     };
 
-    // Check if the token is in the user's favorites
     let isFavorite = Array.find(
       userFavorites,
       func(entry : (TokenIdentifier)) : Bool {
@@ -1535,12 +1229,10 @@ actor Main {
       },
     ) != null;
 
-    // Instead of if (!isFavorite), use if isFavorite == false
     if (isFavorite == false) {
       return #err(#Other("Token is not in favorites"));
     };
 
-    // Remove the token from the user's favorites list
     let updatedFavorites = Array.filter(
       userFavorites,
       func(entry : (TokenIdentifier)) : Bool {
@@ -1548,27 +1240,22 @@ actor Main {
       },
     );
 
-    // Update the user's favorites in the favorites map
     _favorites.put(user, updatedFavorites);
-
-    // Return success message
     return #ok("Token removed from favorites successfully");
   };
 
-  // GET USER FAVORITES //
-  // Function to get the user's favorites
+  // GET USER FAVORITES
   public shared query ({ caller = user }) func getFavorites(user : AccountIdentifier) : async Result.Result<[(TokenIdentifier)], CommonError> {
     if (Principal.isAnonymous(Principal.fromText(user))) {
       throw Error.reject("User is not authenticated");
     };
-    // Check if the user has any favorites
+
     switch (_favorites.get(user)) {
       case (?favorites) {
-        // Return the user's favorites if found
         return #ok(favorites);
       };
       case (_) {
-        // Return an error if no favorites are found for the user
+
         return #err(#Other("No favorites found for this user"));
       };
     };
@@ -1580,33 +1267,26 @@ actor Main {
       ext_marketplaceTransactions : () -> async [Transaction];
     };
 
-    // Retrieve transactions from the collection canister
     let transactions = await transactionActor.ext_marketplaceTransactions();
 
     var transformedTransactions : [(TokenIndex, TokenIdentifier, Transaction, Text)] = [];
 
-    // Iterate through each transaction
     for (transaction in transactions.vals()) {
       if (transaction.buyer == buyerId) {
         let tokenIdentifier = ExtCore.TokenIdentifier.fromPrincipal(_collectionCanisterId, transaction.token);
 
-        // Fetch the collection details to get the name
         let collectionCanisterActor = actor (Principal.toText(_collectionCanisterId)) : actor {
           getCollectionDetails : () -> async (Text, Text, Text);
         };
-
         let (collectionName, _, _) = await collectionCanisterActor.getCollectionDetails();
 
-        // Append the transformed transaction data
         transformedTransactions := Array.append(
           transformedTransactions,
           [(transaction.token, tokenIdentifier, transaction, collectionName)],
         );
       };
     };
-
     return transformedTransactions;
-    // return transformedTransactions;
   };
 
   public shared ({ caller = user }) func alluseractivity(buyerId : AccountIdentifier, chunkSize : Nat, pageNo : Nat) : async Result.Result<{ data : [(TokenIndex, TokenIdentifier, Transaction, Text)]; current_page : Nat; total_pages : Nat }, Text> {
@@ -1615,26 +1295,21 @@ actor Main {
     };
     var allUserActivities : [(TokenIndex, TokenIdentifier, Transaction, Text)] = [];
 
-    // Call getAllCollections to get all collections in the system
     let allCollections = await getAllCollections();
 
-    // Iterate through each collection's details
     for ((_, collections) in allCollections.vals()) {
       for ((_, collectionCanisterId, collectionName, _, _) in collections.vals()) {
         let transactionActor = actor (Principal.toText(collectionCanisterId)) : actor {
           ext_marketplaceTransactions : () -> async [Transaction];
         };
 
-        // Retrieve transactions from the collection canister
         try {
           let transactions = await transactionActor.ext_marketplaceTransactions();
 
-          // Iterate through each transaction
           for (transaction in transactions.vals()) {
             if (transaction.buyer == buyerId) {
               let tokenIdentifier = ExtCore.TokenIdentifier.fromPrincipal(collectionCanisterId, transaction.token);
 
-              // Append the transformed transaction data
               allUserActivities := Array.append(
                 allUserActivities,
                 [(transaction.token, tokenIdentifier, transaction, collectionName)],
@@ -1643,13 +1318,10 @@ actor Main {
           };
 
         } catch (_e) {
-          // Handle potential errors, but continue to the next collection
           Debug.print(Text.concat("Error fetching transactions from canister: ", Principal.toText(collectionCanisterId)));
         };
       };
     };
-
-    // Apply pagination using the chunkSize and pageNo
     let index_pages = Pagin.paginate<(TokenIndex, TokenIdentifier, Transaction, Text)>(allUserActivities, chunkSize);
 
     if (index_pages.size() < pageNo) {
@@ -1698,10 +1370,8 @@ actor Main {
       ext_marketplaceListings : () -> async [(TokenIndex, Listing, Metadata)];
     };
 
-    // Retrieve listings from the collection canister
     let listingData = await priceListings.ext_marketplaceListings();
 
-    // Transform listing data to include TokenIdentifier alongside TokenIndex
     let transformedListingData = Array.map<(TokenIndex, Listing, Metadata), (TokenIndex, TokenIdentifier, Listing, Metadata)>(
       listingData,
       func((tokenIndex, listing, metadata) : (TokenIndex, Listing, Metadata)) : (TokenIndex, TokenIdentifier, Listing, Metadata) {
@@ -1722,10 +1392,8 @@ actor Main {
       ext_marketplaceListings : () -> async [(TokenIndex, Listing, Metadata)];
     };
 
-    // Retrieve listings from the collection canister
     let listingData = await priceListings.ext_marketplaceListings();
 
-    // Transform listing data to include TokenIdentifier alongside TokenIndex
     let transformedListingData = Array.map<(TokenIndex, Listing, Metadata), (TokenIndex, TokenIdentifier, Listing, Metadata)>(
       listingData,
       func((tokenIndex, listing, metadata) : (TokenIndex, Listing, Metadata)) : (TokenIndex, TokenIdentifier, Listing, Metadata) {
@@ -1734,7 +1402,6 @@ actor Main {
       },
     );
 
-    // Apply pagination
     let paginatedListings = Pagin.paginate<(TokenIndex, TokenIdentifier, Listing, Metadata)>(transformedListingData, chunkSize);
 
     if (paginatedListings.size() < pageNo) {
@@ -1764,10 +1431,8 @@ actor Main {
       ext_marketplaceListings_2 : () -> async [(TokenIndex, Listing, Metadata, Nat)];
     };
 
-    // Retrieve listings from the collection canister
     let listingData = await priceListings.ext_marketplaceListings_2();
 
-    // Transform listing data to include TokenIdentifier alongside TokenIndex and count
     let transformedListingData = Array.map<(TokenIndex, Listing, Metadata, Nat), (TokenIndex, TokenIdentifier, Listing, Metadata, Nat)>(
       listingData,
       func((tokenIndex, listing, metadata, count) : (TokenIndex, Listing, Metadata, Nat)) : (TokenIndex, TokenIdentifier, Listing, Metadata, Nat) {
@@ -1776,7 +1441,6 @@ actor Main {
       },
     );
 
-    // Apply pagination
     let paginatedListings = Pagin.paginate<(TokenIndex, TokenIdentifier, Listing, Metadata, Nat)>(transformedListingData, chunkSize);
 
     if (paginatedListings.size() < pageNo) {
@@ -1824,10 +1488,8 @@ actor Main {
       ext_marketplaceTransactions : () -> async [Transaction];
     };
 
-    // Retrieve transactions from the collection canister
     let transactions = await transactionActor.ext_marketplaceTransactions();
 
-    // Transform transaction data to include TokenIdentifier alongside TokenIndex
     let transformedTransactions = Array.map<Transaction, (TokenIndex, TokenIdentifier, Transaction)>(
       transactions,
       func(transaction : Transaction) : (TokenIndex, TokenIdentifier, Transaction) {
@@ -1839,12 +1501,12 @@ actor Main {
     return transformedTransactions;
   };
 
+  // Get all transactions for admin side 
   public shared (msg) func alltransactions(chunkSize : Nat, pageNo : Nat) : async Result.Result<{ data : [(TokenIndex, TokenIdentifier, Transaction)]; current_page : Nat; total_pages : Nat }, Text> {
     if (Principal.isAnonymous(msg.caller)) {
       throw Error.reject("User is not authenticated");
     };
     let canisterId = Principal.fromActor(Main);
-    // Check if the caller is one of the controllers
     let controllerResult = await isController(canisterId, msg.caller);
 
     if (controllerResult == false) {
@@ -1852,21 +1514,17 @@ actor Main {
     };
     var allTransactions : [(TokenIndex, TokenIdentifier, Transaction)] = [];
 
-    // Call getAllCollections to get all collections in the system
     let allCollections = await getAllCollections();
 
-    // Iterate through each collection's details
     for ((_, collections) in allCollections.vals()) {
       for ((_, collectionCanisterId, _, _, _) in collections.vals()) {
         let transactionActor = actor (Principal.toText(collectionCanisterId)) : actor {
           ext_marketplaceTransactions : () -> async [Transaction];
         };
 
-        // Retrieve transactions from the collection canister
         try {
           let transactions = await transactionActor.ext_marketplaceTransactions();
 
-          // Transform transaction data to include TokenIdentifier alongside TokenIndex
           let transformedTransactions = Array.map<Transaction, (TokenIndex, TokenIdentifier, Transaction)>(
             transactions,
             func(transaction : Transaction) : (TokenIndex, TokenIdentifier, Transaction) {
@@ -1875,17 +1533,13 @@ actor Main {
             },
           );
 
-          // Append the transformed transactions to the allTransactions list
           allTransactions := Array.append(allTransactions, transformedTransactions);
 
         } catch (_e) {
-          // Handle potential errors, but continue to the next collection
           Debug.print(Text.concat("Error fetching transactions from canister: ", Principal.toText(collectionCanisterId)));
         };
       };
     };
-
-    // Apply pagination using the chunkSize and pageNo
     let index_pages = Pagin.paginate<(TokenIndex, TokenIdentifier, Transaction)>(allTransactions, chunkSize);
 
     if (index_pages.size() < pageNo) {
@@ -1923,34 +1577,28 @@ actor Main {
     if (Principal.isAnonymous(msg.caller)) {
       throw Error.reject("User is not authenticated");
     };
-    // Debug print available cycles
     Debug.print("Available cycles: " # Nat.toText(Cycles.balance()));
 
     try {
       // Prepare the arguments for the ICP ledger transfer
       let send_args = {
-        memo = 0 : Nat64; // Memo set to 0, explicitly typed as Nat64
-        amount = { e8s = amount_e8s }; // Transfer amount in e8s
-        fee = { e8s = 10000 : Nat64 }; // Transaction fee in e8s (0.0001 ICP)
-        from_subaccount = subaccount; // Subaccount for the buyer, if any
-        to = paymentAddress; // Recipient is the seller's account
-        created_at_time = null : ?Time; // Optional timestamp, explicitly typed as null
+        memo = 0 : Nat64;
+        amount = { e8s = amount_e8s };
+        fee = { e8s = 10000 : Nat64 };
+        from_subaccount = subaccount;
+        to = paymentAddress;
+        created_at_time = null : ?Time;
       };
 
-      // Debugging the send arguments
       Debug.print("Sending args: ");
 
-      // Call the ledger's send_dfx method to transfer funds
       let block_height = await ExternalService_ICPLedger.send_dfx(send_args);
 
-      // Return the block height upon successful transaction
       Debug.print("Transfer successful, block height: " # debug_show (block_height));
       return #ok(block_height);
 
     } catch (err) {
-      // Handle the error and return an appropriate CommonError variant
       Debug.print("Transfer failed with error.");
-      // Here we check if the error is related to an invalid token or some other issue
       let errorMessage = "Transfer Failed: " # Error.message(err);
       return #err(#Other(errorMessage));
     };
@@ -1996,28 +1644,23 @@ actor Main {
     // if (Principal.isAnonymous(msg.caller)) {
     //     throw Error.reject("User is not authenticated");
     // };
-    // Debug print available cycles
     Debug.print("Available cycles: " # Nat.toText(Cycles.balance()));
 
     try {
-      // Prepare the arguments for the ICP ledger transfer
       let send_args = {
-        memo = 0 : Nat64; // Memo set to 0, explicitly typed as Nat64
-        amount = { e8s = amount_e8s }; // Transfer amount in e8s
-        fee = { e8s = 10000 : Nat64 }; // Transaction fee in e8s (0.0001 ICP)
-        from_subaccount = subaccount; // Subaccount for the buyer, if any
-        to = paymentAddress; // Recipient is the seller's account
-        created_at_time = null : ?Time; // Optional timestamp, explicitly typed as null
+        memo = 0 : Nat64;
+        amount = { e8s = amount_e8s };
+        fee = { e8s = 10000 : Nat64 };
+        from_subaccount = subaccount;
+        to = paymentAddress;
+        created_at_time = null : ?Time;
       };
 
-      // Debugging the send arguments
       Debug.print("Sending args: " # debug_show (send_args));
 
-      // Call the ledger's send_dfx method to transfer funds
       let block_height : Nat64 = await ExternalService_ICPLedger.send_dfx(send_args);
       Debug.print("Transfer successful, block height: " # Nat64.toText(block_height));
 
-      // Call the marketplace settle method after successful transfer
       let marketplaceActor = actor (Principal.toText(_collectionCanisterId)) : actor {
         ext_marketplaceSettle : (paymentAddress : AccountIdentifier) -> async Result.Result<(), CommonError>;
       };
@@ -2025,7 +1668,7 @@ actor Main {
       switch (await marketplaceActor.ext_marketplaceSettle(paymentAddress)) {
         case (#ok _) {
           Debug.print("NFT settle successful.");
-          return #ok(block_height); // Return block height upon successful transaction and NFT settle
+          return #ok(block_height);
         };
         case (#err _e) {
           return #err(#Other("NFT settle failed:"));
@@ -2033,27 +1676,9 @@ actor Main {
       };
 
     } catch (err) {
-      // Handle any unexpected errors and return an appropriate error message
       Debug.print("Unexpected error occurred during transfer and NFT settle.");
       let errorMessage = "Unexpected Transfer Failed: " # Error.message(err);
       return #err(#Other(errorMessage));
-    };
-  };
-
-  public shared (_msg) func redeemtoken(_collectionCanisterId : Principal, tokenId : TokenIndex) : async Result.Result<(), Text> {
-    let tokenActor = actor (Principal.toText(_collectionCanisterId)) : actor {
-      burnToken : (TokenIndex) -> async Result.Result<(), Text>;
-    };
-
-    let burnResult = await tokenActor.burnToken(tokenId);
-
-    switch (burnResult) {
-      case (#ok(())) {
-        return #ok();
-      };
-      case (#err(errorMessage)) {
-        return #err("Burn token failed: " # errorMessage);
-      };
     };
   };
 
