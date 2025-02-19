@@ -8,7 +8,7 @@ const RemoveNftsType = ({ isFetching }) => {
   const [fetchedNftType, setFetchedNftType] = useState([]);
 
   const convertNftCost=(nftCost)=>{
-     return nftCost / 100000000
+     return nftCost 
   }
 
   const fetchNftType = async () => {

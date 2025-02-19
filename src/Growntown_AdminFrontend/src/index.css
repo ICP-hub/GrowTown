@@ -266,3 +266,69 @@ body {
   border: 5px solid #cd7f32;
   border-radius: 10px;
 }
+
+
+
+
+/* Local Fonts (Make sure the font files are inside public/assets/fonts/) */
+@font-face {
+  font-family: "Iron Man";
+  src: url('/assets/fonts/IRONMAN_.TTF') format('truetype'); /* Corrected format */
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Finger Paint";
+  src: url('/assets/fonts/FingerPaint-Regular.ttf') format('truetype'); /* Corrected format */
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+@font-face {
+  font-family: "Poppins";
+  src: url('/assets/fonts/Poppins-Regular.ttf') format('truetype'); /* Corrected format */
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Example Usage */
+.custom-ironman {
+  font-family: "Iron Man", sans-serif;
+}
+
+.custom-fingerpaint {
+  font-family: "Finger Paint", sans-serif;
+}
+.custom-fingerpaint-small {
+  font-family: "Finger Paint", sans-serif;
+  font-weight: 400;
+  text-transform: capitalize;
+}
+.custom-poppins{
+  font-family: "Poppins", sans-serif;
+}
+.custom-line-clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 640px) {
+  .custom-line-clamp {
+    -webkit-line-clamp: 15;
+  }
+}
+
+@media (min-width: 768px) {
+  .custom-line-clamp {
+    -webkit-line-clamp: 15;
+  }
+}
+
+@media (min-width: 1024px) {
+  .custom-line-clamp {
+    -webkit-line-clamp: 10;
+  }
+}

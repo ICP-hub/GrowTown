@@ -123,6 +123,7 @@ function LogoImageUploader({ captureUploadedbloburl }) {
 
           </div>
         )}
+        
 
         {previews &&
           previews.map((pic) => {

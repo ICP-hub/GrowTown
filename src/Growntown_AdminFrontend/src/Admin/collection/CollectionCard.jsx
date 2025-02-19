@@ -1,18 +1,45 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { FaTrashAlt, FaPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const CollectionCard = ({ handleDelete, collectiondata, index }) => {
+
     const [isHovered, setIsHovered] = useState(false);
-    console.log('collectiondata', collectiondata)
+
+    console.log('collectiondata', collectiondata);
+
+    // Utility function to check if a string is valid JSON
+    const isValidJSON = (str) => {
+        try {
+            JSON.parse(str);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    };
+
+    // Default values
+    let collectionImageURL = "default-image.jpg";
+    let description = "";
+
+    // Check if collectiondata[4] is a valid JSON string before parsing
+    if (typeof collectiondata[4] === "string" && isValidJSON(collectiondata[4])) {
+        const parsedData = JSON.parse(collectiondata[4]);
+        collectionImageURL = parsedData.collectionImageURL || "default-image.jpg";
+        description = parsedData.description || "";
+    } else {
+        console.error("Invalid JSON in collectiondata[4]:", collectiondata[4]);
+    }
+
     return (
         <Link
             to={`/Admin/collection/collectionDetails/${collectiondata[0]}`}
             key={index}
             state={{ collectiondata }}
         >
+            {console.log('collectiondata[0]', collectiondata[0])}
             <div
-                className="relative  w-[240px] max-w-[280px] ml-10 h-[380px] group transform transition-transform duration-300 ease-out hover:-translate-y-2"
+                className="relative w-[240px] max-w-[280px] ml-10 h-[380px] group transform transition-transform duration-300 ease-out hover:-translate-y-2"
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
@@ -20,14 +47,11 @@ const CollectionCard = ({ handleDelete, collectiondata, index }) => {
                 <div className="absolute -inset-0.5 bg-gradient-to-b from-[#3D9635] to-[#50B248] rounded-xl blur opacity-0 group-hover:opacity-20 transition duration-500"></div>
 
                 <div className="relative h-full backdrop-blur-sm bg-gradient-to-b from-[#29292C]/95 via-[#1a1a1a]/95 to-black/95 rounded-xl border border-white/10 shadow-lg shadow-black/20 overflow-hidden transition-all duration-300 group-hover:border-[#50B248]/30 group-hover:shadow-[#50B248]/10">
-                    <div className="relative h-[220px] w-full overflow-hidden  rounded-lg border border-white/5">
+                    <div className="relative h-[220px] w-full overflow-hidden rounded-lg border border-white/5">
                         <img
                             className="object-cover p-2 w-full h-full transition-transform duration-500 group-hover:scale-110 rounded-lg"
-                            src={
-                                JSON.parse(collectiondata[4]).collectionImageURL ||
-                                "default-image.jpg"
-                            }
-                            alt={`collection`}
+                            src={collectionImageURL}
+                            alt="collection"
                         />
 
                         {/* Overlay gradient */}
@@ -62,18 +86,15 @@ const CollectionCard = ({ handleDelete, collectiondata, index }) => {
                         </h3>
                         <p className="text-sm text-gray-400 mb-2">by <span className="text-[#50B248]">{collectiondata[1].toString()}</span></p>
                         <div className="flex items-center gap-2 mt-4">
-                            <div className="px-3 py-1.5 rounded-full bg-white/5 border max-h-12   overflow-y-scroll no-scrollbar border-white/10">
-                                <p className="text-sm text-gray-300 h-full  ">
-                                    {JSON.parse(collectiondata[4])?.description}
-                                </p>
+                            <div className="px-3 py-1.5 rounded-full bg-white/5 border max-h-12 overflow-y-scroll no-scrollbar border-white/10">
+                                <p className="text-sm text-gray-300 h-full">{description}</p>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </Link>
-    )
-}
+    );
+};
 
-export default CollectionCard
+export default CollectionCard;

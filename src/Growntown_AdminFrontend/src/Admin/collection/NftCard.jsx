@@ -60,7 +60,7 @@ const NftCard = ({ id, list, collectiondata }) => {
             </h1>
             {isValidPrice && (
               <h2 className="mt-1 text-xs text-center sm:text-lg">
-                Price: {price} ICP
+                Price: {price} GRC
               </h2>
             )}
             <h2 className="mt-1 text-xs text-center sm:text-lg">

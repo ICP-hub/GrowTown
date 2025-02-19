@@ -21,7 +21,7 @@ const FullpageLoader = lazy(() =>
 function App() {
   return (
     <SearchProvider>
-      <div>
+      <div className=" ">
         <Suspense fallback={<FullpageLoader />}>
           <Routes>
             <Route path="/" element={<LandingPage />}></Route>

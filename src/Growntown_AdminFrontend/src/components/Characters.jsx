@@ -2,15 +2,14 @@ import React from 'react';
 
 const Characters = () => {
   return (
-    <div id='Characters' className="bg-[#50d2fe] relative flex justify-center items-center h-screen w-full overflow-hidden">
-
-      {/* Background Image */}
-      <img src="images/bg00.png" alt="background" className="absolute w-full h-screen object-cover"
-        draggable='false'
-        loading="lazy" />
+    <div id='Characters'  className="bg-[#50d2fe] relative flex justify-center items-center h-screen w-full overflow-hidden">
+  
+     {/* Background Image */}
+      <img src="images/bg00.png" alt="background" className="absolute w-screen h-screen object-cover"  draggable='false'
+              loading="lazy"/>
 
       {/* Content Wrapper */}
-
+     <div className=' container mx-auto max-w-[2000px] '>
       <div
         className="absolute z-20 w-[60%] flex flex-col items-center "
         style={{
@@ -19,71 +18,60 @@ const Characters = () => {
           transform: 'translate(-50%, -50%)',
         }}
       >
-
+     
         {/* Bee Animation */}
-
-
-        {/*  Title */}
-        <div className='relative   mb-8'>
+        <div className='absolute  top-10'>
           <img
             src="images/beeAnimation.gif"
-            className="  w-64 absolute -top-32 -right-36"
+            className="  w-64 absolute -top-28 -right-36"
             alt="bee animation"
-            draggable='false'
-            loading="lazy"
+             draggable='false'
+              loading="lazy"
           />
-          <h1 className=" text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-[#4B2519]"
+          <h1 className=" text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-[#4B2519] custom-ironman"
             data-aos='fade-up'
           >CHARACTERS</h1>
         </div>
         {/* Character Row */}
-        <div className="flex  justify-center items-center ">
+        <div className="flex mt-20  justify-center items-center ">
           {/* Female Character */}
           <img
             data-aos='fade-up'
-            className=" h-[320px] object-cover relative left-10 lg:left-0  md:h-[550px] xl:h-[650px]" src="images/femaleFarmer.png" alt="Female Farmer"
+            className=" h-[320px] object-cover relative left-10 lg:left-0  md:h-[550px] xl:h-[650px]" src="images/femaleFarmer.png" alt="Female Farmer" 
             draggable='false'
-            loading="lazy"
-          />
+            loading="lazy"/>
+            
 
           {/* Wooden Board */}
           <div className="absolute mt-8 sm:mt-0 ">
             <div className='relative'>
-              <h1 className='absolute top-10 lg:top-20 text-2xl lg:text-3xl left-[50%] transform -translate-x-1/2 font-bold text-[#FFF3C5]'>Tom</h1>
-              <img src="images/woodenBoard.png" alt="Wooden Board" className="  h-[180px] lg:h-[300px]"
-                draggable='false'
-                loading="lazy"
-              />
-              <h1 className='absolute bottom-12 lg:bottom-24 text-2xl lg:text-3xl left-[50%] transform -translate-x-1/2 font-bold text-[#FFF3C5]' >Jerry</h1>
+              <h1 className='absolute top-10 md:top-12 lg:top-20 text-xl md:text-2xl lg:text-3xl left-[50%] transform -translate-x-1/2 font-bold text-[#FFF3C5] custom-fingerpaint-small'>Tom</h1>
+              <img src="images/woodenBoard.png" alt="Wooden Board" className="  h-[160px] md:h-[200px] lg:h-[300px]"
+               draggable='false'
+               loading="lazy" />
+              <h1 className='absolute bottom-12 md:bottom-14 lg:bottom-24  text-xl md:text-2xl lg:text-3xl left-[50%] transform -translate-x-1/2 font-bold text-[#FFF3C5] custom-fingerpaint-small' >Jerry</h1>
             </div>
 
 
             <div className='flex relative justify-center' >
               {/*grass backward of stones*/}
-              <img src='images/grass  9.png' className='h-20 w-20 absolute -top-10'
-                draggable='false'
-                loading="lazy"
-              />
+              <img src='images/grass  9.png' className=' h-16 w-16 sm:h-20 sm:w-20 absolute -top-10'
+               draggable='false'
+               loading="lazy" />
 
-              <img src='images/grass  11.png' className='h-20 w-20 absolute left-10 -top-4'
-                draggable='false'
-                loading="lazy"
-              />
+              <img src='images/grass  11.png' className='h-16  w-16 sm:h-20 sm:w-20 absolute left-10 -top-4' />
               {/* stones*/}
-              <div className="absolute z-10 flex ">
-                <img src='images/rocks 8.png'
-                  draggable='false'
-                  loading="lazy" />
+              <div className="absolute z-10 flex mt-2 sm:mt-0 ">
+                <img src='images/rocks 8.png' className=' h-14 w-14 sm:w-auto sm:h-auto'  draggable='false'
+              loading="lazy" />
                 <img src='images/rocks 9.png'
-                  draggable='false'
-                  loading="lazy"
-                />
+                className=' mt-1 sm:mt-0 h-14 w-14 sm:w-auto sm:h-auto' 
+                 draggable='false'
+                 loading="lazy"/>
               </div>
               {/*grass forward of stones*/}
-              <img src='images/grass  9.png' className='h-10 w-16 absolute z-20 top-4'
-                draggable='false'
-                loading="lazy"
-              />
+              <img src='images/grass  9.png' className=' h-8 w-14 sm:h-10 sm:w-16 absolute z-20 top-4'  draggable='false'
+              loading="lazy"/>
             </div>
           </div>
 
@@ -91,10 +79,13 @@ const Characters = () => {
           <img
             className="  h-[320px] object-cover relative lmd:left-10 md:left-0  md:h-[550px] xl:h-[650px]" src="images/Pose1.png" alt="Male Farmer"
             data-aos='fade-up'
-            draggable='false'
-            loading="lazy"
+             draggable='false'
+              loading="lazy"
           />
+
+<img src='images/pumpkin02.png ' className=' w-20 absolute z-50 md:w-36  -bottom-12 left-0 sm:left-24 2xl:left-64 ' />
         </div>
+      </div>
       </div>
     </div>
   );

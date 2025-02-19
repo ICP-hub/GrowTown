@@ -71,6 +71,8 @@ function Collection() {
     return isMatch(searchableItem);
   });
 
+  console.log('filteredCollections',filteredCollections)
+
   const goToPreviousPage = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
@@ -84,10 +86,10 @@ function Collection() {
       <div className="w-full h-full overscroll-none pt-8 pb-8 px-4 md:px-8 flex flex-col items-center  rounded-2xl">
         {/* Header Section */}
         <div className="flex justify-between items-center w-full max-w-6xl mb-6">
-          <h2 className="text-white text-2xl font-semibold"> Collection</h2>
+          <h2 className="text-white text-xl md:text-2xl font-semibold"> Collection</h2>
           <Link to="/Admin/collection/create">
             <Buttons
-              buttonName="Create Collection"
+              buttonName="Create "
               bgColor="white"
               icon={<IoIosAdd size={24} className="text-black" />}
               className="hover:shadow-lg transition-all duration-300"

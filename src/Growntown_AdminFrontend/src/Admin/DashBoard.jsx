@@ -82,15 +82,15 @@ function DashBoard() {
           <div className="grid justify-center grid-cols-1 gap-6 sm:gap-8 mx-auto md:grid-cols-2 lg:grid-cols-3 max-w-screen-xl font-Quicksand sm:font-bold md:text-lg">
             <div className="bg-gradient-to-r from-[#1C1C1E] to-[#29292C] px-6 py-6 h-40 sm:h-48 flex flex-col justify-center rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300"onClick={()=>navigate('/admin/collection')}>
               <h3 className="text-lg sm:text-xl font-semibold text-gray-300">Total Collections</h3>
-              <p className="font-ironman text-3xl sm:text-4xl lg:text-5xl text-white">{collections}</p>
+              <p className="font-ironman text-3xl sm:text-4xl lg:text-5xl text-white mt-4">{collections}</p>
             </div>
             <div className="bg-gradient-to-r from-[#1A1A1D] to-[#25252B] px-6 py-6 h-40 sm:h-48 flex flex-col justify-center rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300" onClick={()=>navigate('/admin/collection')}>
               <h3 className="text-lg sm:text-xl font-semibold text-gray-300">Total NFTs</h3>
-              <p className="font-ironman text-3xl sm:text-4xl lg:text-5xl text-white">{nfts}</p>
+              <p className="font-ironman text-3xl sm:text-4xl lg:text-5xl text-white mt-4">{nfts}</p>
             </div>
             <div className="bg-gradient-to-r from-[#18181B] to-[#2C2C31] px-6 py-6 h-40 sm:h-48 flex flex-col justify-center rounded-xl shadow-lg transform hover:scale-105 transition-all duration-300"onClick={()=>navigate('/admin/users')}>
               <h3 className="text-lg sm:text-xl font-semibold text-gray-300">Total Users</h3>
-              <p className="font-ironman text-3xl sm:text-4xl lg:text-5xl text-white">{user}</p>
+              <p className="font-ironman text-3xl sm:text-4xl lg:text-5xl text-white mt-4">{user}</p>
             </div>
           </div>
         )}
