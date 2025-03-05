@@ -316,7 +316,7 @@ actor Main {
     for ((userPrincipal, collections) in usersCollectionMap.entries()) {
       var updatedCollections = List.filter<(Time.Time, Principal)>(
         List.fromArray(collections),
-        func((_, collId)) { 
+        func((_, collId)) {
           if (collId == collection_id) {
             found := true;
             return false;
@@ -976,6 +976,23 @@ actor Main {
     };
   };
 
+  public shared ({ caller = user }) func remove_user(accountIdentifier : Principal) : async Result.Result<Text, Text> {
+    let filteredUsers = Array.filter<User>(
+      usersArray,
+      func(u : User) : Bool {
+        u.accountIdentifier != accountIdentifier;
+      },
+    );
+
+    if (filteredUsers.size() == usersArray.size()) {
+      return #err("User not found.");
+    };
+
+    usersArray := filteredUsers;
+    Debug.print("User removed: " # Principal.toText(accountIdentifier));
+    return #ok("User successfully removed.");
+  };
+
   //enter user details
   public shared ({ caller = user }) func updateUserDetails(accountIdentifier : Principal, name : Text, email : Text, telegram : Text, profilePic : ?Text) : async Result.Result<Text, Text> {
     let existingUser = Array.find<User>(
@@ -1473,9 +1490,9 @@ actor Main {
 
   //settle and confirm purchase
   public shared ({ caller = user }) func settlepurchase(_collectionCanisterId : Principal, paymentaddress : AccountIdentifier) : async Result.Result<(), CommonError> {
-    if (Principal.isAnonymous(user)) {
-      throw Error.reject("User is not authenticated");
-    };
+    // if (Principal.isAnonymous(user)) {
+    //   throw Error.reject("User is not authenticated");
+    // };
     let confirmpurchase = actor (Principal.toText(_collectionCanisterId)) : actor {
       ext_marketplaceSettle : (paymentaddress : AccountIdentifier) -> async Result.Result<(), CommonError>;
     };
@@ -1501,7 +1518,7 @@ actor Main {
     return transformedTransactions;
   };
 
-  // Get all transactions for admin side 
+  // Get all transactions for admin side
   public shared (msg) func alltransactions(chunkSize : Nat, pageNo : Nat) : async Result.Result<{ data : [(TokenIndex, TokenIdentifier, Transaction)]; current_page : Nat; total_pages : Nat }, Text> {
     if (Principal.isAnonymous(msg.caller)) {
       throw Error.reject("User is not authenticated");
@@ -1615,9 +1632,9 @@ actor Main {
   };
 
   public shared ({ caller = user }) func balance_nft_settelment(_collectionCanisterId : Principal) : async () {
-    if (Principal.isAnonymous(user)) {
-      throw Error.reject("User is not authenticated");
-    };
+    // if (Principal.isAnonymous(user)) {
+    //   throw Error.reject("User is not authenticated");
+    // };
     let getResult = actor (Principal.toText(_collectionCanisterId)) : actor {
       heartbeat_myself : () -> async ();
     };
