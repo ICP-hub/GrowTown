@@ -49,7 +49,9 @@ function Admin() {
     if (!isAuthenticated) {
       navigate("/");
     } else if (backendActor) {
-      checkingAdminId();
+      // checkingAdminId();
+      navigate("/admin/dashboard");
+
     }
   }, [backendActor, isAuthenticated]);
 
@@ -197,16 +199,16 @@ function Admin() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="flex flex-col items-center">
-          <div className="w-10 h-10 border-4 border-gray-600 border-t-gray-300 rounded-full animate-spin"></div>
-          <p className="mt-2 text-lg text-white">Verifying Admin ID...</p>
-        </div>
-      </div>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <div className="flex items-center justify-center h-screen">
+  //       <div className="flex flex-col items-center">
+  //         <div className="w-10 h-10 border-4 border-gray-600 border-t-gray-300 rounded-full animate-spin"></div>
+  //         <p className="mt-2 text-lg text-white">Verifying Admin ID...</p>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="container max-w-[2000px] mx-auto custom-poppins">

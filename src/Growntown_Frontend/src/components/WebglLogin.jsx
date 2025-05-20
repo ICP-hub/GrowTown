@@ -1,210 +1,114 @@
-// import React, { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
-// import { useUnityContext, Unity } from "react-unity-webgl";
-// import { createActor, Growntown_Backend } from "../../../declarations/Growntown_Backend/index";
-// import { AuthClient } from "@dfinity/auth-client";
-// import { HttpAgent } from "@dfinity/agent";
-// import { DelegationIdentity, Ed25519PublicKey, ECDSAKeyIdentity, DelegationChain } from "@dfinity/identity";
-
-// const WebGLIntegration = () => {
-//   const navigate = useNavigate();
-//   const { unityProvider, sendMessage, isLoaded, loadingProgression } = useUnityContext({
-//     loaderUrl: "/webgl/Build/webgl.loader.js",
-//     dataUrl: "/webgl/Build/webgl.data",
-//     frameworkUrl: "/webgl/Build/webgl.framework.js",
-//     codeUrl: "/webgl/Build/webgl.wasm",
-//   });
-
-//   const [appPublicKey, setAppPublicKey] = useState(null);
-//   const [actor, setActor] = useState(Growntown_Backend);
-//   const [delegationChain, setDelegationChain] = useState(null);
-//   const [loading, setLoading] = useState(false);
-
-//   // Helper function to convert hex string to byte array
-//   const hexToBytes = (hex) => {
-//     return Uint8Array.from(hex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
-//   };
-
-//   useEffect(() => {
-//     const urlParams = new URLSearchParams(window.location.search);
-//     const publicKeyString = urlParams.get("sessionkey");
-
-//     if (publicKeyString) {
-//         try {
-//             const publicKeyBytes = hexToBytes(publicKeyString);
-//             setAppPublicKey(Ed25519PublicKey.fromDer(publicKeyBytes));
-//             handleLogin(); // Trigger login automatically when sessionkey is detected
-//         } catch (error) {
-//             console.error("Error converting hex string to bytes:", error);
-//         }
-//     }
-// }, []);
-
-
-// const handleLogin = async () => {
-//   try {
-//       setLoading(true);
-//       console.log("Initiating login...");
-
-//       const middleKeyIdentity = await ECDSAKeyIdentity.generate();
-//       const authClient = await AuthClient.create({
-//           identity: middleKeyIdentity,
-//       });
-
-//       const iiUrl = "https://identity.ic0.app/#authorize";
-
-//       await new Promise((resolve) => {
-//           authClient.login({
-//               identityProvider: iiUrl,
-//               onSuccess: resolve,
-//               onError: (err) => console.error("Login failed:", err),
-//           });
-//       });
-
-//       const middleIdentity = authClient.getIdentity();
-//       const agent = new HttpAgent({ identity: middleIdentity });
-
-//       if (import.meta.env.VITE_DFX_NETWORK === "local") {
-//           await agent.fetchRootKey();
-//       }
-
-//       const canisterId = process.env.CANISTER_ID_GROWNTOWN_BACKEND;
-//       if (!canisterId) {
-//           throw new Error("Canister ID is undefined.");
-//       }
-
-//       const newActor = createActor(canisterId, { agent });
-//       setActor(newActor);
-
-//       // Generate delegation and append to URL
-//       if (appPublicKey && middleIdentity instanceof DelegationIdentity) {
-//           const middleToApp = await DelegationChain.create(
-//               middleKeyIdentity,
-//               appPublicKey,
-//               new Date(Date.now() + 15 * 60 * 1000),
-//               { previous: middleIdentity.getDelegation() }
-//           );
-
-//           const delegationJson = JSON.stringify(middleToApp.toJSON());
-//           const encodedDelegation = encodeURIComponent(delegationJson);
-
-//           const redirectUrl = `${window.location.origin}?sessionkey=${middleKeyIdentity.getPublicKey().toDerHex()}&delegation=${encodedDelegation}`;
-
-//           console.log("Redirecting to:", redirectUrl);
-//           window.location.href = redirectUrl; // Redirect back with sessionkey and delegation
-//       }
-//   } catch (error) {
-//       console.error("Login failed:", error);
-//   } finally {
-//       setLoading(false);
-//   }
-// };
-
-
-
-//   return (
-//     <div className="container">
-//       <Unity unityProvider={unityProvider} style={{ width: "100%", height: "100vh" }} />
-//       {!isLoaded && <p>Loading WebGL: {Math.round(loadingProgression * 100)}%</p>}
-//     </div>
-//   );
-// };
-
-// export default WebGLIntegration;
 import React, { useEffect, useState, useCallback } from "react";
 import { useUnityContext, Unity } from "react-unity-webgl";
 import { useAuths } from "../utils/useAuthClient";
+import { DelegationChain, Ed25519PublicKey } from "@dfinity/identity";
 
 const WebGLIntegration = () => {
-  const { unityProvider, sendMessage, isLoaded } = useUnityContext({
+  const { unityProvider, sendMessage, isLoaded, addEventListener, removeEventListener } = useUnityContext({
     loaderUrl: "/webgl/Build/webgl.loader.js",
     dataUrl: "/webgl/Build/webgl.data",
     frameworkUrl: "/webgl/Build/webgl.framework.js",
     codeUrl: "/webgl/Build/webgl.wasm",
   });
 
-  const { login, isAuthenticated, principal } = useAuths();
-  const [audioContext, setAudioContext] = useState(null);
+  const { login, isAuthenticated, identity } = useAuths();
+  const [sessionPublicKey, setSessionPublicKey] = useState(null);
+  const GAME_OBJECT_NAME = "AgentAndPlugin";
 
-  // Ensure the function is stable across renders
-  const handleUnityLogin = useCallback(async () => {
-    console.log("🔄 Unity requested login...");
-    await login();
-
-    if (principal) {
-      try {
-        console.log("✅ Sending Principal to Unity:", principal);
-        sendMessage("AuthManager", "ReceivePrincipal", principal);
-      } catch (error) {
-        console.error("❌ Error sending principal to Unity:", error);
-      }
+  const hexToBytes = (hex) => {
+    if (!hex || typeof hex !== "string") {
+      console.error("❌ Invalid hex string provided:", hex);
+      throw new Error("Invalid hex string");
     }
-  }, [login, principal, sendMessage]);
+    return Uint8Array.from(hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
+  };
 
-  useEffect(() => {
-    const handleEvent = () => {
-      console.log("📢 Unity Login Event Detected!");
-      handleUnityLogin();
-    };
-
-    window.addEventListener("UnityLoginRequest", handleEvent);
-
-    return () => {
-      window.removeEventListener("UnityLoginRequest", handleEvent);
-    };
-  }, [handleUnityLogin]);
-
-  useEffect(() => {
-    if (isLoaded && isAuthenticated && principal) {
-      try {
-        console.log("✅ Unity is ready, sending Principal to WebGL:", principal);
-        sendMessage("AuthManager", "ReceivePrincipal", principal);
-      } catch (error) {
-        console.error("❌ Failed to send principal to Unity:", error);
-      }
-    }
-  }, [isLoaded, isAuthenticated, principal, sendMessage]);
-
-  // ✅ Fix WebGL INVALID_ENUM Error (By Adding Fallback for `getInternalformatParameter`)
-  useEffect(() => {
-    if (typeof WebGLRenderingContext !== "undefined") {
-      console.log("🛠️ WebGL Fix: Checking for compatibility...");
-
-      const canvas = document.createElement("canvas");
-      const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
-
-      if (gl) {
-        console.log("✅ WebGL Context Initialized Successfully.");
-      } else {
-        console.error("❌ WebGL is not supported on this browser!");
-      }
+  const handleSessionKey = useCallback((sessionKeyHex) => {
+    try {
+      const publicKeyBytes = hexToBytes(sessionKeyHex);
+      const publicKey = Ed25519PublicKey.fromDer(publicKeyBytes);
+      setSessionPublicKey(publicKey);
+      console.log("✅ Session Public Key Received from Unity at / route:", sessionKeyHex);
+    } catch (error) {
+      console.error("❌ Failed to parse session public key:", error);
     }
   }, []);
 
-  // ✅ Fix for AudioContext Not Allowed to Start (User Interaction Required)
   useEffect(() => {
-    const enableAudioContext = () => {
-      if (!audioContext) {
-        const newAudioContext = new (window.AudioContext || window.webkitAudioContext)();
-        newAudioContext.resume().then(() => {
-          console.log("✅ AudioContext started successfully.");
-          setAudioContext(newAudioContext);
-        }).catch((error) => {
-          console.error("❌ Failed to start AudioContext:", error);
-        });
+    if (isLoaded) {
+      console.log("✅ Unity WebGL is loaded, setting up session key listener...");
+      addEventListener("SendSessionKey", handleSessionKey);
+    }
+    return () => {
+      if (isLoaded) {
+        removeEventListener("SendSessionKey", handleSessionKey);
       }
     };
+  }, [isLoaded, addEventListener, removeEventListener, handleSessionKey]);
 
-    document.addEventListener("click", enableAudioContext, { once: true });
+  const generateDelegationChain = async () => {
+    if (!identity || !sessionPublicKey) {
+      console.error("❌ Cannot generate delegation. Missing identity or sessionPublicKey:", { identity, sessionPublicKey });
+      return;
+    }
 
-    return () => {
-      document.removeEventListener("click", enableAudioContext);
+    try {
+      console.log("🔄 Generating WebGL Delegation Chain at / route...");
+      const newDelegationChain = await DelegationChain.create(
+        identity,
+        sessionPublicKey,
+        new Date(Date.now() + 15 * 60 * 1000) // 15 min validity
+      );
+      console.log("✅ Delegation Created Successfully:", newDelegationChain.toJSON());
+      sendMessage(GAME_OBJECT_NAME, "ReceiveWebGLDelegationStatic", JSON.stringify(newDelegationChain.toJSON()));
+      console.log(`📢 Delegation sent to Unity static method: ReceiveWebGLDelegationStatic`);
+    } catch (error) {
+      console.error("❌ Delegation generation failed:", error);
+    }
+  };
+
+  const handleUnityLogin = useCallback(async (sessionKeyHex) => {
+    console.log("🔄 Unity requested login with session key from event:", sessionKeyHex);
+    if (sessionKeyHex) {
+      handleSessionKey(sessionKeyHex);
+    } else {
+      console.error("❌ No session key provided by Unity event!");
+      return;
+    }
+    if (!isAuthenticated) {
+      console.log("🔄 Triggering wallet login...");
+      await login();
+    } else {
+      console.log("✅ Already authenticated, proceeding with existing identity.");
+    }
+  }, [login, handleSessionKey, isAuthenticated]);
+
+  useEffect(() => {
+    const handleEvent = (event) => {
+      console.log("📢 Unity Login Event Detected at / route! Event detail:", event.detail);
+      const sessionKey = event.detail || "";
+      handleUnityLogin(sessionKey);
     };
-  }, [audioContext]);
+    window.addEventListener("UnityLoginRequest", handleEvent);
+    return () => window.removeEventListener("UnityLoginRequest", handleEvent);
+  }, [handleUnityLogin]);
+
+  useEffect(() => {
+    if (isLoaded && isAuthenticated && identity && sessionPublicKey) {
+      console.log("✅ WebGL conditions met: loaded, authenticated, identity and session key present.");
+      generateDelegationChain();
+    } else {
+      console.log("🔍 WebGL status:", { isLoaded, isAuthenticated, identity, sessionPublicKey });
+    }
+  }, [isLoaded, isAuthenticated, identity, sessionPublicKey]);
 
   return (
-    <div className="container">
-      <Unity unityProvider={unityProvider} style={{ width: "100%", height: "100vh" }} />
+    <div className="container mx-auto">
+      <Unity
+        unityProvider={unityProvider}
+        style={{ width: "100%", height: "100vh" }}
+        devicePixelRatio={window.devicePixelRatio}
+      />
     </div>
   );
 };

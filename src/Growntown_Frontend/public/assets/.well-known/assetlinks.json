@@ -1,0 +1,11 @@
+[
+    {
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.DefaultCompany.GrowTown",
+        "sha256_cert_fingerprints":
+          ["D9:BC:9F:02:78:6B:2F:23:72:22:80:37:66:7D:1F:24:8B:56:21:6F:50:A3:D0:E7:88:DE:84:52:7B:65:05:11"]
+      }
+    }
+  ]

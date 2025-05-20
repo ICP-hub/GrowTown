@@ -7,7 +7,7 @@ import Skeleton from 'react-loading-skeleton';
 
 
 
-const ConnectBtn = ({ onClick }) => {
+const ConnectBtn = () => {
     const { login, isAuthenticated } = useAuths();
 
     return (

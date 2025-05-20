@@ -31,7 +31,10 @@
         "src/Growntown_Frontend/dist"
       ],
       "type": "assets",
-      "workspace": "Growntown_Frontend"
+      "workspace": "Growntown_Frontend",
+      "assets": [
+        ["src/Growntown_Frontend/dist/.well-known", "/.well-known"]
+      ]
     }
   },
   "defaults": {
